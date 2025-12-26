@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <title id="pageTitle">Harshtag Apps</title>
+    <link rel="stylesheet" href="../css/styles.css">
+    <link rel="stylesheet" href="../css/food-items.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Afacad:ital,wght@0,400..700;1,400..700&display=swap"
+        rel="stylesheet">
+</head>
+
+<body>
+    <div class="secondary-appbar">
+        <div class="appbar-content">
+            <button class="back-button" onclick="history.back()">
+                <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M15 18l-6-6 6-6" />
+                </svg>
+            </button>
+            <div class="appbar-title" id="categoryTitle">Category</div>
+        </div>
+        <div class="appbar-border"></div>
+    </div>
+
+    <div class="items-container" id="itemsContainer">
+    </div>
+
+    <script type="module">
+        import { loadRestaurantData } from '../js/api.js';
+        import { getImageForCategory } from '../js/menu_data.js';
+        import { buildPriceTagsHTML } from '../js/utils.js';
+
+        const urlParams = new URLSearchParams(window.location.search);
+        const restaurantId = urlParams.get('r');
+        const categoryType = urlParams.get('category') || '';
+
+        async function renderItems() {
+            try {
+                if (!restaurantId) {
+                    document.getElementById('itemsContainer').innerHTML = `
+                        <div class="empty-state">
+                            <div class="empty-icon">⚠️</div>
+                            <div class="empty-title">No restaurant specified</div>
+                            <div class="empty-subtitle">Please use a valid URL</div>
+                        </div>
+                    `;
+                    return;
+                }
+                const restaurantData = await loadRestaurantData(restaurantId);
+                const restoName = restaurantData?.restoDetails?.restoName?.toUpperCase();
+                const pageTitle = document.getElementById('pageTitle');
+                pageTitle.textContent = restoName ? `${restoName} | Harshtag Apps` : 'Harshtag Apps';
+                
+                const titleElement = document.getElementById('categoryTitle');
+                const container = document.getElementById('itemsContainer');
+
+                if (!categoryType) {
+                    container.innerHTML = `
+                        <div class="empty-state">
+                            <div class="empty-icon">🍽️</div>
+                            <div class="empty-title">No category selected</div>
+                        </div>
+                    `;
+                    return;
+                }
+                titleElement.textContent = categoryType;
+                const category = restaurantData.categories.find(
+                    cat => cat.categoryType === categoryType
+                );
+
+                if (!category || !category.items || category.items.length === 0) {
+                    container.innerHTML = `
+                        <div class="empty-state">
+                            <div class="empty-icon">🍽️</div>
+                            <div class="empty-title">No items in this category</div>
+                        </div>
+                    `;
+                    return;
+                }
+
+                const categoryImage = getImageForCategory(categoryType);
+                container.innerHTML = category.items.map(item => {
+                    const priceTagsHTML = buildPriceTagsHTML(item.prices);
+
+                    return `
+                        <div class="food-item">
+                            <div class="item-image-container">
+                                ${categoryImage ?
+                            `<img src="../${categoryImage}" alt="${item.name}" class="item-image">` :
+                            '<div class="item-icon">🍽️</div>'
+                        }
+                            </div>
+                            <div class="item-details">
+                                <div class="item-name">${item.name}</div>
+                                <div class="price-tags">
+                                    ${priceTagsHTML}
+                                </div>
+                            </div>
+                            <div class="veg-indicator">
+                                <div class="veg-dot ${item.isVeg ? 'veg' : 'non-veg'}"></div>
+                            </div>
+                        </div>
+                    `;
+                }).join('');
+
+            } catch (error) {
+                console.error('Error loading items:', error);
+                document.getElementById('itemsContainer').innerHTML = `
+                    <div class="empty-state">
+                        <div class="empty-icon">⚠️</div>
+                        <div class="empty-title">Failed to load items</div>
+                        <div class="empty-subtitle">${error.message || 'Please check the URL and try again'}</div>
+                    </div>
+                `;
+            }
+        }
+
+        renderItems();
+    </script>
+</body>
+
+</html>

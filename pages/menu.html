@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <title id="pageTitle">Harshtag Apps</title>
+    <link rel="stylesheet" href="../css/styles.css">
+    <link rel="stylesheet" href="../css/splash.css">
+    <link rel="stylesheet" href="../css/menu.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Afacad:ital,wght@0,400..700;1,400..700&display=swap"
+        rel="stylesheet">
+</head>
+
+<body>
+    <div class="splash-screen" id="splashScreen">
+        <img src="../assets/images/logo.png" alt="Logo" class="splash-logo" onerror="this.style.display='none'">
+        <div class="splash-footer">
+            <div class="splash-developed">Developed by</div>
+            <div class="splash-brand">HARSHTAG</div>
+        </div>
+    </div>
+
+    <div id="mainContent" style="display: none;">
+        <div class="restaurant-header" id="restaurantHeader" style="display: none;">
+            <div class="restaurant-header-content">
+                <div class="restaurant-name" id="restaurantName"></div>
+                <div class="restaurant-address" id="restaurantAddress"></div>
+                <div class="restaurant-contact" id="restaurantContact"></div>
+            </div>
+            <div class="restaurant-divider"></div>
+        </div>
+
+        <div class="menu-container">
+            <div class="error-state" id="errorState" style="display: none; text-align: center; padding: 20px 0;">
+                <img src="../assets/images/harshtag.png" alt="Harshtag Logo"
+                    style="max-width: 200px; margin-bottom: 20px;">
+                <div class="error-icon" style="font-size: 2rem; margin-bottom: 10px;">⚠️</div>
+                <div class="error-title" style="font-size: 1.2rem; font-weight: bold; margin-bottom: 5px;">Restaurant
+                    Not Found</div>
+                <div class="error-subtitle" id="errorMessage" style="color: #666;">
+                    The restaurant "<span id="restaurantIdDisplay" style="font-weight: bold;"></span>" was not found.
+                </div>
+                <div style="color: #666; margin-top: 5px;">Please check the URL and try again.</div>
+            </div>
+
+            <div class="empty-state" id="emptyState" style="display: none;">
+                <div class="empty-icon">🍽️</div>
+                <div class="empty-title">No menu items yet</div>
+                <div class="empty-subtitle">Tap the edit icon to add items</div>
+            </div>
+
+            <div class="categories-grid" id="categoriesGrid"></div>
+        </div>
+    </div>
+
+    <script type="module">
+        import { loadRestaurantData } from '../js/api.js';
+        import { getImageForCategory } from '../js/menu_data.js';
+
+        const urlParams = new URLSearchParams(window.location.search);
+        const restaurantId = urlParams.get('r');
+        const splashScreen = document.getElementById('splashScreen');
+        const mainContent = document.getElementById('mainContent');
+        
+        const isBackNavigation = sessionStorage.getItem('menuLoaded') === 'true';
+        
+        sessionStorage.setItem('menuLoaded', 'true');
+
+        async function initMenu() {
+            try {
+                if (!restaurantId) {
+                    hideSplash();
+                    showError('No restaurant specified. Please use a valid URL like: ?r=resto1');
+                    return;
+                }
+                const restaurantData = await loadRestaurantData(restaurantId);
+                
+                if (isBackNavigation) {
+                    hideSplash();
+                    renderMenu(restaurantData);
+                } else {
+                    setTimeout(() => {
+                        hideSplash();
+                        renderMenu(restaurantData);
+                    }, 3500);
+                }
+
+            } catch (error) {
+                console.error('Error loading menu:', error);
+                setTimeout(() => {
+                    hideSplash();
+                    showError(error.message || 'Failed to load restaurant menu. Please check the URL and try again.');
+                }, 1500);
+            }
+        }
+
+        function hideSplash() {
+            splashScreen.style.display = 'none';
+            mainContent.style.display = 'block';
+        }
+
+        function showError(message) {
+            if (restaurantId) {
+                const idDisplay = document.getElementById('restaurantIdDisplay');
+                if (idDisplay) {
+                    idDisplay.textContent = restaurantId;
+                }
+            }
+            document.getElementById('errorState').style.display = 'flex';
+            document.getElementById('emptyState').style.display = 'none';
+            document.getElementById('categoriesGrid').style.display = 'none';
+            document.getElementById('restaurantHeader').style.display = 'none';
+        }
+
+        function renderMenu(restaurantData) {
+            const header = document.getElementById('restaurantHeader');
+            if (restaurantData && restaurantData.restoDetails) {
+                const restoName = (restaurantData.restoDetails.restoName || '').toUpperCase();
+                const restoAddress = restaurantData.restoDetails.address || '';
+                
+                const pageTitle = document.getElementById('pageTitle');
+                pageTitle.textContent = restoName ? `${restoName} | Harshtag Apps` : 'Harshtag Apps';
+                const restoContact = restaurantData.restoDetails.contact || '';
+                document.getElementById('restaurantName').textContent = restoName;
+                document.getElementById('restaurantAddress').textContent = restoAddress;
+                document.getElementById('restaurantContact').textContent = restoContact ? `Ph: +91 ${restoContact}` : '';
+                header.style.display = 'block';
+                document.getElementById('errorState').style.display = 'none';
+            } else {
+                header.style.display = 'none';
+            }
+
+            if (!restaurantData || !restaurantData.categories || restaurantData.categories.length === 0) {
+                document.getElementById('emptyState').style.display = 'flex';
+                document.getElementById('categoriesGrid').style.display = 'none';
+                document.getElementById('errorState').style.display = 'none';
+                return;
+            }
+
+            const categories = restaurantData.categories.map(cat => cat.categoryType);
+            const uniqueCategories = [...new Set(categories)];
+
+            if (uniqueCategories.length === 0) {
+                document.getElementById('emptyState').style.display = 'flex';
+                document.getElementById('categoriesGrid').style.display = 'none';
+                document.getElementById('errorState').style.display = 'none';
+                return;
+            }
+
+            document.getElementById('errorState').style.display = 'none';
+            document.getElementById('emptyState').style.display = 'none';
+            document.getElementById('categoriesGrid').style.display = 'grid';
+
+            const grid = document.getElementById('categoriesGrid');
+            grid.innerHTML = uniqueCategories.map(categoryType => {
+                const image = getImageForCategory(categoryType);
+                return `
+                    <div class="category-card" data-category="${categoryType}">
+                        <div class="category-image-container">
+                            ${image ?
+                        `<img src="../${image}" alt="${categoryType}" class="category-image">` :
+                        '<div class="category-icon">🍽️</div>'
+                    }
+                        </div>
+                        <div class="category-name">${categoryType}</div>
+                    </div>
+                `;
+            }).join('');
+
+            document.querySelectorAll('.category-card').forEach(card => {
+                card.addEventListener('click', () => {
+                    const categoryType = card.dataset.category;
+                    window.location.href = `food_items.html?r=${restaurantId}&category=${encodeURIComponent(categoryType)}`;
+                });
+            });
+        }
+        initMenu();
+    </script>
+</body>
+
+</html>

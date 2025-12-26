@@ -1,0 +1,1178 @@
+{
+  "id": "montagna",
+  "restoDetails": {
+    "restoName": "MONTAGNA",
+    "address": "Pathankot",
+    "contact": "6280088282"
+  },
+  "categories": [
+    {
+      "categoryType": "Mocktails",
+      "items": [
+        {
+          "name": "Fresh Lime Soda",
+          "isVeg": true,
+          "prices": {
+            "full": 129
+          }
+        },
+        {
+          "name": "Fruit Punch",
+          "isVeg": true,
+          "prices": {
+            "full": 259
+          }
+        },
+        {
+          "name": "Lemon Iced Tea",
+          "isVeg": true,
+          "prices": {
+            "full": 199
+          }
+        },
+        {
+          "name": "Kiwi Mojito",
+          "isVeg": true,
+          "prices": {
+            "full": 199
+          }
+        },
+        {
+          "name": "Mango Mint",
+          "isVeg": true,
+          "prices": {
+            "full": 199
+          }
+        },
+        {
+          "name": "Virgin Mojito",
+          "isVeg": true,
+          "prices": {
+            "full": 199
+          }
+        },
+        {
+          "name": "Cold Drinks",
+          "isVeg": true,
+          "prices": {
+            "large": 40
+          }
+        },
+        {
+          "name": "Peach Iced Tea",
+          "isVeg": true,
+          "prices": {
+            "full": 169
+          }
+        },
+        {
+          "name": "Green Apple",
+          "isVeg": true,
+          "prices": {
+            "full": 199
+          }
+        },
+        {
+          "name": "Blue Lagoon",
+          "isVeg": true,
+          "prices": {
+            "full": 199
+          }
+        }
+      ]
+    },
+    {
+      "categoryType": "Soup",
+      "items": [
+        {
+          "name": "Chicken Sweet Corn Soup",
+          "isVeg": false,
+          "prices": {
+            "full": 130
+          }
+        },
+        {
+          "name": "Manchow Soup",
+          "isVeg": true,
+          "prices": {
+            "full": 80
+          }
+        },
+        {
+          "name": "Sweet Corn Soup",
+          "isVeg": true,
+          "prices": {
+            "full": 100
+          }
+        },
+        {
+          "name": "Chicken Manchow Soup",
+          "isVeg": false,
+          "prices": {
+            "full": 130
+          }
+        }
+      ]
+    },
+    {
+      "categoryType": "Tikka",
+      "items": [
+        {
+          "name": "Achari Tikka",
+          "isVeg": true,
+          "prices": {
+            "full": 230
+          }
+        },
+        {
+          "name": "Malai Tikka",
+          "isVeg": true,
+          "prices": {
+            "full": 270
+          }
+        },
+        {
+          "name": "Chicken Malai Tikka",
+          "isVeg": false,
+          "prices": {
+            "half": 300
+          }
+        },
+        {
+          "name": "Paneer Tikka",
+          "isVeg": true,
+          "prices": {
+            "full": 250
+          }
+        },
+        {
+          "name": "Paneer Mirchi Tikka",
+          "isVeg": true,
+          "prices": {
+            "large": 280
+          }
+        },
+        {
+          "name": "Masala Chaap",
+          "isVeg": true,
+          "prices": {
+            "full": 160
+          }
+        },
+        {
+          "name": "Malai Chaap",
+          "isVeg": true,
+          "prices": {
+            "full": 180
+          }
+        },
+        {
+          "name": "Afghani Chicken",
+          "isVeg": false,
+          "prices": {
+            "half": 290,
+            "full": 490
+          }
+        },
+        {
+          "name": "Tandoori Chicken",
+          "isVeg": false,
+          "prices": {
+            "half": 260,
+            "full": 480
+          }
+        },
+        {
+          "name": "Paneer Malai Tikka",
+          "isVeg": true,
+          "prices": {
+            "large": 270
+          }
+        },
+        {
+          "name": "Chicken Tikka",
+          "isVeg": false,
+          "prices": {
+            "half": 280
+          }
+        },
+        {
+          "name": "Achari Chaap",
+          "isVeg": true,
+          "prices": {
+            "full": 160
+          }
+        },
+        {
+          "name": "Lemon Tikka",
+          "isVeg": true,
+          "prices": {
+            "full": 230
+          }
+        }
+      ]
+    },
+    {
+      "categoryType": "Main Course",
+      "items": [
+        {
+          "name": "Butter Chicken",
+          "isVeg": false,
+          "prices": {
+            "half": 320,
+            "full": 600
+          }
+        },
+        {
+          "name": "Paneer Tikka Butter Masala",
+          "isVeg": true,
+          "prices": {
+            "full": 300
+          }
+        },
+        {
+          "name": "Rara Chicken",
+          "isVeg": false,
+          "prices": {
+            "half": 340,
+            "full": 640
+          }
+        },
+        {
+          "name": "Kadhai Chicken",
+          "isVeg": false,
+          "prices": {
+            "half": 300,
+            "full": 580
+          }
+        },
+        {
+          "name": "Kadhai Paneer",
+          "isVeg": true,
+          "prices": {
+            "full": 270
+          }
+        },
+        {
+          "name": "Mix Veg",
+          "isVeg": true,
+          "prices": {
+            "full": 190
+          }
+        },
+        {
+          "name": "Paneer Do Pyaza",
+          "isVeg": true,
+          "prices": {
+            "full": 280
+          }
+        },
+        {
+          "name": "Home Style Chicken",
+          "isVeg": false,
+          "prices": {
+            "medium": 320,
+            "large": 600
+          }
+        },
+        {
+          "name": "Matar Paneer",
+          "isVeg": true,
+          "prices": {
+            "full": 250
+          }
+        },
+        {
+          "name": "Dal Makhni",
+          "isVeg": true,
+          "prices": {
+            "full": 190
+          }
+        },
+        {
+          "name": "Paneer Bhurji",
+          "isVeg": true,
+          "prices": {
+            "full": 270
+          }
+        },
+        {
+          "name": "Masala Chicken",
+          "isVeg": false,
+          "prices": {
+            "half": 300,
+            "full": 580
+          }
+        },
+        {
+          "name": "Shahi Paneer",
+          "isVeg": true,
+          "prices": {
+            "large": 280
+          }
+        },
+        {
+          "name": "Masala Chaap Gravy",
+          "isVeg": true,
+          "prices": {
+            "full": 280
+          }
+        },
+        {
+          "name": "Dal Fry",
+          "isVeg": true,
+          "prices": {
+            "full": 190
+          }
+        },
+        {
+          "name": "Kadhai Mushroom",
+          "isVeg": true,
+          "prices": {
+            "full": 270
+          }
+        },
+        {
+          "name": "Lemon Chicken",
+          "isVeg": false,
+          "prices": {
+            "half": 280,
+            "full": 500
+          }
+        },
+        {
+          "name": "Dal Bukara",
+          "isVeg": true,
+          "prices": {
+            "full": 220
+          }
+        },
+        {
+          "name": "Paneer Butter Masala",
+          "isVeg": true,
+          "prices": {
+            "full": 280
+          }
+        },
+        {
+          "name": "Mushroom Masala",
+          "isVeg": true,
+          "prices": {
+            "full": 220
+          }
+        },
+        {
+          "name": "Mushroom Do Pyaza",
+          "isVeg": true,
+          "prices": {
+            "full": 270
+          }
+        }
+      ]
+    },
+    {
+      "categoryType": "Coffee",
+      "items": [
+        {
+          "name": "Espresso",
+          "isVeg": true,
+          "prices": {
+            "full": 99
+          }
+        },
+        {
+          "name": "Hot Chocolate",
+          "isVeg": true,
+          "prices": {
+            "full": 179
+          }
+        },
+        {
+          "name": "Classic Cold Coffee",
+          "isVeg": true,
+          "prices": {
+            "large": 179
+          }
+        },
+        {
+          "name": "Nutella Cold Coffee",
+          "isVeg": true,
+          "prices": {
+            "full": 189
+          }
+        },
+        {
+          "name": "Cappuccino",
+          "isVeg": true,
+          "prices": {
+            "full": 179
+          }
+        },
+        {
+          "name": "Oreo Cold Coffee",
+          "isVeg": true,
+          "prices": {
+            "full": 179
+          }
+        },
+        {
+          "name": "Caffe Latte",
+          "isVeg": true,
+          "prices": {
+            "full": 179
+          }
+        },
+        {
+          "name": "Caffe Mocha",
+          "isVeg": true,
+          "prices": {
+            "full": 189
+          }
+        },
+        {
+          "name": "Hazelnut Cold Coffee",
+          "isVeg": true,
+          "prices": {
+            "large": 179
+          }
+        },
+        {
+          "name": "Tea",
+          "isVeg": true,
+          "prices": {
+            "large": 50
+          }
+        },
+        {
+          "name": "Americano",
+          "isVeg": true,
+          "prices": {
+            "full": 129
+          }
+        },
+        {
+          "name": "Extra Flavour",
+          "isVeg": true,
+          "prices": {
+            "full": 29
+          }
+        }
+      ]
+    },
+    {
+      "categoryType": "Salad",
+      "items": [
+        {
+          "name": "Green Salad",
+          "isVeg": true,
+          "prices": {
+            "full": 100
+          }
+        },
+        {
+          "name": "Kachumber Salad",
+          "isVeg": true,
+          "prices": {
+            "full": 140
+          }
+        }
+      ]
+    },
+    {
+      "categoryType": "Chinese",
+      "items": [
+        {
+          "name": "Cheese Balls Garlic Sauce",
+          "isVeg": true,
+          "prices": {
+            "full": 260
+          }
+        },
+        {
+          "name": "Garlic Paneer",
+          "isVeg": true,
+          "prices": {
+            "full": 250
+          }
+        },
+        {
+          "name": "Garlic Chicken",
+          "isVeg": false,
+          "prices": {
+            "half": 290,
+            "full": 530
+          }
+        },
+        {
+          "name": "KFC Style Chicken",
+          "isVeg": false,
+          "prices": {
+            "half": 320,
+            "full": 600
+          }
+        },
+        {
+          "name": "Chilli Paneer Gravy",
+          "isVeg": true,
+          "prices": {
+            "full": 250
+          }
+        },
+        {
+          "name": "Cheese Fingers",
+          "isVeg": true,
+          "prices": {
+            "full": 250
+          }
+        },
+        {
+          "name": "Singaporean Chilli Paneer",
+          "isVeg": true,
+          "prices": {
+            "full": 300
+          }
+        },
+        {
+          "name": "Veg Kabab",
+          "isVeg": true,
+          "prices": {
+            "full": 250
+          }
+        },
+        {
+          "name": "Chilli Chicken",
+          "isVeg": false,
+          "prices": {
+            "half": 290,
+            "full": 530
+          }
+        },
+        {
+          "name": "Crispy Chicken",
+          "isVeg": false,
+          "prices": {
+            "half": 280,
+            "full": 540
+          }
+        },
+        {
+          "name": "Veg Manchurian Gravy",
+          "isVeg": true,
+          "prices": {
+            "full": 220
+          }
+        },
+        {
+          "name": "Veg Manchurian Dry",
+          "isVeg": true,
+          "prices": {
+            "full": 240
+          }
+        },
+        {
+          "name": "Chilli Paneer Dry",
+          "isVeg": true,
+          "prices": {
+            "full": 250
+          }
+        },
+        {
+          "name": "Fry Chicken",
+          "isVeg": false,
+          "prices": {
+            "small": 250,
+            "large": 480
+          }
+        },
+        {
+          "name": "Chilli Mushroom",
+          "isVeg": true,
+          "prices": {
+            "full": 240
+          }
+        },
+        {
+          "name": "Singaporean Chilli Chicken",
+          "isVeg": false,
+          "prices": {
+            "half": 380,
+            "full": 720
+          }
+        },
+        {
+          "name": "Honey Chilli Cauliflower",
+          "isVeg": true,
+          "prices": {
+            "full": 240
+          }
+        },
+        {
+          "name": "Schezwan Chicken",
+          "isVeg": false,
+          "prices": {
+            "half": 300,
+            "full": 580
+          }
+        },
+        {
+          "name": "Honey Chilli Potato",
+          "isVeg": true,
+          "prices": {
+            "full": 220
+          }
+        }
+      ]
+    },
+    {
+      "categoryType": "Water",
+      "items": [
+        {
+          "name": "Water Small",
+          "isVeg": true,
+          "prices": {
+            "small": 10
+          }
+        },
+        {
+          "name": "Water Large",
+          "isVeg": true,
+          "prices": {
+            "large": 30
+          }
+        }
+      ]
+    },
+    {
+      "categoryType": "Noodles",
+      "items": [
+        {
+          "name": "Chicken Schezwan Noodles",
+          "isVeg": false,
+          "prices": {
+            "full": 199
+          }
+        },
+        {
+          "name": "Chicken Hakka Noodles",
+          "isVeg": false,
+          "prices": {
+            "full": 199
+          }
+        },
+        {
+          "name": "Chicken Noodles",
+          "isVeg": false,
+          "prices": {
+            "full": 199
+          }
+        },
+        {
+          "name": "Hakka Noodles",
+          "isVeg": true,
+          "prices": {
+            "full": 209
+          }
+        },
+        {
+          "name": "Schezwan Noodles",
+          "isVeg": true,
+          "prices": {
+            "full": 219
+          }
+        },
+        {
+          "name": "Veg Noodles",
+          "isVeg": true,
+          "prices": {
+            "full": 179
+          }
+        },
+        {
+          "name": "Veg Thupka",
+          "isVeg": true,
+          "prices": {
+            "medium": 150
+          }
+        }
+      ]
+    },
+    {
+      "categoryType": "Pizza",
+      "items": [
+        {
+          "name": "Chicken Tikka Pizza",
+          "isVeg": false,
+          "prices": {
+            "small": 269,
+            "medium": 369
+          }
+        },
+        {
+          "name": "Chicken Loaded Pizza",
+          "isVeg": false,
+          "prices": {
+            "small": 269,
+            "medium": 369
+          }
+        },
+        {
+          "name": "Paneer Tikka Pizza",
+          "isVeg": true,
+          "prices": {
+            "small": 269,
+            "medium": 369
+          }
+        },
+        {
+          "name": "Corn Chinese Pizza",
+          "isVeg": true,
+          "prices": {
+            "small": 170,
+            "medium": 220
+          }
+        },
+        {
+          "name": "Onion Capsicum Pizza",
+          "isVeg": true,
+          "prices": {
+            "small": 169,
+            "medium": 220
+          }
+        },
+        {
+          "name": "Farm House Pizza",
+          "isVeg": true,
+          "prices": {
+            "small": 279,
+            "medium": 429
+          }
+        },
+        {
+          "name": "Mushroom Pizza",
+          "isVeg": true,
+          "prices": {
+            "small": 269,
+            "medium": 369
+          }
+        },
+        {
+          "name": "Chicken Corn Pizza",
+          "isVeg": false,
+          "prices": {
+            "small": 279,
+            "medium": 379
+          }
+        },
+        {
+          "name": "Cheese Burst Pizza",
+          "isVeg": true,
+          "prices": {
+            "small": 269,
+            "medium": 369
+          }
+        },
+        {
+          "name": "Extra Cheese",
+          "isVeg": true,
+          "prices": {
+            "full": 49
+          }
+        },
+        {
+          "name": "Extra Toppings",
+          "isVeg": true,
+          "prices": {
+            "full": 39
+          }
+        }
+      ]
+    },
+    {
+      "categoryType": "Shakes",
+      "items": [
+        {
+          "name": "Nutella Shake",
+          "isVeg": true,
+          "prices": {
+            "full": 189
+          }
+        },
+        {
+          "name": "Mango Shake",
+          "isVeg": true,
+          "prices": {
+            "full": 179
+          }
+        },
+        {
+          "name": "Blueberry Shake",
+          "isVeg": true,
+          "prices": {
+            "full": 149
+          }
+        },
+        {
+          "name": "KitKat Shake",
+          "isVeg": true,
+          "prices": {
+            "full": 169
+          }
+        },
+        {
+          "name": "Caramel Shake",
+          "isVeg": true,
+          "prices": {
+            "full": 169
+          }
+        },
+        {
+          "name": "Butter Scotch Shake",
+          "isVeg": true,
+          "prices": {
+            "full": 179
+          }
+        },
+        {
+          "name": "Oreo Shake",
+          "isVeg": true,
+          "prices": {
+            "full": 169
+          }
+        },
+        {
+          "name": "Vanilla Shake",
+          "isVeg": true,
+          "prices": {
+            "full": 159
+          }
+        },
+        {
+          "name": "Black Currant Shake",
+          "isVeg": true,
+          "prices": {
+            "full": 179
+          }
+        },
+        {
+          "name": "Strawberry Shake",
+          "isVeg": true,
+          "prices": {
+            "full": 179
+          }
+        },
+        {
+          "name": "Chocolate Shake",
+          "isVeg": true,
+          "prices": {
+            "full": 169
+          }
+        }
+      ]
+    },
+    {
+      "categoryType": "Momos",
+      "items": [
+        {
+          "name": "Veg Momos",
+          "isVeg": true,
+          "prices": {
+            "full": 120
+          }
+        },
+        {
+          "name": "Non Veg Momos",
+          "isVeg": false,
+          "prices": {
+            "full": 180
+          }
+        }
+      ]
+    },
+    {
+      "categoryType": "Dessert",
+      "items": [
+        {
+          "name": "Ice Cream",
+          "isVeg": true,
+          "prices": {
+            "full": 50
+          }
+        },
+        {
+          "name": "Gulab Jamun",
+          "isVeg": true,
+          "prices": {
+            "full": 50
+          }
+        }
+      ]
+    },
+    {
+      "categoryType": "Rice",
+      "items": [
+        {
+          "name": "Plain Rice",
+          "isVeg": true,
+          "prices": {
+            "full": 130
+          }
+        },
+        {
+          "name": "Veg Fried Rice",
+          "isVeg": true,
+          "prices": {
+            "full": 180
+          }
+        },
+        {
+          "name": "Egg Fried Rice",
+          "isVeg": false,
+          "prices": {
+            "full": 200
+          }
+        },
+        {
+          "name": "Zeera Rice",
+          "isVeg": true,
+          "prices": {
+            "full": 160
+          }
+        },
+        {
+          "name": "Chicken Fried Rice",
+          "isVeg": false,
+          "prices": {
+            "full": 220
+          }
+        },
+        {
+          "name": "Veg Pulao",
+          "isVeg": true,
+          "prices": {
+            "full": 180
+          }
+        }
+      ]
+    },
+    {
+      "categoryType": "Pasta",
+      "items": [
+        {
+          "name": "Red Sauce Pasta",
+          "isVeg": true,
+          "prices": {
+            "full": 200
+          }
+        },
+        {
+          "name": "White Chicken Pasta",
+          "isVeg": false,
+          "prices": {
+            "full": 320
+          }
+        },
+        {
+          "name": "White Sauce Pasta",
+          "isVeg": true,
+          "prices": {
+            "full": 220
+          }
+        },
+        {
+          "name": "Red Chicken Pasta",
+          "isVeg": false,
+          "prices": {
+            "full": 300
+          }
+        }
+      ]
+    },
+    {
+      "categoryType": "Roti",
+      "items": [
+        {
+          "name": "Plain Roti",
+          "isVeg": true,
+          "prices": {
+            "full": 15
+          }
+        },
+        {
+          "name": "Extra Butter",
+          "isVeg": true,
+          "prices": {
+            "full": 15
+          }
+        },
+        {
+          "name": "Butter Roti",
+          "isVeg": true,
+          "prices": {
+            "full": 20
+          }
+        },
+        {
+          "name": "Lachha Parantha",
+          "isVeg": true,
+          "prices": {
+            "full": 45
+          }
+        },
+        {
+          "name": "Butter Naan",
+          "isVeg": true,
+          "prices": {
+            "full": 50
+          }
+        },
+        {
+          "name": "Plain Naan",
+          "isVeg": true,
+          "prices": {
+            "full": 40
+          }
+        },
+        {
+          "name": "Missi Roti",
+          "isVeg": true,
+          "prices": {
+            "full": 35
+          }
+        }
+      ]
+    },
+    {
+      "categoryType": "Hotdog",
+      "items": [
+        {
+          "name": "Veg Hotdog Sandwich",
+          "isVeg": true,
+          "prices": {
+            "full": 119
+          }
+        },
+        {
+          "name": "Plain Hot Dog",
+          "isVeg": true,
+          "prices": {
+            "medium": 79
+          }
+        },
+        {
+          "name": "Chicken Hotdog Sandwich",
+          "isVeg": false,
+          "prices": {
+            "full": 149
+          }
+        }
+      ]
+    },
+    {
+      "categoryType": "Fries",
+      "items": [
+        {
+          "name": "Plain Fries",
+          "isVeg": true,
+          "prices": {
+            "full": 120
+          }
+        },
+        {
+          "name": "Peanut Masala",
+          "isVeg": true,
+          "prices": {
+            "medium": 120
+          }
+        },
+        {
+          "name": "Peri Peri Fries",
+          "isVeg": true,
+          "prices": {
+            "full": 150
+          }
+        },
+        {
+          "name": "Masala Fries",
+          "isVeg": true,
+          "prices": {
+            "full": 160
+          }
+        }
+      ]
+    },
+    {
+      "categoryType": "Dahi",
+      "items": [
+        {
+          "name": "Plain Curd",
+          "isVeg": true,
+          "prices": {
+            "full": 80
+          }
+        },
+        {
+          "name": "Mixed Raita",
+          "isVeg": true,
+          "prices": {
+            "full": 100
+          }
+        },
+        {
+          "name": "Boondi Raita",
+          "isVeg": true,
+          "prices": {
+            "full": 100
+          }
+        }
+      ]
+    },
+    {
+      "categoryType": "Sandwich",
+      "items": [
+        {
+          "name": "Paneer Tikka Sandwich",
+          "isVeg": true,
+          "prices": {
+            "full": 209
+          }
+        },
+        {
+          "name": "Veg Sandwich",
+          "isVeg": true,
+          "prices": {
+            "full": 159
+          }
+        },
+        {
+          "name": "Egg Sandwich",
+          "isVeg": false,
+          "prices": {
+            "full": 249
+          }
+        },
+        {
+          "name": "Chicken Sandwich",
+          "isVeg": false,
+          "prices": {
+            "full": 279
+          }
+        },
+        {
+          "name": "Cheese Corn Sandwich",
+          "isVeg": true,
+          "prices": {
+            "full": 169
+          }
+        },
+        {
+          "name": "Chicken Corn Sandwich",
+          "isVeg": false,
+          "prices": {
+            "full": 279
+          }
+        }
+      ]
+    }
+  ]
+}
+

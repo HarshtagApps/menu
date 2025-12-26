@@ -1,0 +1,243 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html,
+body {
+    font-family: 'Afacad', sans-serif;
+    background-color: #FFFAEB;
+    color: #333333;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    width: 100%;
+    min-height: 100vh;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+}
+
+body {
+    padding: 0;
+    margin: 0;
+    min-height: 100vh;
+    position: relative;
+}
+
+#app {
+    width: 100%;
+    min-height: 100vh;
+    position: relative;
+}
+
+.secondary-appbar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    background-color: #FA057B;
+    height: 48px;
+    z-index: 1000;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.appbar-content {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 48px;
+    padding: 0 16px;
+    position: relative;
+}
+
+.appbar-title {
+    color: #FFFFFF;
+    font-size: 20px;
+    font-weight: 500;
+    text-align: center;
+    font-family: 'Afacad', sans-serif;
+    line-height: 1.2;
+}
+
+.back-button {
+    position: absolute;
+    left: 4px;
+    background: none;
+    border: none;
+    color: #FFFFFF;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 12px 8px;
+    touch-action: manipulation;
+    -webkit-tap-highlight-color: transparent;
+    height: 100%;
+    box-sizing: border-box;
+}
+
+.back-button:active {
+    opacity: 0.7;
+}
+
+.appbar-border {
+    height: 1px;
+    background-color: #FFFFFF;
+    width: 100%;
+}
+
+.restaurant-header {
+    background-color: #FFFAEB;
+    padding: 15px;
+    width: 100%;
+    box-shadow: 0 0 8px rgba(51, 51, 51, 0.25);
+}
+
+.restaurant-header-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+}
+
+.restaurant-name {
+    font-size: 26px;
+    font-weight: 700;
+    color: #FA057B;
+    letter-spacing: 2px;
+    font-family: 'Afacad', sans-serif;
+    text-transform: uppercase;
+}
+
+.restaurant-address {
+    font-size: 16px;
+    color: #333333;
+    font-weight: 400;
+    font-family: 'Afacad', sans-serif;
+}
+
+.restaurant-contact {
+    font-size: 12px;
+    color: rgba(51, 51, 51, 0.75);
+    font-weight: 400;
+    font-family: 'Afacad', sans-serif;
+}
+
+.restaurant-divider {
+    height: 0.75px;
+    background-color: #888888;
+    width: 100%;
+    margin-top: 5px;
+}
+
+.empty-state {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: calc(100vh - 100px);
+    padding: 20px;
+}
+
+.empty-icon {
+    font-size: 80px;
+    color: #888888;
+    margin-bottom: 16px;
+}
+
+.empty-title {
+    font-size: 16px;
+    color: #333333;
+    font-weight: 400;
+    margin-bottom: 8px;
+    text-align: center;
+}
+
+.empty-subtitle {
+    font-size: 12px;
+    color: #888888;
+    font-weight: 400;
+    text-align: center;
+}
+
+.error-state {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    padding: 20px;
+    background-color: #FFFAEB;
+}
+
+.error-icon {
+    font-size: 80px;
+    margin-bottom: 16px;
+}
+
+.error-title {
+    font-size: 18px;
+    color: #333333;
+    font-weight: 500;
+    margin-bottom: 8px;
+}
+
+.error-subtitle {
+    font-size: 14px;
+    color: #888888;
+    font-weight: 400;
+}
+
+* {
+    transition: background-color 0.2s ease, color 0.2s ease, opacity 0.2s ease;
+}
+
+.category-card,
+.food-item,
+.back-button {
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    -webkit-tap-highlight-color: transparent;
+}
+
+.items-container,
+.menu-container {
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+}
+
+@media (max-width: 480px) {
+    .appbar-title {
+        font-size: 22px;
+    }
+}
+
+.loading-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.3);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 9999;
+}
+
+.loading-spinner {
+    width: 50px;
+    height: 50px;
+    border: 4px solid #FFFFFF;
+    border-top-color: #FA057B;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    to {
+        transform: rotate(360deg);
+    }
+}
