@@ -4,7 +4,7 @@ export async function loadRestaurantData(restaurantId) {
     }
 
     try {
-        const response = await fetch(`./data/${restaurantId}.json`);
+        const response = await fetch(`../data/${restaurantId}.json`);
 
         if (!response.ok) {
             if (response.status === 404) {
