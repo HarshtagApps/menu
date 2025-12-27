@@ -17,7 +17,7 @@ async function initApp() {
 
     try {
         const restaurantData = await loadRestaurantData(restaurantId);
-        const router = new Router(restaurantData);
+        const router = new Router(restaurantData, restaurantId);
         setTimeout(() => {
             router.handleInitialRoute();
         }, 2500);
