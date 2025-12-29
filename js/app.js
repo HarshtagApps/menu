@@ -4,13 +4,13 @@ import { loadRestaurantData } from './api.js';
 async function initApp() {
     const app = document.getElementById('app');
     const urlParams = new URLSearchParams(window.location.search);
-    const restaurantId = urlParams.get('r') || 'montagna';
+    const restaurantId = urlParams.get('r') || '';
 
     app.innerHTML = `
         <div class="splash-screen">
             <img src="assets/images/logo.png" alt="Logo" class="splash-logo">
             <div class="splash-footer">
-                <div class="splash-developed">Developed by</div>
+                <div class="splash-developed">Powered by</div>
                 <div class="splash-brand">HARSHTAG</div>
             </div>
         </div>`;

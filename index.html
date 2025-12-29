@@ -1,17 +1,19 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Harshtag Apps</title>
     <script>
-        // Redirect to splash page with restaurant parameter
         const urlParams = new URLSearchParams(window.location.search);
-        const restaurantId = urlParams.get('r') || 'montagna';
-        window.location.href = `pages/splash.html?r=${encodeURIComponent(restaurantId)}`;
+        const restaurantId = urlParams.get('r') || '';
+        window.location.href = `pages/menu.html?r=${encodeURIComponent(restaurantId)}`;
     </script>
 </head>
+
 <body>
     <p>Redirecting...</p>
 </body>
+
 </html>

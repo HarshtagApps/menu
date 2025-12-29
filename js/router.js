@@ -17,10 +17,9 @@ class Router {
         const restoName = (restoDetails.restoName || '').toUpperCase();
         const restoAddress = restoDetails.address || '';
         const restoContact = restoDetails.contact || '';
-        
-        // Update page title
+
         document.title = restoName ? `${restoName} | Harshtag Apps` : 'Harshtag Apps';
-        
+
         this.appElement.innerHTML = `
             <div class="page-transition">
                 <div class="restaurant-header">
