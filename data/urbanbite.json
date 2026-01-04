@@ -3,7 +3,7 @@
     "restoDetails": {
         "restoName": "URBAN BITE",
         "address": "Daulatpur Chowk",
-        "contact": ""
+        "contact": "urbanbite_chowk@gmail.com"
     },
     "categories": [
         {
@@ -534,6 +534,32 @@
                     "isVeg": true,
                     "prices": {
                         "large": 129
+                    }
+                }
+            ]
+        },
+        {
+            "categoryType": "Water",
+            "items": [
+                {
+                    "name": "Water Small",
+                    "isVeg": true,
+                    "prices": {
+                        "small": 10
+                    }
+                },
+                {
+                    "name": "Water Large",
+                    "isVeg": true,
+                    "prices": {
+                        "large": 20
+                    }
+                },
+                {
+                    "name": "Cold-Drinks (@rate)",
+                    "isVeg": true,
+                    "prices": {
+                        "large": 0
                     }
                 }
             ]
