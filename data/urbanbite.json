@@ -1,0 +1,542 @@
+{
+    "id": "urbanbite",
+    "restoDetails": {
+        "restoName": "URBAN BITE",
+        "address": "Daulatpur Chowk",
+        "contact": ""
+    },
+    "categories": [
+        {
+            "categoryType": "Pizza",
+            "items": [
+                {
+                    "name": "Margherita Pizza",
+                    "isVeg": true,
+                    "prices": {
+                        "small": 119,
+                        "medium": 159,
+                        "large": 199
+                    }
+                },
+                {
+                    "name": "Farmhouse Pizza",
+                    "isVeg": true,
+                    "prices": {
+                        "medium": 179,
+                        "large": 219
+                    }
+                },
+                {
+                    "name": "Veg Loaded Pizza",
+                    "isVeg": true,
+                    "prices": {
+                        "small": 149,
+                        "large": 229
+                    }
+                },
+                {
+                    "name": "Cheese Burst Pizza",
+                    "isVeg": true,
+                    "prices": {
+                        "medium": 199
+                    }
+                },
+                {
+                    "name": "Corn & Cheese Pizza",
+                    "isVeg": true,
+                    "prices": {
+                        "small": 139,
+                        "medium": 179
+                    }
+                },
+                {
+                    "name": "Paneer Tikka Pizza",
+                    "isVeg": true,
+                    "prices": {
+                        "medium": 209,
+                        "large": 249
+                    }
+                },
+                {
+                    "name": "Chicken Pizza",
+                    "isVeg": false,
+                    "prices": {
+                        "medium": 189,
+                        "large": 239
+                    }
+                },
+                {
+                    "name": "BBQ Chicken Pizza",
+                    "isVeg": false,
+                    "prices": {
+                        "large": 259
+                    }
+                },
+                {
+                    "name": "Pepper Chicken Pizza",
+                    "isVeg": false,
+                    "prices": {
+                        "medium": 219
+                    }
+                },
+                {
+                    "name": "Classic Veg Pizza",
+                    "isVeg": true,
+                    "prices": {
+                        "small": 129
+                    }
+                }
+            ]
+        },
+        {
+            "categoryType": "Burgers",
+            "items": [
+                {
+                    "name": "Veg Burger",
+                    "isVeg": true,
+                    "prices": {
+                        "full": 39
+                    }
+                },
+                {
+                    "name": "Veg Cheese Burger",
+                    "isVeg": true,
+                    "prices": {
+                        "full": 59
+                    }
+                },
+                {
+                    "name": "Paneer Burger",
+                    "isVeg": true,
+                    "prices": {
+                        "full": 79
+                    }
+                },
+                {
+                    "name": "Aloo Tikki Burger",
+                    "isVeg": true,
+                    "prices": {
+                        "full": 49
+                    }
+                },
+                {
+                    "name": "Corn Burger",
+                    "isVeg": true,
+                    "prices": {
+                        "full": 79
+                    }
+                },
+                {
+                    "name": "Chicken Burger",
+                    "isVeg": false,
+                    "prices": {
+                        "full": 119
+                    }
+                },
+                {
+                    "name": "Crispy Chicken Burger",
+                    "isVeg": false,
+                    "prices": {
+                        "full": 139
+                    }
+                },
+                {
+                    "name": "Chicken Cheese Burger",
+                    "isVeg": false,
+                    "prices": {
+                        "full": 149
+                    }
+                },
+                {
+                    "name": "Spicy Chicken Burger",
+                    "isVeg": false,
+                    "prices": {
+                        "full": 109
+                    }
+                },
+                {
+                    "name": "Classic Noodles Burger",
+                    "isVeg": true,
+                    "prices": {
+                        "full": 59
+                    }
+                }
+            ]
+        },
+        {
+            "categoryType": "Sandwich",
+            "items": [
+                {
+                    "name": "Veg Grilled Sandwich",
+                    "isVeg": true,
+                    "prices": {
+                        "full": 99
+                    }
+                },
+                {
+                    "name": "Cheese Sandwich",
+                    "isVeg": true,
+                    "prices": {
+                        "full": 69
+                    }
+                },
+                {
+                    "name": "Corn Cheese Sandwich",
+                    "isVeg": true,
+                    "prices": {
+                        "full": 79
+                    }
+                },
+                {
+                    "name": "Veg Club Sandwich",
+                    "isVeg": true,
+                    "prices": {
+                        "full": 99
+                    }
+                },
+                {
+                    "name": "Paneer Sandwich",
+                    "isVeg": true,
+                    "prices": {
+                        "full": 89
+                    }
+                },
+                {
+                    "name": "Chicken Sandwich",
+                    "isVeg": false,
+                    "prices": {
+                        "full": 119
+                    }
+                },
+                {
+                    "name": "Grilled Chicken Sandwich",
+                    "isVeg": false,
+                    "prices": {
+                        "full": 129
+                    }
+                },
+                {
+                    "name": "Chicken Cheese Sandwich",
+                    "isVeg": false,
+                    "prices": {
+                        "full": 129
+                    }
+                },
+                {
+                    "name": "Egg Sandwich",
+                    "isVeg": false,
+                    "prices": {
+                        "full": 109
+                    }
+                },
+                {
+                    "name": "Classic Sandwich",
+                    "isVeg": true,
+                    "prices": {
+                        "full": 39
+                    }
+                }
+            ]
+        },
+        {
+            "categoryType": "Fries",
+            "items": [
+                {
+                    "name": "Plain Fries",
+                    "isVeg": true,
+                    "prices": {
+                        "full": 59
+                    }
+                },
+                {
+                    "name": "Masala Fries",
+                    "isVeg": true,
+                    "prices": {
+                        "full": 99
+                    }
+                },
+                {
+                    "name": "Peri Peri Fries",
+                    "isVeg": true,
+                    "prices": {
+                        "full": 109
+                    }
+                },
+                {
+                    "name": "Cheese Fries",
+                    "isVeg": true,
+                    "prices": {
+                        "full": 129
+                    }
+                },
+                {
+                    "name": "Garlic Fries",
+                    "isVeg": true,
+                    "prices": {
+                        "full": 119
+                    }
+                },
+                {
+                    "name": "Spicy Fries",
+                    "isVeg": true,
+                    "prices": {
+                        "full": 69
+                    }
+                },
+                {
+                    "name": "Classic Fries",
+                    "isVeg": true,
+                    "prices": {
+                        "full": 99
+                    }
+                },
+                {
+                    "name": "Loaded Fries",
+                    "isVeg": true,
+                    "prices": {
+                        "full": 139
+                    }
+                },
+                {
+                    "name": "Butter Fries",
+                    "isVeg": true,
+                    "prices": {
+                        "full": 109
+                    }
+                },
+                {
+                    "name": "Salted Fries",
+                    "isVeg": true,
+                    "prices": {
+                        "full": 69
+                    }
+                }
+            ]
+        },
+        {
+            "categoryType": "Mocktails",
+            "items": [
+                {
+                    "name": "Fresh Lime Soda",
+                    "isVeg": true,
+                    "prices": {
+                        "full": 99
+                    }
+                },
+                {
+                    "name": "Virgin Mojito",
+                    "isVeg": true,
+                    "prices": {
+                        "full": 119
+                    }
+                },
+                {
+                    "name": "Blue Lagoon",
+                    "isVeg": true,
+                    "prices": {
+                        "full": 129
+                    }
+                },
+                {
+                    "name": "Green Apple",
+                    "isVeg": true,
+                    "prices": {
+                        "full": 129
+                    }
+                },
+                {
+                    "name": "Lemon Iced Tea",
+                    "isVeg": true,
+                    "prices": {
+                        "full": 109
+                    }
+                },
+                {
+                    "name": "Peach Iced Tea",
+                    "isVeg": true,
+                    "prices": {
+                        "full": 109
+                    }
+                },
+                {
+                    "name": "Fruit Punch",
+                    "isVeg": true,
+                    "prices": {
+                        "full": 139
+                    }
+                },
+                {
+                    "name": "Mint Cooler",
+                    "isVeg": true,
+                    "prices": {
+                        "full": 99
+                    }
+                },
+                {
+                    "name": "Watermelon Cooler",
+                    "isVeg": true,
+                    "prices": {
+                        "full": 119
+                    }
+                },
+                {
+                    "name": "Orange Blast",
+                    "isVeg": true,
+                    "prices": {
+                        "full": 119
+                    }
+                }
+            ]
+        },
+        {
+            "categoryType": "Coffee",
+            "items": [
+                {
+                    "name": "Classic Brew",
+                    "isVeg": true,
+                    "prices": {
+                        "full": 79
+                    }
+                },
+                {
+                    "name": "Chilled Brew",
+                    "isVeg": true,
+                    "prices": {
+                        "full": 99
+                    }
+                },
+                {
+                    "name": "Dark Roast",
+                    "isVeg": true,
+                    "prices": {
+                        "full": 69
+                    }
+                },
+                {
+                    "name": "Creamy Brew",
+                    "isVeg": true,
+                    "prices": {
+                        "full": 109
+                    }
+                },
+                {
+                    "name": "Smooth Latte",
+                    "isVeg": true,
+                    "prices": {
+                        "full": 119
+                    }
+                },
+                {
+                    "name": "Choco Brew",
+                    "isVeg": true,
+                    "prices": {
+                        "full": 129
+                    }
+                },
+                {
+                    "name": "South Brew",
+                    "isVeg": true,
+                    "prices": {
+                        "full": 79
+                    }
+                },
+                {
+                    "name": "Bold Brew",
+                    "isVeg": true,
+                    "prices": {
+                        "full": 89
+                    }
+                },
+                {
+                    "name": "Milk Blend",
+                    "isVeg": true,
+                    "prices": {
+                        "full": 79
+                    }
+                },
+                {
+                    "name": "House Special Brew",
+                    "isVeg": true,
+                    "prices": {
+                        "full": 99
+                    }
+                }
+            ]
+        },
+        {
+            "categoryType": "Shakes",
+            "items": [
+                {
+                    "name": "Chocolate Shake",
+                    "isVeg": true,
+                    "prices": {
+                        "large": 119
+                    }
+                },
+                {
+                    "name": "Strawberry Shake",
+                    "isVeg": true,
+                    "prices": {
+                        "large": 109
+                    }
+                },
+                {
+                    "name": "Vanilla Shake",
+                    "isVeg": true,
+                    "prices": {
+                        "large": 99
+                    }
+                },
+                {
+                    "name": "Oreo Shake",
+                    "isVeg": true,
+                    "prices": {
+                        "large": 129
+                    }
+                },
+                {
+                    "name": "Mango Shake",
+                    "isVeg": true,
+                    "prices": {
+                        "large": 119
+                    }
+                },
+                {
+                    "name": "Banana Shake",
+                    "isVeg": true,
+                    "prices": {
+                        "large": 99
+                    }
+                },
+                {
+                    "name": "Pineapple Shake",
+                    "isVeg": true,
+                    "prices": {
+                        "large": 109
+                    }
+                },
+                {
+                    "name": "KitKat Shake",
+                    "isVeg": true,
+                    "prices": {
+                        "large": 139
+                    }
+                },
+                {
+                    "name": "Cold Coffee",
+                    "isVeg": true,
+                    "prices": {
+                        "large": 119
+                    }
+                },
+                {
+                    "name": "Butterscotch Shake",
+                    "isVeg": true,
+                    "prices": {
+                        "large": 129
+                    }
+                }
+            ]
+        }
+    ]
+}

@@ -14,7 +14,7 @@ export const MenuData = {
         { image: ProjectImages.water, name: "Water" },
         { image: ProjectImages.coffee, name: "Coffee" },
         { image: ProjectImages.shakes, name: "Shakes" },
-        { image: ProjectImages.burger, name: "Burger" },
+        { image: ProjectImages.burger, name: "Burgers" },
         { image: ProjectImages.hotDog, name: "Hotdog" },
         { image: ProjectImages.chinese, name: "Chinese" },
         { image: ProjectImages.noodles, name: "Noodles" },
