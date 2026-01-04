@@ -13,70 +13,63 @@
           "name": "Fresh Lime Soda",
           "isVeg": true,
           "prices": {
-            "full": 129
+            "full": 130
           }
         },
         {
           "name": "Fruit Punch",
           "isVeg": true,
           "prices": {
-            "full": 259
+            "full": 260
           }
         },
         {
           "name": "Lemon Iced Tea",
           "isVeg": true,
           "prices": {
-            "full": 199
+            "full": 180
           }
         },
         {
           "name": "Kiwi Mojito",
           "isVeg": true,
           "prices": {
-            "full": 199
+            "full": 200
           }
         },
         {
           "name": "Mango Mint",
           "isVeg": true,
           "prices": {
-            "full": 199
+            "full": 200
           }
         },
         {
           "name": "Virgin Mojito",
           "isVeg": true,
           "prices": {
-            "full": 199
-          }
-        },
-        {
-          "name": "Cold Drinks",
-          "isVeg": true,
-          "prices": {
-            "large": 40
+            "full": 200
           }
         },
         {
           "name": "Peach Iced Tea",
           "isVeg": true,
           "prices": {
-            "full": 169
+            "full": 180
           }
         },
         {
           "name": "Green Apple",
           "isVeg": true,
           "prices": {
-            "full": 199
+            "full": 200
           }
         },
         {
           "name": "Blue Lagoon",
           "isVeg": true,
           "prices": {
-            "full": 199
+            "full": 200
           }
         }
       ]
@@ -95,14 +88,14 @@
           "name": "Manchow Soup",
           "isVeg": true,
           "prices": {
-            "full": 80
+            "full": 90
           }
         },
         {
           "name": "Sweet Corn Soup",
           "isVeg": true,
           "prices": {
-            "full": 100
+            "full": 90
           }
         },
         {
@@ -153,40 +146,26 @@
           }
         },
         {
-          "name": "Masala Chaap",
-          "isVeg": true,
-          "prices": {
-            "full": 160
-          }
-        },
-        {
-          "name": "Malai Chaap",
-          "isVeg": true,
-          "prices": {
-            "full": 180
-          }
-        },
-        {
           "name": "Afghani Chicken",
           "isVeg": false,
           "prices": {
-            "half": 290,
-            "full": 490
+            "half": 300,
+            "full": 500
           }
         },
         {
           "name": "Tandoori Chicken",
           "isVeg": false,
           "prices": {
-            "half": 260,
-            "full": 480
+            "half": 280,
+            "full": 500
           }
         },
         {
           "name": "Paneer Malai Tikka",
           "isVeg": true,
           "prices": {
-            "large": 270
+            "large": 280
           }
         },
         {
@@ -219,7 +198,7 @@
           "name": "Butter Chicken",
           "isVeg": false,
           "prices": {
-            "half": 320,
+            "half": 330,
             "full": 600
           }
         },
@@ -235,22 +214,22 @@
           "isVeg": false,
           "prices": {
             "half": 340,
-            "full": 640
+            "full": 600
           }
         },
         {
           "name": "Kadhai Chicken",
           "isVeg": false,
           "prices": {
-            "half": 300,
-            "full": 580
+            "half": 320,
+            "full": 600
           }
         },
         {
           "name": "Kadhai Paneer",
           "isVeg": true,
           "prices": {
-            "full": 270
+            "full": 290
           }
         },
         {
@@ -264,14 +243,21 @@
           "name": "Paneer Do Pyaza",
           "isVeg": true,
           "prices": {
-            "full": 280
+            "full": 290
+          }
+        },
+        {
+          "name": "Paneer Rogan Josh",
+          "isVeg": true,
+          "prices": {
+            "medium": 300
           }
         },
         {
           "name": "Home Style Chicken",
           "isVeg": false,
           "prices": {
-            "medium": 320,
+            "medium": 330,
             "large": 600
           }
         },
@@ -286,22 +272,22 @@
           "name": "Dal Makhni",
           "isVeg": true,
           "prices": {
-            "full": 190
+            "full": 200
           }
         },
         {
           "name": "Paneer Bhurji",
           "isVeg": true,
           "prices": {
-            "full": 270
+            "full": 280
           }
         },
         {
           "name": "Masala Chicken",
           "isVeg": false,
           "prices": {
-            "half": 300,
-            "full": 580
+            "half": 320,
+            "full": 590
           }
         },
         {
@@ -336,7 +322,7 @@
           "name": "Lemon Chicken",
           "isVeg": false,
           "prices": {
-            "half": 280,
+            "half": 310,
             "full": 500
           }
         },
@@ -351,7 +337,7 @@
           "name": "Paneer Butter Masala",
           "isVeg": true,
           "prices": {
-            "full": 280
+            "full": 290
           }
         },
         {
@@ -377,84 +363,77 @@
           "name": "Espresso",
           "isVeg": true,
           "prices": {
-            "full": 99
+            "full": 100
           }
         },
         {
           "name": "Hot Chocolate",
           "isVeg": true,
           "prices": {
-            "full": 179
+            "full": 180
           }
         },
         {
           "name": "Classic Cold Coffee",
           "isVeg": true,
           "prices": {
-            "large": 179
+            "large": 180
           }
         },
         {
           "name": "Nutella Cold Coffee",
           "isVeg": true,
           "prices": {
-            "full": 189
+            "full": 180
           }
         },
         {
           "name": "Cappuccino",
           "isVeg": true,
           "prices": {
-            "full": 179
+            "full": 180
           }
         },
         {
           "name": "Oreo Cold Coffee",
           "isVeg": true,
           "prices": {
-            "full": 179
+            "full": 180
           }
         },
         {
           "name": "Caffe Latte",
           "isVeg": true,
           "prices": {
-            "full": 179
+            "full": 180
           }
         },
         {
           "name": "Caffe Mocha",
           "isVeg": true,
           "prices": {
-            "full": 189
+            "full": 190
           }
         },
         {
           "name": "Hazelnut Cold Coffee",
           "isVeg": true,
           "prices": {
-            "large": 179
-          }
-        },
-        {
-          "name": "Tea",
-          "isVeg": true,
-          "prices": {
-            "large": 50
+            "large": 180
           }
         },
         {
           "name": "Americano",
           "isVeg": true,
           "prices": {
-            "full": 129
+            "full": 130
           }
         },
         {
           "name": "Extra Flavour",
           "isVeg": true,
           "prices": {
-            "full": 29
+            "full": 30
           }
         }
       ]
@@ -492,7 +471,7 @@
           "name": "Garlic Paneer",
           "isVeg": true,
           "prices": {
-            "full": 250
+            "full": 270
           }
         },
         {
@@ -515,7 +494,7 @@
           "name": "Chilli Paneer Gravy",
           "isVeg": true,
           "prices": {
-            "full": 250
+            "full": 280
           }
         },
         {
@@ -543,7 +522,7 @@
           "name": "Chilli Chicken",
           "isVeg": false,
           "prices": {
-            "half": 290,
+            "half": 320,
             "full": 530
           }
         },
@@ -559,28 +538,28 @@
           "name": "Veg Manchurian Gravy",
           "isVeg": true,
           "prices": {
-            "full": 220
+            "full": 240
           }
         },
         {
           "name": "Veg Manchurian Dry",
           "isVeg": true,
           "prices": {
-            "full": 240
+            "full": 220
           }
         },
         {
           "name": "Chilli Paneer Dry",
           "isVeg": true,
           "prices": {
-            "full": 250
+            "full": 270
           }
         },
         {
           "name": "Fry Chicken",
           "isVeg": false,
           "prices": {
-            "small": 250,
+            "small": 260,
             "large": 480
           }
         },
@@ -620,6 +599,13 @@
           "prices": {
             "full": 220
           }
+        },
+        {
+          "name": "Boneless Chicken (Extras)",
+          "isVeg": false,
+          "prices": {
+            "full": 80
+          }
         }
       ]
     },
@@ -649,42 +635,42 @@
           "name": "Chicken Schezwan Noodles",
           "isVeg": false,
           "prices": {
-            "full": 199
+            "full": 200
           }
         },
         {
           "name": "Chicken Hakka Noodles",
           "isVeg": false,
           "prices": {
-            "full": 199
+            "full": 200
           }
         },
         {
           "name": "Chicken Noodles",
           "isVeg": false,
           "prices": {
-            "full": 199
+            "full": 200
           }
         },
         {
           "name": "Hakka Noodles",
           "isVeg": true,
           "prices": {
-            "full": 209
+            "full": 210
           }
         },
         {
           "name": "Schezwan Noodles",
           "isVeg": true,
           "prices": {
-            "full": 219
+            "full": 220
           }
         },
         {
           "name": "Veg Noodles",
           "isVeg": true,
           "prices": {
-            "full": 179
+            "full": 180
           }
         },
         {
@@ -703,28 +689,44 @@
           "name": "Chicken Tikka Pizza",
           "isVeg": false,
           "prices": {
-            "small": 269,
-            "medium": 369
+            "small": 270,
+            "medium": 370
           }
         },
         {
           "name": "Chicken Loaded Pizza",
           "isVeg": false,
           "prices": {
-            "small": 269,
-            "medium": 369
+            "small": 270,
+            "medium": 370
           }
         },
         {
           "name": "Paneer Tikka Pizza",
           "isVeg": true,
           "prices": {
-            "small": 269,
-            "medium": 369
+            "small": 270,
+            "medium": 370
           }
         },
         {
           "name": "Corn Chinese Pizza",
+          "isVeg": true,
+          "prices": {
+            "small": 180,
+            "medium": 230
+          }
+        },
+        {
+          "name": "Park Avenue Pizza",
+          "isVeg": true,
+          "prices": {
+            "small": 270,
+            "medium": 400
+          }
+        },
+        {
+          "name": "Onion Capsicum Pizza",
           "isVeg": true,
           "prices": {
             "small": 170,
@@ -732,57 +734,49 @@
           }
         },
         {
-          "name": "Onion Capsicum Pizza",
-          "isVeg": true,
-          "prices": {
-            "small": 169,
-            "medium": 220
-          }
-        },
-        {
           "name": "Farm House Pizza",
           "isVeg": true,
           "prices": {
-            "small": 279,
-            "medium": 429
+            "small": 280,
+            "medium": 430
           }
         },
         {
           "name": "Mushroom Pizza",
           "isVeg": true,
           "prices": {
-            "small": 269,
-            "medium": 369
+            "small": 190,
+            "medium": 280
           }
         },
         {
           "name": "Chicken Corn Pizza",
           "isVeg": false,
           "prices": {
-            "small": 279,
-            "medium": 379
+            "small": 280,
+            "medium": 380
           }
         },
         {
           "name": "Cheese Burst Pizza",
           "isVeg": true,
           "prices": {
-            "small": 269,
-            "medium": 369
+            "small": 270,
+            "medium": 370
           }
         },
         {
           "name": "Extra Cheese",
           "isVeg": true,
           "prices": {
-            "full": 49
+            "full": 50
           }
         },
         {
           "name": "Extra Toppings",
           "isVeg": true,
           "prices": {
-            "full": 39
+            "full": 40
           }
         }
       ]
@@ -794,77 +788,77 @@
           "name": "Nutella Shake",
           "isVeg": true,
           "prices": {
-            "full": 189
+            "full": 190
           }
         },
         {
           "name": "Mango Shake",
           "isVeg": true,
           "prices": {
-            "full": 179
+            "full": 190
           }
         },
         {
           "name": "Blueberry Shake",
           "isVeg": true,
           "prices": {
-            "full": 149
+            "full": 180
           }
         },
         {
           "name": "KitKat Shake",
           "isVeg": true,
           "prices": {
-            "full": 169
+            "full": 170
           }
         },
         {
           "name": "Caramel Shake",
           "isVeg": true,
           "prices": {
-            "full": 169
+            "full": 170
           }
         },
         {
           "name": "Butter Scotch Shake",
           "isVeg": true,
           "prices": {
-            "full": 179
+            "full": 180
           }
         },
         {
           "name": "Oreo Shake",
           "isVeg": true,
           "prices": {
-            "full": 169
+            "full": 170
           }
         },
         {
           "name": "Vanilla Shake",
           "isVeg": true,
           "prices": {
-            "full": 159
+            "full": 160
           }
         },
         {
           "name": "Black Currant Shake",
           "isVeg": true,
           "prices": {
-            "full": 179
+            "full": 180
           }
         },
         {
           "name": "Strawberry Shake",
           "isVeg": true,
           "prices": {
-            "full": 179
+            "full": 180
           }
         },
         {
           "name": "Chocolate Shake",
           "isVeg": true,
           "prices": {
-            "full": 169
+            "full": 170
           }
         }
       ]
@@ -944,13 +938,6 @@
           "prices": {
             "full": 220
           }
-        },
-        {
-          "name": "Veg Pulao",
-          "isVeg": true,
-          "prices": {
-            "full": 180
-          }
         }
       ]
     },
@@ -998,6 +985,13 @@
           }
         },
         {
+          "name": "Tandoori Plain Roti",
+          "isVeg": true,
+          "prices": {
+            "full": 20
+          }
+        },
+        {
           "name": "Extra Butter",
           "isVeg": true,
           "prices": {
@@ -1012,6 +1006,13 @@
           }
         },
         {
+          "name": "Tandoori Butter Roti",
+          "isVeg": true,
+          "prices": {
+            "full": 25
+          }
+        },
+        {
           "name": "Lachha Parantha",
           "isVeg": true,
           "prices": {
@@ -1019,10 +1020,17 @@
           }
         },
         {
+          "name": "Tandoori Lachha Parantha",
+          "isVeg": true,
+          "prices": {
+            "full": 55
+          }
+        },
+        {
           "name": "Butter Naan",
           "isVeg": true,
           "prices": {
-            "full": 50
+            "full": 55
           }
         },
         {
@@ -1030,13 +1038,6 @@
           "isVeg": true,
           "prices": {
             "full": 40
-          }
-        },
-        {
-          "name": "Missi Roti",
-          "isVeg": true,
-          "prices": {
-            "full": 35
           }
         }
       ]
@@ -1048,21 +1049,21 @@
           "name": "Veg Hotdog Sandwich",
           "isVeg": true,
           "prices": {
-            "full": 119
+            "full": 120
           }
         },
         {
           "name": "Plain Hot Dog",
           "isVeg": true,
           "prices": {
-            "medium": 79
+            "medium": 80
           }
         },
         {
           "name": "Chicken Hotdog Sandwich",
           "isVeg": false,
           "prices": {
-            "full": 149
+            "full": 150
           }
         }
       ]
@@ -1074,7 +1075,7 @@
           "name": "Plain Fries",
           "isVeg": true,
           "prices": {
-            "full": 120
+            "full": 130
           }
         },
         {
@@ -1088,7 +1089,7 @@
           "name": "Peri Peri Fries",
           "isVeg": true,
           "prices": {
-            "full": 150
+            "full": 160
           }
         },
         {
@@ -1133,46 +1134,38 @@
           "name": "Paneer Tikka Sandwich",
           "isVeg": true,
           "prices": {
-            "full": 209
+            "full": 230
           }
         },
         {
           "name": "Veg Sandwich",
           "isVeg": true,
           "prices": {
-            "full": 159
-          }
-        },
-        {
-          "name": "Egg Sandwich",
-          "isVeg": false,
-          "prices": {
-            "full": 249
+            "full": 160
           }
         },
         {
           "name": "Chicken Sandwich",
           "isVeg": false,
           "prices": {
-            "full": 279
+            "full": 280
           }
         },
         {
           "name": "Cheese Corn Sandwich",
           "isVeg": true,
           "prices": {
-            "full": 169
+            "full": 170
           }
         },
         {
           "name": "Chicken Corn Sandwich",
           "isVeg": false,
           "prices": {
-            "full": 279
+            "full": 280
           }
         }
       ]
     }
   ]
 }
-
