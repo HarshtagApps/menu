@@ -1,6 +1,8 @@
 import Router from './router.js';
 import { loadRestaurantData } from './api.js';
+import { initSecurity } from './security.js';
 
+initSecurity();
 async function initApp() {
     const app = document.getElementById('app');
     const urlParams = new URLSearchParams(window.location.search);
@@ -20,7 +22,7 @@ async function initApp() {
         const router = new Router(restaurantData, restaurantId);
         setTimeout(() => {
             router.handleInitialRoute();
-        }, 2500);
+        }, 3500);
 
     } catch (error) {
         app.innerHTML = `<div class="error-state">

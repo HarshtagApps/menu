@@ -10,6 +10,7 @@
     <link rel="stylesheet" href="../css/styles.css">
     <link rel="stylesheet" href="../css/splash.css">
     <link rel="stylesheet" href="../css/menu.css">
+    <link rel="stylesheet" href="../css/scrollbar.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Afacad:ital,wght@0,400..700;1,400..700&display=swap"
@@ -61,14 +62,13 @@
     <script type="module">
         import { loadRestaurantData } from '../js/api.js';
         import { getImageForCategory } from '../js/menu_data.js';
-
+        import { initSecurity } from '../js/security.js';
+        initSecurity();
         const urlParams = new URLSearchParams(window.location.search);
         const restaurantId = urlParams.get('r');
         const splashScreen = document.getElementById('splashScreen');
         const mainContent = document.getElementById('mainContent');
-        
         const isBackNavigation = sessionStorage.getItem('menuLoaded') === 'true';
-        
         sessionStorage.setItem('menuLoaded', 'true');
 
         async function initMenu() {
@@ -79,7 +79,7 @@
                     return;
                 }
                 const restaurantData = await loadRestaurantData(restaurantId);
-                
+
                 if (isBackNavigation) {
                     hideSplash();
                     renderMenu(restaurantData);
@@ -122,7 +122,7 @@
             if (restaurantData && restaurantData.restoDetails) {
                 const restoName = (restaurantData.restoDetails.restoName || '').toUpperCase();
                 const restoAddress = restaurantData.restoDetails.address || '';
-                
+
                 const pageTitle = document.getElementById('pageTitle');
                 pageTitle.textContent = restoName ? `${restoName} | Harshtag Apps` : 'Harshtag Apps';
                 const restoContact = restaurantData.restoDetails.contact || '';
@@ -155,7 +155,6 @@
             document.getElementById('errorState').style.display = 'none';
             document.getElementById('emptyState').style.display = 'none';
             document.getElementById('categoriesGrid').style.display = 'grid';
-
             const grid = document.getElementById('categoriesGrid');
             grid.innerHTML = uniqueCategories.map(categoryType => {
                 const image = getImageForCategory(categoryType);
@@ -180,6 +179,12 @@
             });
         }
         initMenu();
+    </script>
+    <script>
+        document.addEventListener('contextmenu', function (e) {
+            e.preventDefault();
+            return false;
+        });
     </script>
 </body>
 
