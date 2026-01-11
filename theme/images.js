@@ -14,6 +14,7 @@ export const ProjectImages = {
     tikka: '/assets/images/tikka.png',
     water: '/assets/images/water.png',
     thali: '/assets/images/thali.png',
+    order: '/assets/images/order.png',
     burger: '/assets/images/burger.png',
     cheese: '/assets/images/cheese.png',
     coffee: '/assets/images/coffee.png',

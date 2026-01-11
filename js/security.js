@@ -15,7 +15,6 @@ export function initSecurity() {
         { meta: true, alt: true, key: 'C', code: 'KeyC' }
     ];
 
-    // Detect iOS devices
     const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) ||
         (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
 
@@ -49,7 +48,6 @@ export function initSecurity() {
         return false;
     });
 
-    // Only run dimension checks on non-iOS devices
     if (!isIOS) {
         setTimeout(() => {
             const devtools = /./;

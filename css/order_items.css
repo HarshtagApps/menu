@@ -1,0 +1,327 @@
+.items-container {
+    padding: 12px;
+    padding-top: 60px;
+    padding-bottom: 100px;
+    min-height: 100vh;
+    background-color: #FFFAEB;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+}
+
+.food-item {
+    background-color: #FFFFFF;
+    border-radius: 8px;
+    border: 0.75px solid rgba(250, 5, 123, 0.5);
+    padding: 10px;
+    margin-bottom: 12px;
+    box-shadow: 0 3px 5px rgba(51, 51, 51, 0.2);
+    touch-action: manipulation;
+    -webkit-tap-highlight-color: transparent;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+
+.premium-item {
+    flex-direction: column;
+    align-items: stretch;
+    padding: 8px;
+}
+
+.item-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 8px;
+}
+
+.item-image-container {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    background-color: transparent;
+}
+
+.item-image {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+}
+
+.item-icon {
+    font-size: 30px;
+    color: #F8FAFC;
+}
+
+.premium-item .item-name {
+    flex: 1;
+    padding: 0 12px;
+    margin-bottom: 0;
+    font-size: 18px;
+    font-weight: 500;
+    color: #333333;
+    font-family: 'Afacad', sans-serif;
+}
+
+.item-indicators {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.veg-dot {
+    width: 15px;
+    height: 15px;
+    border-radius: 2px;
+}
+
+.veg-dot.veg {
+    background-color: #00C851;
+}
+
+.veg-dot.non-veg {
+    background-color: #FF4444;
+}
+
+.special-badge {
+    width: 24px;
+    height: 24px;
+    object-fit: contain;
+}
+
+.price-variants {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.price-variant-container {
+    background-color: #FFFAEB;
+    border-radius: 8px;
+    border: 0.5px solid rgba(204, 204, 204, 0.3);
+    padding: 10px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    transition: all 0.3s ease;
+}
+
+
+.price-variant-container.has-quantity {
+    background-color: rgba(250, 5, 123, 0.05);
+    border: 1px solid rgba(250, 5, 123, 0.5);
+}
+
+.variant-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.variant-size {
+    font-size: 14px;
+    font-weight: 600;
+    color: #333333;
+    font-family: 'Afacad', sans-serif;
+}
+
+.variant-price {
+    font-size: 13px;
+    font-weight: 400;
+    color: #FA057B;
+    font-family: 'Afacad', sans-serif;
+}
+
+.quantity-controls {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.qty-btn {
+    width: 32px;
+    height: 32px;
+    border-radius: 6px;
+    background-color: #FA057B;
+    border: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: opacity 0.2s;
+    -webkit-tap-highlight-color: transparent;
+}
+
+.qty-btn:active {
+    opacity: 0.7;
+}
+
+.qty-btn svg {
+    stroke: #FFFFFF;
+}
+
+.quantity-display {
+    width: 40px;
+    height: 32px;
+    border-radius: 6px;
+    background-color: #FFFFFF;
+    border: 1px solid #CCCCCC;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 14px;
+    font-weight: 600;
+    color: #333333;
+    font-family: 'Afacad', sans-serif;
+}
+
+.notes-container {
+    margin-top: 8px;
+}
+
+.notes-input {
+    width: 100%;
+    height: 40px;
+    padding: 11px 10px;
+    border: 1px solid rgba(250, 5, 123, 0.5);
+    border-radius: 6px;
+    background-color: #FFFFFF;
+    font-size: 14px;
+    font-family: 'Afacad', sans-serif;
+    color: rgba(51, 51, 51, 0.7);
+    transition: border-color 0.2s;
+}
+
+.notes-input:focus {
+    outline: none;
+    border-color: #FA057B;
+}
+
+.notes-input::placeholder {
+    color: #999999;
+    font-size: 16px;
+}
+
+.category-summary-bar {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background-color: #FFFFFF;
+    padding: 6px 12px;
+    box-shadow: 0 -2px 8px rgba(51, 51, 51, 0.2);
+    z-index: 100;
+}
+
+.summary-info {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 5px;
+    font-size: 14px;
+}
+
+.summary-info span:first-child {
+    color: #333333;
+}
+
+.summary-info span:last-child {
+    font-weight: bold;
+    color: #FA057B;
+}
+
+.done-btn {
+    width: 100%;
+    height: 50px;
+    background-color: #FA057B;
+    color: #FFFFFF;
+    border: none;
+    border-radius: 8px;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    font-family: 'Afacad', sans-serif;
+    transition: background-color 0.2s, transform 0.1s;
+    touch-action: manipulation;
+    -webkit-tap-highlight-color: transparent;
+}
+
+.done-btn:active {
+    transform: scale(0.98);
+    background-color: #d9046b;
+}
+
+.item-badge {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 24px;
+    height: 24px;
+    background-color: #FFFFFF;
+    color: #FA057B;
+    border-radius: 12px;
+    font-size: 14px;
+    font-weight: bold;
+}
+
+.empty-state {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 60px 20px;
+    text-align: center;
+}
+
+.empty-icon {
+    font-size: 64px;
+    margin-bottom: 16px;
+}
+
+.empty-text {
+    font-size: 16px;
+    color: #666666;
+}
+
+@media (max-width: 480px) {
+    .premium-item .item-name {
+        font-size: 16px;
+    }
+
+    .variant-size {
+        font-size: 13px;
+    }
+
+    .variant-price {
+        font-size: 12px;
+    }
+
+    .qty-btn {
+        width: 28px;
+        height: 28px;
+    }
+
+    .quantity-display {
+        width: 36px;
+        height: 28px;
+        font-size: 13px;
+    }
+
+    .notes-input {
+        font-size: 13px;
+    }
+
+    .notes-input::placeholder {
+        font-size: 14px;
+    }
+}
