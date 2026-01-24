@@ -112,7 +112,7 @@ const AppContent = () => {
 };
 
 const App = () => (
-  <Router>
+  <Router basename="/menu">
     <AppContent />
   </Router>
 );
