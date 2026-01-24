@@ -41,7 +41,7 @@ const Categories = ({ restaurantData }) => {
                         </div>
                         {isPremiumPlan && (
                             <button className="order-button" onClick={handleOrderClick}>
-                                <img src="/assets/images/order.png" alt="Order" />
+                                <img src="assets/images/order.png" alt="Order" />
                             </button>
                         )}
                     </div>

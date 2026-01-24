@@ -99,7 +99,7 @@ const FoodItems = ({ restaurantData }) => {
                                     </div>
                                 </div>
                                 <div className="food-item-indicators">
-                                    {item.isSpecial && <img src="/assets/images/special.png" alt="Special" className="food-item-special-badge" />}
+                                    {item.isSpecial && <img src="assets/images/special.png" alt="Special" className="food-item-special-badge" />}
                                     <div className={`food-item-veg-dot ${item.isVeg ? 'veg' : 'non-veg'}`}></div>
                                 </div>
                             </div>
