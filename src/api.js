@@ -4,7 +4,7 @@ export async function loadRestaurantData(restaurantId) {
     }
 
     try {
-        const response = await fetch(`/data/${restaurantId}.json`);
+        const response = await fetch(`data/${restaurantId}.json`);
         const contentType = response.headers.get("content-type");
 
         // Check if response is not JSON (likely HTML fallback for 404 in SPA)

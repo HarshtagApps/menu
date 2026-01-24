@@ -74,7 +74,7 @@ const AppContent = () => {
         minHeight: '100vh'
       }}>
         <img
-          src="/assets/images/harshtag.png"
+          src="assets/images/harshtag.png"
           alt="Harshtag Logo"
           style={{ maxWidth: '200px', marginBottom: '20px' }}
         />

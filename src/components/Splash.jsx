@@ -12,7 +12,7 @@ const Splash = ({ onFinish }) => {
     return (
         <div className="splash-screen">
             <img
-                src="/assets/images/logo.png"
+                src="assets/images/logo.png"
                 alt="Logo"
                 className="splash-logo"
                 onError={(e) => { e.target.style.display = 'none'; }}
