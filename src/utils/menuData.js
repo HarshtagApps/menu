@@ -1,0 +1,77 @@
+export const ProjectImages = {
+    logo: '/assets/images/logo.png',
+    menu: '/assets/images/menu.png',
+    rice: '/assets/images/rice.png',
+    dahi: '/assets/images/dahi.png',
+    roti: '/assets/images/roti.png',
+    soup: '/assets/images/soup.png',
+    cake: '/assets/images/cake.png',
+    eggs: '/assets/images/eggs.png',
+    pizza: '/assets/images/pizza.png',
+    momos: '/assets/images/momos.png',
+    pasta: '/assets/images/pasta.png',
+    salad: '/assets/images/salad.png',
+    tikka: '/assets/images/tikka.png',
+    water: '/assets/images/water.png',
+    thali: '/assets/images/thali.png',
+    order: '/assets/images/order.png',
+    burger: '/assets/images/burger.png',
+    cheese: '/assets/images/cheese.png',
+    coffee: '/assets/images/coffee.png',
+    hotDog: '/assets/images/hotdog.png',
+    indian: '/assets/images/indian.png',
+    chinese: '/assets/images/chinese.png',
+    cookies: '/assets/images/cookies.png',
+    noodles: '/assets/images/noodles.png',
+    shakes: '/assets/images/smoothie.png',
+    special: '/assets/images/special.png',
+    harshtag: '/assets/images/harshtag.png',
+    iceCream: '/assets/images/iceCream.png',
+    mocktail: '/assets/images/mocktail.png',
+    sandwich: '/assets/images/sandwich.png',
+    mainCourse: '/assets/images/mainCourse.png',
+    frenchFries: '/assets/images/frenchFries.png',
+};
+
+export const MenuData = {
+    items: [
+        { image: ProjectImages.rice, name: "Rice" },
+        { image: ProjectImages.rice, name: "Rice & Biryani" },
+        { image: ProjectImages.roti, name: "Roti" },
+        { image: ProjectImages.roti, name: "Roti & Parantha" },
+        { image: ProjectImages.dahi, name: "Dahi" },
+        { image: ProjectImages.soup, name: "Soup" },
+        { image: ProjectImages.pizza, name: "Pizza" },
+        { image: ProjectImages.momos, name: "Momos" },
+        { image: ProjectImages.pasta, name: "Pasta" },
+        { image: ProjectImages.salad, name: "Salad" },
+        { image: ProjectImages.tikka, name: "Tikka" },
+        { image: ProjectImages.water, name: "Water" },
+        { image: ProjectImages.coffee, name: "Coffee" },
+        { image: ProjectImages.coffee, name: "Tea & Coffee" },
+        { image: ProjectImages.shakes, name: "Shakes" },
+        { image: ProjectImages.burger, name: "Burgers" },
+        { image: ProjectImages.hotDog, name: "Hotdog" },
+        { image: ProjectImages.chinese, name: "Chinese" },
+        { image: ProjectImages.noodles, name: "Noodles" },
+        { image: ProjectImages.iceCream, name: "Ice Cream" },
+        { image: ProjectImages.sandwich, name: "Sandwich" },
+        { image: ProjectImages.frenchFries, name: "Fries" },
+        { image: ProjectImages.frenchFries, name: "Snacks" },
+        { image: ProjectImages.mocktail, name: "Mocktails" },
+        { image: ProjectImages.mocktail, name: "Beverages" },
+        { image: ProjectImages.mainCourse, name: "Main Course" },
+        { image: ProjectImages.cheese, name: "Paneer" },
+        { image: ProjectImages.indian, name: "Indian" },
+        { image: ProjectImages.eggs, name: "Eggs/Omelette" },
+        { image: ProjectImages.cake, name: "Dessert" },
+    ]
+};
+
+export function getImageForCategory(categoryType) {
+    const menuItem = MenuData.items.find(
+        item => item.name.toLowerCase() === categoryType.toLowerCase()
+    );
+    if (!menuItem) return '';
+    return menuItem.image;
+}
