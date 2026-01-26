@@ -15,6 +15,7 @@ export const ProjectImages = {
     water: 'assets/images/water.png',
     thali: 'assets/images/thali.png',
     order: 'assets/images/order.png',
+    wraps: 'assets/images/wraps.png',
     burger: 'assets/images/burger.png',
     cheese: 'assets/images/cheese.png',
     coffee: 'assets/images/coffee.png',
@@ -65,6 +66,7 @@ export const MenuData = {
         { image: ProjectImages.indian, name: "Indian" },
         { image: ProjectImages.eggs, name: "Eggs/Omelette" },
         { image: ProjectImages.cake, name: "Dessert" },
+        { image: ProjectImages.wraps, name: "Wraps" },
     ]
 };
 
