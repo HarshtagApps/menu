@@ -7,14 +7,17 @@ import {
     User,
     FileText,
     Pencil,
-    CheckCircle
+    CheckCircle,
+    CreditCard,
+    X,
+    Truck
 } from 'lucide-react';
 
 const Review = ({ restaurantData, orderDetails, setOrderDetails }) => {
     const navigate = useNavigate();
     const [searchParams] = useSearchParams();
+    const [showPaymentModal, setShowPaymentModal] = React.useState(false);
     const restaurantId = searchParams.get('r');
-
     useEffect(() => {
         if (restaurantData && restaurantData.restoDetails) {
             const restoName = (restaurantData.restoDetails.restoName || '').toUpperCase();
@@ -24,12 +27,10 @@ const Review = ({ restaurantData, orderDetails, setOrderDetails }) => {
             }
         }
     }, [restaurantData]);
-
     if (!restaurantData) return null;
-
     const { restoDetails } = restaurantData;
     const phoneNumber = restoDetails?.contact || '';
-
+    const upiId = restoDetails?.upiId;
     const flatItems = useMemo(() => {
         const items = [];
         Object.entries(orderDetails.items).forEach(([itemName, sizes]) => {
@@ -47,9 +48,7 @@ const Review = ({ restaurantData, orderDetails, setOrderDetails }) => {
         });
         return items;
     }, [orderDetails.items]);
-
     const totalAmount = flatItems.reduce((acc, item) => acc + item.total, 0);
-
     const formatSize = (size) => {
         switch (size.toLowerCase()) {
             case 'small': return 'Small';
@@ -60,7 +59,6 @@ const Review = ({ restaurantData, orderDetails, setOrderDetails }) => {
             default: return size;
         }
     };
-
     const generateWhatsAppMessage = () => {
         const restoName = restoDetails?.restoName || 'Restaurant';
         let message = `*🍽️ New Order*\n\n`;
@@ -76,7 +74,6 @@ const Review = ({ restaurantData, orderDetails, setOrderDetails }) => {
             message += `_*Type:* Online (Takeaway)_\n`;
             message += `_*Address:* ${orderDetails.customerAddress.trim()}_\n\n`;
         }
-
         message += `🍴*_Ordered Items:_*\n`;
         flatItems.forEach((item, index) => {
             const vegSymbol = item.isVeg ? '🟩' : '🟥';
@@ -88,22 +85,16 @@ const Review = ({ restaurantData, orderDetails, setOrderDetails }) => {
             }
             message += `\n`;
         });
-
         message += `💸_*Total Amount:* ₹${totalAmount.toFixed(2)}_\n\n`;
         message += `_Please confirm. Thanks!_\n`;
         message += `_Powered by *HARSHTAG APPS*_`;
-
         return message;
     };
 
     const handleSendOrder = () => {
         const message = encodeURIComponent(generateWhatsAppMessage());
         const whatsappURL = `https://api.whatsapp.com/send?phone=91${phoneNumber}&text=${message}`;
-
-        // Open WhatsApp
         window.open(whatsappURL, '_blank');
-
-        // Reset Order State
         setOrderDetails({
             customerName: '',
             customerAddress: '',
@@ -111,13 +102,25 @@ const Review = ({ restaurantData, orderDetails, setOrderDetails }) => {
             type: 'online',
             items: {}
         });
-
-        // Navigate back to Home/Menu
         setTimeout(() => {
             navigate(`/?r=${restaurantId}`);
         }, 100);
     };
-
+    const handlePayNow = () => {
+        if (!upiId) return;
+        const payeeName = restoDetails.restoName || 'Merchant';
+        const note = `Order for ${orderDetails.customerName}`;
+        const upiUrl = `upi://pay?pa=${upiId}&pn=${encodeURIComponent(payeeName)}&am=${totalAmount.toFixed(2)}&cu=INR&tn=${encodeURIComponent(note)}`;
+        window.location.href = upiUrl;
+        setShowPaymentModal(false);
+    };
+    const handleSendOrderClick = () => {
+        if (upiId) {
+            setShowPaymentModal(true);
+        } else {
+            handleSendOrder();
+        }
+    };
     return (
         <div className="review-page">
             <div className="secondary-appbar">
@@ -213,8 +216,9 @@ const Review = ({ restaurantData, orderDetails, setOrderDetails }) => {
             <div className="review-page-summary-bar" style={{
                 display: 'flex',
                 flexDirection: 'column',
-                gap: '10px',
+                gap: '12px',
                 alignItems: 'stretch',
+                paddingTop: '16px'
             }}>
                 <div className="review-total-section" style={{
                     marginBottom: '0',
@@ -225,11 +229,155 @@ const Review = ({ restaurantData, orderDetails, setOrderDetails }) => {
                     <div className="review-total-label">Total Amount</div>
                     <div className="review-total-amount">₹{totalAmount.toFixed(2)}</div>
                 </div>
-                <button className="review-send-btn" onClick={handleSendOrder}>
+
+                <button
+                    className="review-send-btn"
+                    onClick={handleSendOrderClick}
+                >
                     <CheckCircle size={20} strokeWidth={2} />
-                    <span>Send Confirmation</span>
+                    <span>Send Order</span>
                 </button>
             </div>
+
+            {/* Payment Modal */}
+            {showPaymentModal && (
+                <div className="modal-overlay" style={{
+                    position: 'fixed',
+                    top: 0,
+                    left: 0,
+                    right: 0,
+                    bottom: 0,
+                    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    zIndex: 1000
+                }} onClick={() => setShowPaymentModal(false)}>
+                    <div className="modal-content" style={{
+                        backgroundColor: 'white',
+                        padding: '12px',
+                        borderRadius: '16px',
+                        width: '90%',
+                        maxWidth: '350px',
+                        display: 'flex',
+                        flexDirection: 'column',
+                        gap: '16px',
+                        position: 'relative'
+                    }} onClick={e => e.stopPropagation()}>
+
+                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', }}>
+                            <h3 style={{ margin: 0, fontSize: '18px', fontWeight: '600' }}>Choose Payment Mode</h3>
+                            <button onClick={() => setShowPaymentModal(false)} style={{ background: 'none', border: 'none', cursor: 'pointer' }}>
+                                <X size={20} color="#666" />
+                            </button>
+                        </div>
+                        <p style={{
+                            fontSize: '14px',
+                            color: '#333333',
+                            backgroundColor: '#FFFAEB',
+                            border: '1px solid #E0E0E0',
+                            padding: '10px',
+                            borderRadius: '8px',
+                            lineHeight: '1.4'
+                        }}>
+                            If you choose <strong>Pay Now</strong>, please take a screenshot of the payment and attach it after sending the order.
+                        </p>
+
+
+                        <div style={{ display: 'flex', gap: '12px' }}>
+                            <button
+                                onClick={handlePayNow}
+                                style={{
+                                    flex: 1,
+                                    display: 'flex',
+                                    alignItems: 'center',
+                                    justifyContent: 'center',
+                                    gap: '8px',
+                                    padding: '12px',
+                                    backgroundColor: '#FA057B',
+                                    color: 'white',
+                                    border: 'none',
+                                    borderRadius: '8px',
+                                    fontSize: '14px',
+                                    fontWeight: '500',
+                                    cursor: 'pointer'
+                                }}
+                            >
+                                <CreditCard size={18} />
+                                Pay Now
+                            </button>
+
+                            <button
+                                onClick={() => {
+                                    setShowPaymentModal(false);
+                                    handleSendOrder();
+                                }}
+                                style={{
+                                    flex: 1,
+                                    display: 'flex',
+                                    alignItems: 'center',
+                                    justifyContent: 'center',
+                                    gap: '8px',
+                                    padding: '12px',
+                                    backgroundColor: '#00A9FE',
+                                    color: 'white',
+                                    border: 'none',
+                                    borderRadius: '8px',
+                                    fontSize: '14px',
+                                    fontWeight: '500',
+                                    cursor: 'pointer'
+                                }}
+                            >
+                                <Truck
+                                    size={18} />
+                                Pay on Delivery
+                            </button>
+                        </div>
+                        <button
+                            onClick={() => {
+                                setShowPaymentModal(false);
+                                handleSendOrder();
+                            }}
+                            style={{
+                                background: 'none',
+                                border: 'none',
+                                padding: 0,
+                                fontSize: '13px',
+                                color: '#FA057B',
+                                cursor: 'pointer',
+                                alignSelf: 'center'
+                            }}
+                        >
+                            Already paid?
+                        </button>
+
+                    </div>
+                </div>
+            )}
+            {/* End Payment Modal */}
+            <style>
+                {`
+@keyframes popupBounce {
+    0% {
+        transform: scale(0.9);
+        opacity: 0;
+    }
+    60% {
+        transform: scale(1.1);
+        opacity: 1;
+    }
+    100% {
+        transform: scale(1);
+    }
+}
+
+.modal-content {
+    animation: popupBounce 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
+    will-change: transform, opacity;
+}
+`}
+            </style>
+
         </div>
     );
 };

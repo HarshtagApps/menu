@@ -1,4 +1,3 @@
-import React from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { getImageForCategory } from '../utils/menuData';
 import '../styles/menu.css';
@@ -8,21 +7,16 @@ const Categories = ({ restaurantData }) => {
     const navigate = useNavigate();
     const [searchParams] = useSearchParams();
     const restaurantId = searchParams.get('r');
-
     if (!restaurantData) return null;
-
     const { restoDetails, categories } = restaurantData;
     const isPremiumPlan = restoDetails?.plan === 'premium';
     const restoName = (restoDetails?.restoName || '').toUpperCase();
     const restoAddress = restoDetails?.address || '';
     const restoContact = restoDetails?.contact || '';
-
     const uniqueCategories = [...new Set((categories || []).map(cat => cat.categoryType))];
-
     const handleCategoryClick = (categoryType) => {
         navigate(`/items?r=${restaurantId}&category=${encodeURIComponent(categoryType)}`);
     };
-
     const handleOrderClick = () => {
         navigate(`/order?r=${restaurantId}`);
     };
@@ -42,6 +36,7 @@ const Categories = ({ restaurantData }) => {
                         {isPremiumPlan && (
                             <button className="order-button" onClick={handleOrderClick}>
                                 <img src="assets/images/order.png" alt="Order" />
+                                <span className="order-button-text">Order Here</span>
                             </button>
                         )}
                     </div>
