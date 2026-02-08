@@ -160,24 +160,34 @@ const Order = ({ restaurantData, orderDetails, setOrderDetails }) => {
         };
         return labels[size.toLowerCase()] || size;
     };
+    const showStatusSnackbar = (message) => {
+        const snackbar = document.getElementById("order-validation-snackbar");
+        if (!snackbar) return;
+        snackbar.innerHTML = message;
+        snackbar.className = "show";
+        setTimeout(() => {
+            snackbar.className = "";
+        }, 5000);
+    };
+
     const handleReviewClick = () => {
         if (!orderDetails.customerName || orderDetails.customerName.trim().length === 0) {
-            alert('Please enter customer name');
+            showStatusSnackbar('Please enter your Name');
             return;
         }
         if (orderDetails.type === 'online' && (!orderDetails.customerAddress || orderDetails.customerAddress.trim().length === 0)) {
-            alert('Please enter delivery address');
+            showStatusSnackbar('Please enter your Delivery Address');
             return;
         }
         if (orderDetails.type === 'dinein' && (!orderDetails.tableNumber || orderDetails.tableNumber.trim().length === 0)) {
-            alert('Please enter table number');
+            showStatusSnackbar('Please enter table number');
             return;
         }
         const itemsCount = Object.values(orderDetails.items).reduce((acc, sizes) => {
             return acc + Object.values(sizes).reduce((sAcc, s) => sAcc + s.quantity, 0);
         }, 0);
         if (itemsCount === 0) {
-            alert('Please add items to the order');
+            showStatusSnackbar('Please add items to the order');
             return;
         }
         navigate(`/review?r=${restaurantId}`);
@@ -389,8 +399,34 @@ const Order = ({ restaurantData, orderDetails, setOrderDetails }) => {
                 </div>
             )}
 
+            <div id="order-validation-snackbar"></div>
+
             <style dangerouslySetInnerHTML={{
                 __html: `
+        #order-validation-snackbar {
+            visibility: hidden;
+            min-width: 90%;
+            background-color: #FF8800;
+            color: #FFFFFF;
+            text-align: left;
+            border-radius: 12px;
+            padding: 14px 18px;
+            position: fixed;
+            z-index: 9999;
+            top: 15px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-family: 'Afacad', sans-serif;
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.25);
+            font-weight: 500;
+        }
+        #order-validation-snackbar.show {
+            visibility: visible;
+            animation: slideDownOrder 0.35s ease-out, fadeOutOrder 0.35s ease-in 4.65s;
+        }
+        @keyframes slideDownOrder { from { opacity: 0; transform: translate(-50%, -20px); } to { opacity: 1; transform: translate(-50%, 0); } }
+        @keyframes fadeOutOrder { from { opacity: 1; } to { opacity: 0; } }
+
         .toggle-switch {
           display: flex;
           background: rgba(255, 255, 255, 0.2);

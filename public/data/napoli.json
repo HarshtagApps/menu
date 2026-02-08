@@ -2,9 +2,10 @@
     "id": "napoli",
     "restoDetails": {
         "restoName": "NAPOLI SLICE & SIP",
-        "address": "Near Samarth Palace Bhadwar",
+        "address": "Near Samarth Palace, Bhadwar",
         "contact": "6230476888",
-        "plan": "premium"
+        "plan": "premium",
+        "upiId": "0518400A0438404.mab@pnb"
     },
     "categories": [
         {
