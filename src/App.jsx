@@ -11,6 +11,7 @@ const FoodItems = React.lazy(() => import('./pages/FoodItems'));
 const Order = React.lazy(() => import('./pages/Order'));
 const OrderItems = React.lazy(() => import('./pages/OrderItems'));
 const Review = React.lazy(() => import('./pages/Review'));
+const More = React.lazy(() => import('./pages/More'));
 
 const AppContent = () => {
   const [searchParams] = useSearchParams();
@@ -106,6 +107,7 @@ const AppContent = () => {
         <Route path="/order" element={<Order restaurantData={restaurantData} orderDetails={orderDetails} setOrderDetails={setOrderDetails} />} />
         <Route path="/order-items" element={<OrderItems restaurantData={restaurantData} orderDetails={orderDetails} setOrderDetails={setOrderDetails} />} />
         <Route path="/review" element={<Review restaurantData={restaurantData} orderDetails={orderDetails} setOrderDetails={setOrderDetails} />} />
+        <Route path="/more" element={<More restaurantData={restaurantData} />} />
       </Routes>
     </React.Suspense>
   );

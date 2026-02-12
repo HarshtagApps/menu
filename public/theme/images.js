@@ -20,6 +20,7 @@ export const ProjectImages = {
     coffee: 'assets/images/coffee.png',
     hotDog: 'assets/images/hotdog.png',
     indian: 'assets/images/indian.png',
+    google: 'assets/images/google.png',
     chinese: 'assets/images/chinese.png',
     cookies: 'assets/images/cookies.png',
     noodles: 'assets/images/noodles.png',
@@ -29,6 +30,9 @@ export const ProjectImages = {
     iceCream: 'assets/images/iceCream.png',
     mocktail: 'assets/images/mocktail.png',
     sandwich: 'assets/images/sandwich.png',
+    whatsapp: 'assets/images/whatsapp.png',
+    location: 'assets/images/location.png',
+    instagram: 'assets/images/instagram.png',
     mainCourse: 'assets/images/mainCourse.png',
     frenchFries: 'assets/images/frenchFries.png',
 };

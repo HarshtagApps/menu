@@ -64,7 +64,11 @@ export const fetchMenuData = async (restaurantId) => {
                 address: restoInfo.Address || '',
                 contact: restoInfo.Contact || '',
                 plan: restoInfo.Plan || 'basic',
-                upiId: restoInfo.UpiID || restoInfo.upiId || ''
+                upiId: restoInfo.UpiID || restoInfo.upiId || '',
+                instagram: restoInfo.Instagram || '',
+                location: restoInfo.Location || '',
+                reviewUrl: restoInfo.GoogleReview || restoInfo.ReviewURL || restoInfo.ReviewUrl || '',
+                gallery: restoInfo.Gallery || ''
             },
             categories
         };

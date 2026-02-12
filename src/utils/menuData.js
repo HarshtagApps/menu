@@ -32,6 +32,12 @@ export const ProjectImages = {
     sandwich: 'assets/images/sandwich.png',
     mainCourse: 'assets/images/mainCourse.png',
     frenchFries: 'assets/images/frenchFries.png',
+    google: 'assets/images/google.png',
+    whatsapp: 'assets/images/whatsapp.png',
+    location: 'assets/images/location.png',
+    instagram: 'assets/images/instagram.png',
+    share: 'assets/images/share.png',
+    gallery: 'assets/images/gallery.png',
 };
 
 export const MenuData = {

@@ -1,4 +1,5 @@
 import { useNavigate, useSearchParams } from 'react-router-dom';
+import { Menu } from 'lucide-react';
 import { getImageForCategory } from '../utils/menuData';
 import '../styles/menu.css';
 import '../styles/styles.css';
@@ -27,6 +28,24 @@ const Categories = ({ restaurantData }) => {
                 <div className="restaurant-header-content">
                     <div className="restaurant-name">{restoName}</div>
                     <div className="restaurant-info-row">
+                        <button
+                            className="menu-button"
+                            onClick={() => navigate(`/more?r=${restaurantId}`)}
+                            style={{
+                                position: 'absolute',
+                                left: '0',
+                                background: 'none',
+                                border: 'none',
+                                color: '#00A9FE',
+                                cursor: 'pointer',
+                                display: 'flex',
+                                alignItems: 'center',
+                                justifyContent: 'center',
+                                zIndex: 10
+                            }}
+                        >
+                            <Menu size={32} strokeWidth={1.5} />
+                        </button>
                         <div className="restaurant-info-column">
                             <div className="restaurant-address">{restoAddress}</div>
                             <div className="restaurant-contact">
@@ -36,7 +55,6 @@ const Categories = ({ restaurantData }) => {
                         {isPremiumPlan && (
                             <button className="order-button" onClick={handleOrderClick}>
                                 <img src="assets/images/order.png" alt="Order" />
-                                <span className="order-button-text">Order Here</span>
                             </button>
                         )}
                     </div>

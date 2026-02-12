@@ -1,0 +1,354 @@
+import React from 'react';
+import { useNavigate, useSearchParams } from 'react-router-dom';
+import { ChevronLeft, ChevronRight, Hourglass, Lock } from 'lucide-react';
+import '../styles/styles.css';
+
+import { ProjectImages } from '../utils/menuData';
+
+const SettingTileItem = ({ icon, label, onTap, onDisabledTap, trailing, isEnabled = true, comingSoon = false }) => {
+    const handleClick = () => {
+        if (comingSoon || !isEnabled) {
+            onDisabledTap && onDisabledTap();
+        } else {
+            onTap();
+        }
+    };
+
+    const textColor = (!comingSoon && isEnabled) ? '#333333' : 'rgba(51, 51, 51, 0.4)';
+    const arrowColor = (!comingSoon && isEnabled) ? '#FFFFFF' : 'rgba(255, 255, 255, 0.4)';
+
+    return (
+        <div style={{ position: 'relative', width: '100%' }}>
+            <div
+                onClick={handleClick}
+                style={{
+                    width: '100%',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'space-between',
+                    padding: '8px 8px',
+                    cursor: 'pointer',
+                    userSelect: 'none',
+                    WebkitTapHighlightColor: 'transparent'
+                }}
+            >
+                <div style={{ display: 'flex', alignItems: 'center' }}>
+                    <div style={{ height: '35px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                        {typeof icon === 'string' ? (
+                            <img src={icon} alt={label} style={{ height: '100%', objectFit: 'contain' }} />
+                        ) : (
+                            icon
+                        )}
+                    </div>
+                    <div style={{ width: '15px' }}></div>
+                    <span style={{
+                        fontSize: '16px',
+                        color: textColor,
+                        fontWeight: '400',
+                        fontFamily: 'Afacad, sans-serif',
+                        whiteSpace: 'nowrap',
+                        overflow: 'hidden',
+                        textOverflow: 'ellipsis'
+                    }}>
+                        {label}
+                    </span>
+                </div>
+
+                {trailing || (
+                    <div style={{
+                        borderRadius: '4px',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        padding: '4px'
+                    }}>
+                        <ChevronRight size={24} color={arrowColor} />
+                    </div>
+                )}
+            </div>
+
+            {(comingSoon || !isEnabled) && (
+                <div style={{
+                    position: 'absolute',
+                    top: 0,
+                    left: 0,
+                    right: 0,
+                    bottom: 0,
+                    backgroundColor: 'rgba(255, 255, 255, 0.5)',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    pointerEvents: 'none',
+                    zIndex: 5
+                }}>
+                    {comingSoon ? (
+                        <Hourglass size={26} color="rgba(51, 51, 51, 0.75)" />
+                    ) : (
+                        <Lock size={26} color="rgba(51, 51, 51, 0.75)" />
+                    )}
+                </div>
+            )}
+        </div>
+    );
+};
+
+const DynamicSettingCard = ({ items }) => {
+    return (
+        <div style={{
+            width: '100%',
+            padding: '2px 12px',
+            backgroundColor: 'rgba(250, 5, 123, 0.25)',
+            borderRadius: '12px',
+            border: '2px solid rgba(250, 5, 123, 0.75)',
+            display: 'flex',
+            flexDirection: 'column'
+        }}>
+            {items.map((item, index) => (
+                <React.Fragment key={index}>
+                    <SettingTileItem {...item} />
+                    {index !== items.length - 1 && (
+                        <div style={{ height: '1px', backgroundColor: '#333333', opacity: 0.15, width: '100%' }}></div>
+                    )}
+                </React.Fragment>
+            ))}
+        </div>
+    );
+};
+
+const More = ({ restaurantData }) => {
+    const navigate = useNavigate();
+    const [searchParams] = useSearchParams();
+    const [snackbar, setSnackbar] = React.useState({ show: false, title: '', message: '' });
+    const restaurantId = searchParams.get('r');
+
+    if (!restaurantData) return null;
+
+    const { restoDetails } = restaurantData;
+
+    const showMessage = (title, message) => {
+        setSnackbar({ show: true, title, message });
+        setTimeout(() => setSnackbar({ show: false, title: '', message: '' }), 5000);
+    };
+
+    const getStatusProps = (value, type) => {
+        const upperValue = String(value).toUpperCase();
+
+        if (!value || upperValue === 'COMING_SOON') {
+            return {
+                comingSoon: true,
+                isEnabled: false,
+                value: '',
+                onDisabledTap: () => showMessage("Feature Coming Soon", "This feature is in progress and will be available soon.")
+            };
+        }
+
+        if (upperValue === 'FALSE' || upperValue === 'UNAVAILABLE') {
+            return {
+                comingSoon: false,
+                isEnabled: false,
+                value: '',
+                onDisabledTap: () => showMessage("Feature Unavailable", "This feature is currently disabled by the restaurant.")
+            };
+        }
+
+        return { comingSoon: false, isEnabled: true, value };
+    };
+
+    const instaProps = getStatusProps(restoDetails.instagram, 'instagram');
+    const locationProps = getStatusProps(restoDetails.location, 'location');
+    const reviewProps = getStatusProps(restoDetails.reviewUrl, 'review');
+    const galleryProps = getStatusProps(restoDetails.gallery, 'gallery');
+
+    const handleShare = async () => {
+        const shareUrl = `${window.location.origin}${window.location.pathname}?r=${restaurantId}`;
+        const shareData = {
+            title: restoDetails.restoName,
+            text: `Hey! Check out the menu for ${restoDetails.restoName}`,
+            url: shareUrl
+        };
+
+        try {
+            if (navigator.share) {
+                await navigator.share(shareData);
+                return;
+            }
+        } catch (err) {
+            console.error('Error sharing:', err);
+            if (err.name === 'AbortError') return;
+        }
+
+        try {
+            if (navigator.clipboard && navigator.clipboard.writeText) {
+                await navigator.clipboard.writeText(shareUrl);
+                showMessage("Link Copied!", "The menu link has been copied to your clipboard. You can now paste and share it anywhere.");
+            } else {
+                throw new Error('Clipboard API unavailable');
+            }
+        } catch (err) {
+            console.error('Clipboard fallback failed:', err);
+            showMessage("Sharing not supported", "Please copy the link from your browser address bar to share.");
+        }
+    };
+
+    const socialSection = [
+        {
+            icon: ProjectImages.whatsapp,
+            label: 'Chat on Whatsapp',
+            onTap: () => window.open(`https://wa.me/91${restoDetails.contact}`, '_blank'),
+            isEnabled: !!restoDetails.contact,
+            comingSoon: !restoDetails.contact
+        },
+        {
+            icon: ProjectImages.instagram,
+            label: 'Instagram',
+            onTap: () => {
+                const url = instaProps.value.startsWith('http')
+                    ? instaProps.value
+                    : `https://instagram.com/${instaProps.value}`;
+                window.open(url, '_blank');
+            },
+            ...instaProps
+        }
+    ];
+
+    const reviewSection = [
+        {
+            icon: ProjectImages.google,
+            label: 'Google Review',
+            onTap: () => {
+                const url = reviewProps.value.startsWith('http')
+                    ? reviewProps.value
+                    : `https://search.google.com/local/writereview?placeid=${reviewProps.value}`;
+                window.open(url, '_blank');
+            },
+            ...reviewProps
+        },
+        {
+            icon: ProjectImages.location,
+            label: 'Location',
+            onTap: () => {
+                const url = locationProps.value.startsWith('http')
+                    ? locationProps.value
+                    : `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(locationProps.value)}`;
+                window.open(url, '_blank');
+            },
+            ...locationProps
+        }
+    ];
+
+    const utilitySection = [
+        {
+            icon: ProjectImages.share,
+            label: 'Share with Friends',
+            onTap: handleShare,
+            isEnabled: true
+        },
+        {
+            icon: ProjectImages.gallery,
+            label: "Restaurant's Gallery",
+            onTap: () => {
+                const url = galleryProps.value.startsWith('http')
+                    ? galleryProps.value
+                    : `https://${galleryProps.value}`;
+                window.open(url, '_blank');
+            },
+            ...galleryProps
+        }
+    ];
+
+    return (
+        <div className="more-page" style={{
+            minHeight: '100vh',
+            backgroundColor: '#FFFAEB',
+            display: 'flex',
+            flexDirection: 'column'
+        }}>
+            <div className="secondary-appbar">
+                <div className="appbar-content">
+                    <button className="back-button" onClick={() => navigate(-1)}>
+                        <ChevronLeft size={30} strokeWidth={2} />
+                    </button>
+                    <div className="appbar-title">More</div>
+                </div>
+                <div className="appbar-border"></div>
+            </div>
+
+            <div className="more-container" style={{
+                padding: '64px 16px 16px 16px',
+                flexGrow: 1,
+                display: 'flex',
+                flexDirection: 'column'
+            }}>
+                <DynamicSettingCard items={socialSection} />
+
+                <div style={{ height: '20px' }}></div>
+
+                <DynamicSettingCard items={reviewSection} />
+
+                <div style={{ height: '20px' }}></div>
+
+                <DynamicSettingCard items={utilitySection} />
+
+                <div style={{
+                    marginTop: 'auto',
+                    paddingBottom: '50px',
+                    display: 'flex',
+                    flexDirection: 'column',
+                    alignItems: 'center',
+                    gap: '4px'
+                }}>
+                    <div style={{ color: '#888', fontSize: '12px' }}>
+                        Powered by
+                    </div>
+                    <img
+                        src={ProjectImages.harshtag}
+                        alt="Harshtag Logo"
+                        style={{ height: '35px', objectFit: 'contain', opacity: 0.75 }}
+                    />
+                </div>
+            </div>
+
+            {snackbar.show && (
+                <div className="snackbar show">
+                    <div style={{ fontWeight: '600', fontSize: '15px', marginBottom: '2px' }}>{snackbar.title}</div>
+                    <div style={{ fontSize: '13px', opacity: 0.9 }}>{snackbar.message}</div>
+                </div>
+            )}
+
+            <style dangerouslySetInnerHTML={{
+                __html: `
+                .snackbar {
+                    visibility: hidden;
+                    min-width: 90%;
+                    background-color: #00A9FE;
+                    color: #FFFFFF;
+                    text-align: left;
+                    border-radius: 12px;
+                    padding: 14px 18px;
+                    position: fixed;
+                    z-index: 9999;
+                    top: 15px;
+                    left: 50%;
+                    transform: translateX(-50%);
+                    font-family: 'Afacad', sans-serif;
+                    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.25);
+                }
+                .snackbar.show {
+                    visibility: visible;
+                    animation: slideDown 0.35s ease-out, fadeOut 0.35s ease-in 4.65s;
+                }
+                @keyframes slideDown { 
+                    from { opacity: 0; transform: translate(-50%, -20px); } 
+                    to { opacity: 1; transform: translate(-50%, 0); } 
+                }
+                @keyframes fadeOut { 
+                    from { opacity: 1; } 
+                    to { opacity: 0; } 
+                }
+                `
+            }} />
+        </div>
+    );
+};
+
+export default More;
