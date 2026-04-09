@@ -7,6 +7,7 @@ export const ProjectImages = {
     soup: 'assets/images/soup.png',
     cake: 'assets/images/cake.png',
     eggs: 'assets/images/eggs.png',
+    call: 'assets/images/call.png',
     pizza: 'assets/images/pizza.png',
     momos: 'assets/images/momos.png',
     pasta: 'assets/images/pasta.png',

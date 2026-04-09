@@ -154,6 +154,14 @@ const More = ({ restaurantData }) => {
         return { comingSoon: false, isEnabled: true, value };
     };
 
+    const buildTelHref = (contact) => {
+        const digits = String(contact || '').replace(/\D/g, '');
+        if (!digits) return '';
+        if (digits.length === 10) return `tel:+91${digits}`;
+        if (digits.startsWith('91') && digits.length >= 12) return `tel:+${digits}`;
+        return `tel:+${digits}`;
+    };
+
     const instaProps = getStatusProps(restoDetails.instagram, 'instagram');
     const locationProps = getStatusProps(restoDetails.location, 'location');
     const reviewProps = getStatusProps(restoDetails.reviewUrl, 'review');
@@ -194,15 +202,25 @@ const More = ({ restaurantData }) => {
 
     const socialSection = [
         {
+            icon: ProjectImages.call,
+            label: 'Call Us Now',
+            onTap: () => {
+                const href = buildTelHref(restoDetails.contact);
+                if (href) window.location.href = href;
+            },
+            isEnabled: !!restoDetails.contact,
+            comingSoon: !restoDetails.contact
+        },
+        {
             icon: ProjectImages.whatsapp,
             label: 'Chat on Whatsapp',
-            onTap: () => window.open(`https://wa.me/91${restoDetails.contact}`, '_blank'),
+            onTap: () => window.open(`https://wa.me/91${String(restoDetails.contact).replace(/\D/g, '')}`, '_blank'),
             isEnabled: !!restoDetails.contact,
             comingSoon: !restoDetails.contact
         },
         {
             icon: ProjectImages.instagram,
-            label: 'Instagram',
+            label: 'See our Instagram',
             onTap: () => {
                 const url = instaProps.value.startsWith('http')
                     ? instaProps.value
@@ -216,7 +234,7 @@ const More = ({ restaurantData }) => {
     const reviewSection = [
         {
             icon: ProjectImages.google,
-            label: 'Google Review',
+            label: 'Give us a Google Review',
             onTap: () => {
                 const url = reviewProps.value.startsWith('http')
                     ? reviewProps.value
@@ -227,7 +245,7 @@ const More = ({ restaurantData }) => {
         },
         {
             icon: ProjectImages.location,
-            label: 'Location',
+            label: 'See our Location',
             onTap: () => {
                 const url = locationProps.value.startsWith('http')
                     ? locationProps.value

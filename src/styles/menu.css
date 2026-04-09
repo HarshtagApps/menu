@@ -127,3 +127,21 @@
         font-size: 14px;
     }
 }
+
+@media (max-width: 399px) {
+    .categories-grid {
+        gap: 10px;
+    }
+
+    .category-image-container {
+        height: 50px;
+    }
+
+    .category-image {
+        object-fit: contain;
+    }
+
+    .category-name {
+        font-size: 12px;
+    }
+}
