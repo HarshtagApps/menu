@@ -1,5 +1,5 @@
-import React, { useState, useEffect, useLayoutEffect } from 'react';
-import { BrowserRouter as Router, Routes, Route, useSearchParams, useNavigate } from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
+import { BrowserRouter as Router, Routes, Route, useSearchParams } from 'react-router-dom';
 import { loadRestaurantData } from './api';
 import Splash from './components/Splash';
 import Loading from './components/Loading';
@@ -26,10 +26,7 @@ function shouldShowSplashOnLoad() {
   return nav?.type !== 'reload';
 }
 
-const GH_PAGES_PATH_KEY = 'menuGhPagesPath';
-
 const AppContent = () => {
-  const navigate = useNavigate();
   const [searchParams] = useSearchParams();
   const [restaurantData, setRestaurantData] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -45,18 +42,6 @@ const AppContent = () => {
   });
 
   const restaurantId = searchParams.get('r');
-
-  useLayoutEffect(() => {
-    try {
-      const saved = sessionStorage.getItem(GH_PAGES_PATH_KEY);
-      if (saved) {
-        sessionStorage.removeItem(GH_PAGES_PATH_KEY);
-        navigate(saved.startsWith('/') ? saved : `/${saved}`, { replace: true });
-      }
-    } catch {
-      /* ignore */
-    }
-  }, [navigate]);
 
   useEffect(() => {
     if (!restaurantId) {
