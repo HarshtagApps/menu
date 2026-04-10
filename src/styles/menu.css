@@ -128,7 +128,7 @@
     }
 }
 
-@media (max-width: 399px) {
+@media (max-width: 375px) {
     .categories-grid {
         gap: 10px;
     }

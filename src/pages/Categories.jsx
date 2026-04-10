@@ -1,5 +1,5 @@
 import { useNavigate, useSearchParams } from 'react-router-dom';
-import { Menu } from 'lucide-react';
+import { AlignJustify } from 'lucide-react';
 import { getImageForCategory } from '../utils/menuData';
 import '../styles/menu.css';
 import '../styles/styles.css';
@@ -36,7 +36,7 @@ const Categories = ({ restaurantData }) => {
                                 left: '0',
                                 background: 'none',
                                 border: 'none',
-                                color: '#00A9FE',
+                                color: '#333333',
                                 cursor: 'pointer',
                                 display: 'flex',
                                 alignItems: 'center',
@@ -44,7 +44,7 @@ const Categories = ({ restaurantData }) => {
                                 zIndex: 10
                             }}
                         >
-                            <Menu size={32} strokeWidth={1.5} />
+                            <AlignJustify size={30} strokeWidth={1.25} />
                         </button>
                         <div className="restaurant-info-column">
                             <div className="restaurant-address">{restoAddress}</div>
