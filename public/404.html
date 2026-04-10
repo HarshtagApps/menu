@@ -10,6 +10,12 @@
       var path = (location.pathname || '/').replace(/\/+$/, '') || '/';
       if (path.indexOf('/menu') !== 0) return;
       if (path === '/menu' || path === '/menu/index.html') return;
+      var sub = path.slice('/menu'.length);
+      if (!sub || sub === '/') return;
+      try {
+        sessionStorage.setItem('menuGhPagesPath', sub + (location.search || '') + (location.hash || ''));
+        sessionStorage.setItem('menuGhPagesSkipSplash', '1');
+      } catch (e) { }
       location.replace('/menu/' + (location.search || ''));
     })();
   </script>
