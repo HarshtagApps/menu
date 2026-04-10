@@ -1,17 +1,17 @@
-import React, { useState, useEffect } from 'react';
-import { useNavigate, useSearchParams } from 'react-router-dom';
-import { ChevronLeft } from 'lucide-react';
-import { getImageForCategory } from '../utils/menuData';
-import '../styles/food-items.css';
 import '../styles/styles.css';
+import '../styles/food-items.css';
+import { ChevronLeft } from 'lucide-react';
+import { useState, useEffect } from 'react';
+import { getImageForCategory } from '../utils/menuData';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 
 const FoodItems = ({ restaurantData }) => {
     const navigate = useNavigate();
     const [searchParams] = useSearchParams();
-    const [showSnackbar, setShowSnackbar] = useState(false);
-
     const restaurantId = searchParams.get('r');
     const categoryType = searchParams.get('category');
+    const [showSnackbar, setShowSnackbar] = useState(false);
+    const [isNonVegEnabled, setIsNonVegEnabled] = useState(false);
 
     useEffect(() => {
         if (restaurantData && restaurantData.restoDetails) {
@@ -19,12 +19,20 @@ const FoodItems = ({ restaurantData }) => {
             document.getElementById('pageTitle').textContent = restoName ? `${restoName} | Harshtag Apps` : 'Harshtag Apps';
         }
     }, [restaurantData]);
-
     if (!restaurantData || !categoryType) return null;
-
-    const category = restaurantData.categories.find(cat => cat.categoryType === categoryType);
+    const categoryItems = category?.items || [];
+    const showTypeToggle = hasVegItems && hasNonVegItems;
+    const hasVegItems = categoryItems.some(item => item.isVeg);
+    const hasNonVegItems = categoryItems.some(item => !item.isVeg);
     const restoName = restaurantData.restoDetails?.restoName?.toUpperCase() || '';
-
+    const category = restaurantData.categories.find(cat => cat.categoryType === categoryType);
+    const sortedItems = categoryItems
+        .slice()
+        .sort((a, b) => {
+            if (a.isVeg === b.isVeg) return 0;
+            if (isNonVegEnabled) return a.isVeg ? 1 : -1;
+            return a.isVeg ? -1 : 1;
+        });
     const handleSpecialClick = (name) => {
         const snackbar = document.getElementById("food-items-snackbar");
         if (!snackbar) return;
@@ -34,7 +42,6 @@ const FoodItems = ({ restaurantData }) => {
             snackbar.className = "";
         }, 5000);
     };
-
     const getShortSize = (size) => {
         const mapping = {
             'full': 'F',
@@ -45,7 +52,6 @@ const FoodItems = ({ restaurantData }) => {
         };
         return mapping[size.toLowerCase()] || size;
     };
-
     const buildPriceTagsHTML = (prices) => {
         return Object.entries(prices).map(([size, price]) => (
             <div key={size} className="price-tag">
@@ -62,6 +68,24 @@ const FoodItems = ({ restaurantData }) => {
                         <ChevronLeft size={30} strokeWidth={2} />
                     </button>
                     <div className="appbar-title">{categoryType}</div>
+                    {showTypeToggle && (
+                        <div className="food-type-toggle">
+                            <button
+                                className={!isNonVegEnabled ? 'active' : ''}
+                                onClick={() => setIsNonVegEnabled(false)}
+                                type="button"
+                            >
+                                Veg
+                            </button>
+                            <button
+                                className={isNonVegEnabled ? 'active' : ''}
+                                onClick={() => setIsNonVegEnabled(true)}
+                                type="button"
+                            >
+                                Nonveg
+                            </button>
+                        </div>
+                    )}
                 </div>
                 <div className="appbar-border"></div>
             </div>
@@ -73,7 +97,7 @@ const FoodItems = ({ restaurantData }) => {
                         <div className="food-items-empty-title">No items in this category</div>
                     </div>
                 ) : (
-                    category.items.map((item, index) => {
+                    sortedItems.map((item, index) => {
                         const categoryImage = getImageForCategory(categoryType);
                         return (
                             <div
