@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Harshtag Apps</title>
+  <script>
+    (function () {
+      var path = (location.pathname || '/').replace(/\/+$/, '') || '/';
+      if (path.indexOf('/menu') !== 0) return;
+      if (path === '/menu' || path === '/menu/index.html') return;
+      location.replace('/menu/' + (location.search || ''));
+    })();
+  </script>
+</head>
+
+<body>
+  <p style="font-family: system-ui, sans-serif; padding: 1rem;">Loading menu… <a href="/menu/">Open menu</a></p>
+</body>
+
+</html>

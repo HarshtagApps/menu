@@ -168,9 +168,11 @@ const More = ({ restaurantData }) => {
     const galleryProps = getStatusProps(restoDetails.gallery, 'gallery');
 
     const handleShare = async () => {
-        // Correctly point to the home page by removing the /more route
-        const baseUrl = window.location.origin + window.location.pathname.replace(/\/more$/, '');
-        const shareUrl = `${baseUrl}/?r=${restaurantId}`;
+        const appRoot = new URL(import.meta.env.BASE_URL, window.location.origin).href.replace(
+            /\/+$/,
+            ''
+        );
+        const shareUrl = `${appRoot}/#/?r=${encodeURIComponent(restaurantId)}`;
         const shareData = {
             title: restoDetails.restoName,
             text: `Hey! Check out the menu for ${restoDetails.restoName}`,

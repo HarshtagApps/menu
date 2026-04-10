@@ -5,7 +5,6 @@ import Splash from './components/Splash';
 import Loading from './components/Loading';
 import './index.css';
 
-// Lazy load pages
 const Categories = React.lazy(() => import('./pages/Categories'));
 const FoodItems = React.lazy(() => import('./pages/FoodItems'));
 const Order = React.lazy(() => import('./pages/Order'));
@@ -13,20 +12,25 @@ const OrderItems = React.lazy(() => import('./pages/OrderItems'));
 const Review = React.lazy(() => import('./pages/Review'));
 const More = React.lazy(() => import('./pages/More'));
 
+function shouldShowSplashOnLoad() {
+  if (typeof performance === 'undefined') return true;
+  const nav = performance.getEntriesByType?.('navigation')?.[0];
+  return nav?.type !== 'reload';
+}
+
 const AppContent = () => {
   const [searchParams] = useSearchParams();
   const [restaurantData, setRestaurantData] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const [showSplash, setShowSplash] = useState(true);
+  const [showSplash, setShowSplash] = useState(() => shouldShowSplashOnLoad());
 
-  // Global Order State
   const [orderDetails, setOrderDetails] = useState({
     customerName: '',
     customerAddress: '',
     tableNumber: '',
-    type: 'online', // 'online' or 'dinein'
-    items: {} // { itemId: { size: { quantity, price, notes } } }
+    type: 'online',
+    items: {}
   });
 
   const restaurantId = searchParams.get('r');
@@ -61,7 +65,6 @@ const AppContent = () => {
   }
 
   if (error) {
-    // Check if error matches "The restaurant "ID" was not found." pattern to bold the ID
     const notFoundMatch = error.match(/The restaurant "(.*?)" was not found\./);
 
     return (
