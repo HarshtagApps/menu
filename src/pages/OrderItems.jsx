@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { ChevronLeft, Minus, Plus } from 'lucide-react';
 import { getImageForCategory } from '../utils/menuData';
@@ -10,6 +10,7 @@ const OrderItems = ({ restaurantData, orderDetails, setOrderDetails }) => {
     const [searchParams] = useSearchParams();
     const restaurantId = searchParams.get('r');
     const categoryType = searchParams.get('category');
+    const [isNonVegEnabled, setIsNonVegEnabled] = useState(false);
 
     useEffect(() => {
         if (restaurantData && restaurantData.restoDetails) {
@@ -25,26 +26,30 @@ const OrderItems = ({ restaurantData, orderDetails, setOrderDetails }) => {
 
     const category = restaurantData.categories.find(cat => cat.categoryType === categoryType);
     const categoryItems = category?.items || [];
+    const hasVegItems = categoryItems.some(item => item.isVeg);
+    const hasNonVegItems = categoryItems.some(item => !item.isVeg);
+    const showTypeToggle = hasVegItems && hasNonVegItems;
+
+    const filteredItems = showTypeToggle
+        ? categoryItems.filter(item => isNonVegEnabled ? !item.isVeg : item.isVeg)
+        : categoryItems;
+
 
     const updateQuantity = (itemId, size, price, change) => {
         setOrderDetails(prev => {
             const newItems = { ...prev.items };
 
-            // Deep copy nested objects before mutation
             if (newItems[itemId]) {
                 newItems[itemId] = { ...newItems[itemId] };
             } else {
                 newItems[itemId] = {};
             }
-
             if (newItems[itemId][size]) {
                 newItems[itemId][size] = { ...newItems[itemId][size] };
             } else {
                 newItems[itemId][size] = { quantity: 0, price: price, notes: '' };
             }
-
             const newQty = newItems[itemId][size].quantity + change;
-
             if (newQty <= 0) {
                 delete newItems[itemId][size];
                 if (Object.keys(newItems[itemId]).length === 0) {
@@ -54,7 +59,6 @@ const OrderItems = ({ restaurantData, orderDetails, setOrderDetails }) => {
                 newItems[itemId][size].quantity = newQty;
                 newItems[itemId][size].price = price;
             }
-
             return { ...prev, items: newItems };
         });
     };
@@ -139,6 +143,24 @@ const OrderItems = ({ restaurantData, orderDetails, setOrderDetails }) => {
                         <ChevronLeft size={30} strokeWidth={2} />
                     </button>
                     <div className="appbar-title">{categoryType}</div>
+                    {showTypeToggle && (
+                        <div className="food-type-toggle">
+                            <button
+                                className={!isNonVegEnabled ? 'active' : ''}
+                                onClick={() => setIsNonVegEnabled(false)}
+                                type="button"
+                            >
+                                Veg
+                            </button>
+                            <button
+                                className={isNonVegEnabled ? 'active' : ''}
+                                onClick={() => setIsNonVegEnabled(true)}
+                                type="button"
+                            >
+                                Nonveg
+                            </button>
+                        </div>
+                    )}
                 </div>
                 <div className="appbar-border"></div>
             </div>
@@ -150,7 +172,7 @@ const OrderItems = ({ restaurantData, orderDetails, setOrderDetails }) => {
                         <div className="order-items-empty-text">No items in this category</div>
                     </div>
                 ) : (
-                    categoryItems.map((item, index) => {
+                    filteredItems.map((item, index) => {
                         const itemId = item.name;
                         return (
                             <div

@@ -8,6 +8,32 @@
     -webkit-overflow-scrolling: touch;
 }
 
+.food-type-toggle {
+    position: absolute;
+    right: 12px;
+    display: flex;
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 20px;
+    padding: 2px;
+    border: 1px solid rgba(255, 255, 255, 0.4);
+}
+
+.food-type-toggle button {
+    background: none;
+    border: none;
+    color: #FFFFFF;
+    padding: 4px 8px;
+    border-radius: 18px;
+    font-size: 10px;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.food-type-toggle button.active {
+    background: #FFFFFF;
+    color: #FA057B;
+}
+
 .order-items-card {
     background-color: #FFFFFF;
     border-radius: 8px;
