@@ -1,4 +1,5 @@
 import { useNavigate, useSearchParams } from 'react-router-dom';
+import { useState, useEffect } from 'react';
 import { AlignJustify } from 'lucide-react';
 import { getImageForCategory } from '../utils/menuData';
 import '../styles/menu.css';
@@ -8,6 +9,7 @@ const Categories = ({ restaurantData }) => {
     const navigate = useNavigate();
     const [searchParams] = useSearchParams();
     const restaurantId = searchParams.get('r');
+    const [currentBannerIndex, setCurrentBannerIndex] = useState(0);
     if (!restaurantData) return null;
     const { restoDetails, categories } = restaurantData;
     const isPremiumPlan = restoDetails?.plan === 'premium';
@@ -21,6 +23,19 @@ const Categories = ({ restaurantData }) => {
     const handleOrderClick = () => {
         navigate(`/order?r=${restaurantId}`);
     };
+
+    useEffect(() => {
+        const bannerUrls = restoDetails?.offerBannerUrls || [];
+        if (bannerUrls.length <= 1) return;
+
+        const interval = setInterval(() => {
+            setCurrentBannerIndex((prevIndex) =>
+                (prevIndex + 1) % bannerUrls.length
+            );
+        }, 7500);
+
+        return () => clearInterval(interval);
+    }, [restoDetails?.offerBannerUrls]);
 
     return (
         <div id="mainContent">
@@ -61,6 +76,20 @@ const Categories = ({ restaurantData }) => {
                 </div>
                 <div className="restaurant-divider"></div>
             </div>
+
+            {restoDetails?.showOffer && restoDetails?.offerBannerUrls && restoDetails?.offerBannerUrls.length > 0 && (
+                <div className="offer-banner-container">
+                    <img
+                        key={currentBannerIndex}
+                        src={restoDetails.offerBannerUrls[currentBannerIndex]}
+                        alt="Special Offer"
+                        className="offer-banner-image fade-in"
+                        onError={(e) => {
+                            e.target.style.display = 'none';
+                        }}
+                    />
+                </div>
+            )}
 
             <div className="menu-container">
                 {uniqueCategories.length === 0 ? (

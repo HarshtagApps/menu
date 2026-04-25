@@ -68,7 +68,10 @@ export const fetchMenuData = async (restaurantId) => {
                 instagram: restoInfo.Instagram || '',
                 location: restoInfo.Location || '',
                 reviewUrl: restoInfo.GoogleReview || restoInfo.ReviewURL || restoInfo.ReviewUrl || '',
-                gallery: restoInfo.Gallery || ''
+                gallery: restoInfo.Gallery || '',
+                showOffer: (restoInfo.ShowOffer === true || restoInfo.ShowOffer === 'TRUE'),
+                offerBannerUrl: restoInfo.OfferBannerURL || '',
+                offerBannerUrls: restoInfo.OfferBannerURL ? restoInfo.OfferBannerURL.split(',').map(url => url.trim()).filter(url => url) : []
             },
             categories
         };
