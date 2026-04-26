@@ -1,0 +1,55 @@
+.more-page {
+    min-height: 100vh;
+    background-color: #FFFAEB;
+    display: flex;
+    flex-direction: column;
+}
+
+.more-container {
+    padding: 50px 10px 10px 10px;
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+.snackbar {
+    visibility: hidden;
+    min-width: 95%;
+    background-color: #00A9FE;
+    color: #FFFFFF;
+    text-align: left;
+    border-radius: 12px;
+    padding: 14px 18px;
+    position: fixed;
+    z-index: 9999;
+    top: 15px;
+    left: 50%;
+    transform: translateX(-50%);
+    font-family: 'Afacad', sans-serif;
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.25);
+}
+
+.snackbar.show {
+    visibility: visible;
+    animation: slideDown 0.35s ease-out, fadeOut 0.35s ease-in 4.65s;
+}
+
+@keyframes slideDown {
+    from {
+        opacity: 0;
+        transform: translate(-50%, -20px);
+    }
+    to {
+        opacity: 1;
+        transform: translate(-50%, 0);
+    }
+}
+
+@keyframes fadeOut {
+    from {
+        opacity: 1;
+    }
+    to {
+        opacity: 0;
+    }
+}

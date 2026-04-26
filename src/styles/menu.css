@@ -106,37 +106,6 @@
     margin-bottom: 6px;
 }
 
-.offer-banner-container {
-    width: 100%;
-    padding: 0 10px;
-}
-
-.offer-banner-image {
-    width: 100%;
-    height: auto;
-    border-radius: 10px;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-    object-fit: contain;
-    transition: transform 0.2s ease;
-}
-
-.fade-in {
-    animation: fadeIn 2s ease-in-out;
-}
-
-@keyframes fadeIn {
-    from {
-        opacity: 0;
-    }
-    to {
-        opacity: 1;
-    }
-}
-
-.offer-banner-image:hover {
-    transform: scale(1.02);
-}
-
 @media (min-width: 768px) and (orientation: portrait) {
     .categories-grid {
         grid-template-columns: repeat(5, 1fr);

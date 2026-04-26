@@ -405,7 +405,7 @@ const Order = ({ restaurantData, orderDetails, setOrderDetails }) => {
                 __html: `
         #order-validation-snackbar {
             visibility: hidden;
-            min-width: 90%;
+            min-width: 95%;
             background-color: #FF8800;
             color: #FFFFFF;
             text-align: left;

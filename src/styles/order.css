@@ -18,10 +18,10 @@
     font-family: 'Afacad', sans-serif;
 }
 
-
 .order-container {
     padding: 12px;
     padding-top: 50px;
+    padding-bottom: 60px;
     min-height: calc(100vh - 41px);
     overflow-y: auto;
     -webkit-overflow-scrolling: touch;

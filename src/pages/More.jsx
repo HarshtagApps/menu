@@ -2,8 +2,9 @@ import React from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { ChevronLeft, ChevronRight, Hourglass, Lock } from 'lucide-react';
 import '../styles/styles.css';
-
+import '../styles/More.css';
 import { ProjectImages } from '../utils/menuData';
+import Ads from '../components/Ads';
 
 const SettingTileItem = ({ icon, label, onTap, onDisabledTap, trailing, isEnabled = true, comingSoon = false }) => {
     const handleClick = () => {
@@ -279,12 +280,7 @@ const More = ({ restaurantData }) => {
     ];
 
     return (
-        <div className="more-page" style={{
-            minHeight: '100vh',
-            backgroundColor: '#FFFAEB',
-            display: 'flex',
-            flexDirection: 'column'
-        }}>
+        <div className="more-page">
             <div className="secondary-appbar">
                 <div className="appbar-content">
                     <button className="back-button" onClick={() => navigate(-1)}>
@@ -295,12 +291,15 @@ const More = ({ restaurantData }) => {
                 <div className="appbar-border"></div>
             </div>
 
-            <div className="more-container" style={{
-                padding: '64px 16px 16px 16px',
-                flexGrow: 1,
-                display: 'flex',
-                flexDirection: 'column'
-            }}>
+            <div className="more-container">
+                <Ads
+                    bannerAdsUrls={restoDetails?.bannerAdsUrls}
+                    showBannerAds={restoDetails?.showBannerAds}
+                    bannerAdsMap={restoDetails?.bannerAdsMap}
+                    screenKey="MoreAds"
+                />
+                <div style={{ height: '10px' }}></div>
+
                 <DynamicSettingCard items={socialSection} />
 
                 <div style={{ height: '20px' }}></div>
@@ -313,7 +312,7 @@ const More = ({ restaurantData }) => {
 
                 <div style={{
                     marginTop: 'auto',
-                    paddingBottom: '50px',
+                    paddingBottom: '60px',
                     display: 'flex',
                     flexDirection: 'column',
                     alignItems: 'center',
@@ -336,39 +335,6 @@ const More = ({ restaurantData }) => {
                     <div style={{ fontSize: '13px', opacity: 0.9 }}>{snackbar.message}</div>
                 </div>
             )}
-
-            <style dangerouslySetInnerHTML={{
-                __html: `
-                .snackbar {
-                    visibility: hidden;
-                    min-width: 90%;
-                    background-color: #00A9FE;
-                    color: #FFFFFF;
-                    text-align: left;
-                    border-radius: 12px;
-                    padding: 14px 18px;
-                    position: fixed;
-                    z-index: 9999;
-                    top: 15px;
-                    left: 50%;
-                    transform: translateX(-50%);
-                    font-family: 'Afacad', sans-serif;
-                    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.25);
-                }
-                .snackbar.show {
-                    visibility: visible;
-                    animation: slideDown 0.35s ease-out, fadeOut 0.35s ease-in 4.65s;
-                }
-                @keyframes slideDown { 
-                    from { opacity: 0; transform: translate(-50%, -20px); } 
-                    to { opacity: 1; transform: translate(-50%, 0); } 
-                }
-                @keyframes fadeOut { 
-                    from { opacity: 1; } 
-                    to { opacity: 0; } 
-                }
-                `
-            }} />
         </div>
     );
 };
