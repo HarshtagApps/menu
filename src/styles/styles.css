@@ -31,14 +31,12 @@ body {
 }
 
 .secondary-appbar {
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
+    position: relative;
     background-color: #FA057B;
     height: 48px;
     z-index: 1000;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    flex-shrink: 0;
 }
 
 .appbar-content {
@@ -106,6 +104,29 @@ body {
     letter-spacing: 2px;
     font-family: 'Afacad', sans-serif;
     text-transform: uppercase;
+    line-height: 1.2;
+    display: block;
+}
+
+.restaurant-name-bracket {
+    font-size: 22px;
+    font-weight: 600;
+    letter-spacing: 1px;
+    font-family: 'Afacad', sans-serif;
+    text-transform: uppercase;
+    line-height: 1.2;
+    display: block;
+    color: #FA057B;
+}
+
+.restaurant-name-parentheses {
+    font-size: 18px;
+    font-weight: 500;
+    letter-spacing: 0.5px;
+    font-family: 'Afacad', sans-serif;
+    text-transform: uppercase;
+    display: block;
+    color: #FA057B;
 }
 
 .restaurant-address {

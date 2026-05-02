@@ -1,6 +1,7 @@
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { AlignJustify } from 'lucide-react';
 import { getImageForCategory } from '../utils/menuData';
+import { parseRestaurantName, getRestaurantNameClass } from '../utils/restaurantNameParser';
 import Ads from '../components/Ads';
 import '../styles/menu.css';
 import '../styles/styles.css';
@@ -28,7 +29,13 @@ const Categories = ({ restaurantData }) => {
         <div id="mainContent">
             <div className="restaurant-header">
                 <div className="restaurant-header-content">
-                    <div className="restaurant-name">{restoName}</div>
+                    <div className="restaurant-name">
+                        {parseRestaurantName(restoName).map((segment, index) => (
+                            <span key={index} className={getRestaurantNameClass(segment.type)}>
+                                {segment.text}
+                            </span>
+                        ))}
+                    </div>
                     <div className="restaurant-info-row">
                         <button
                             className="menu-button"

@@ -18,11 +18,17 @@
     font-family: 'Afacad', sans-serif;
 }
 
+.order-page {
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+}
+
 .order-container {
-    padding: 12px;
-    padding-top: 50px;
+    flex: 1;
+    padding: 2px 12px 12px 12px;
     padding-bottom: 60px;
-    min-height: calc(100vh - 41px);
+    background-color: #FFFAEB;
     overflow-y: auto;
     -webkit-overflow-scrolling: touch;
 }

@@ -1,8 +1,13 @@
+.order-items-page {
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+}
+
 .order-items-container {
+    flex: 1;
     padding: 12px;
-    padding-top: 60px;
     padding-bottom: 100px;
-    min-height: 100vh;
     background-color: #FFFAEB;
     overflow-y: auto;
     -webkit-overflow-scrolling: touch;

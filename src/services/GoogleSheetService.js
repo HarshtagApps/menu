@@ -18,7 +18,7 @@ export const fetchMenuData = async (restaurantId) => {
         }
         const categoriesMap = {};
         rows.forEach(row => {
-            const { Category, ItemName, IsVeg, IsSpecial, Size, Price } = row;
+            const { Category, ItemName, IsVeg, IsSpecial, Size, Price, Description } = row;
             if (!categoriesMap[Category]) {
                 categoriesMap[Category] = {
                     categoryType: Category,
@@ -30,6 +30,7 @@ export const fetchMenuData = async (restaurantId) => {
                     name: ItemName,
                     isVeg: (IsVeg === true || IsVeg === 'TRUE'),
                     isSpecial: (IsSpecial === true || IsSpecial === 'TRUE'),
+                    description: Description || '',
                     prices: {}
                 };
             }

@@ -1,7 +1,8 @@
 import { useState, useEffect } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
-import { ChevronLeft } from 'lucide-react';
+import { ChevronLeft, ChevronDown } from 'lucide-react';
 import { getImageForCategory } from '../utils/menuData';
+import Ads from '../components/Ads';
 import '../styles/food-items.css';
 import '../styles/styles.css';
 
@@ -10,6 +11,7 @@ const FoodItems = ({ restaurantData }) => {
     const [searchParams] = useSearchParams();
     const [showSnackbar, setShowSnackbar] = useState(false);
     const [isNonVegEnabled, setIsNonVegEnabled] = useState(false);
+    const [expandedDescriptions, setExpandedDescriptions] = useState(new Set());
 
     const restaurantId = searchParams.get('r');
     const categoryType = searchParams.get('category');
@@ -59,12 +61,14 @@ const FoodItems = ({ restaurantData }) => {
         return mapping[size.toLowerCase()] || size;
     };
 
-    const buildPriceTagsHTML = (prices) => {
-        return Object.entries(prices).map(([size, price]) => (
-            <div key={size} className="price-tag">
-                {getShortSize(size)}: ₹{price}
-            </div>
-        ));
+    const toggleDescription = (itemName) => {
+        const newExpanded = new Set(expandedDescriptions);
+        if (newExpanded.has(itemName)) {
+            newExpanded.delete(itemName);
+        } else {
+            newExpanded.add(itemName);
+        }
+        setExpandedDescriptions(newExpanded);
     };
 
     return (
@@ -97,6 +101,13 @@ const FoodItems = ({ restaurantData }) => {
                 <div className="appbar-border"></div>
             </div>
 
+            <Ads
+                bannerAdsUrls={restaurantData?.restoDetails?.bannerAdsUrls}
+                showBannerAds={restaurantData?.restoDetails?.showBannerAds}
+                bannerAdsMap={restaurantData?.restoDetails?.bannerAdsMap}
+                screenKey="FoodItemsAds"
+            />
+
             <div className="food-items-container">
                 {!category || !category.items || category.items.length === 0 ? (
                     <div className="food-items-empty-state">
@@ -106,33 +117,70 @@ const FoodItems = ({ restaurantData }) => {
                 ) : (
                     sortedItems.map((item, index) => {
                         const categoryImage = getImageForCategory(categoryType);
+                        const isExpanded = expandedDescriptions.has(item.name);
+                        const hasDescription = !!item.description;
+
                         return (
-                            <div
-                                key={index}
-                                className="food-item-card"
-                                onClick={item.isSpecial ? () => handleSpecialClick(item.name) : undefined}
-                            >
-                                <div className="food-item-image-box">
-                                    {categoryImage ? (
-                                        <img src={categoryImage} alt={item.name} className="food-item-image" />
-                                    ) : (
-                                        <div className="food-item-icon">🍽️</div>
-                                    )}
-                                </div>
-                                <div className="food-item-details">
-                                    <div className="food-item-name">{item.name}</div>
-                                    <div className="food-item-price-tags">
-                                        {Object.entries(item.prices).map(([size, price]) => (
-                                            <div key={size} className="food-item-price-tag">
-                                                {getShortSize(size)}: ₹{price}
-                                            </div>
-                                        ))}
+                            <div key={index} className="food-item-wrapper">
+                                <div
+                                    className={`food-item-card ${hasDescription && isExpanded ? 'description-open' : ''}`}
+                                    onClick={() => {
+                                        if (item.isSpecial) {
+                                            handleSpecialClick(item.name);
+                                        } else if (hasDescription) {
+                                            toggleDescription(item.name);
+                                        }
+                                    }}
+                                >
+                                    <div className="food-item-image-box">
+                                        {categoryImage ? (
+                                            <img src={categoryImage} alt={item.name} className="food-item-image" />
+                                        ) : (
+                                            <div className="food-item-icon">🍽️</div>
+                                        )}
+                                    </div>
+
+                                    <div className="food-item-details">
+                                        <div className="food-item-name">{item.name}</div>
+                                        <div className="food-item-price-tags">
+                                            {Object.entries(item.prices).map(([size, price]) => (
+                                                <div key={size} className="food-item-price-tag">
+                                                    {getShortSize(size)}: ₹{price}
+                                                </div>
+                                            ))}
+                                        </div>
+                                    </div>
+
+                                    <div className="food-item-indicators">
+                                        {item.isSpecial && (
+                                            <img
+                                                src="assets/images/special.png"
+                                                alt="Special"
+                                                className="food-item-special-badge"
+                                            />
+                                        )}
+                                        <div className={`food-item-veg-dot ${item.isVeg ? 'veg' : 'non-veg'}`} />
+                                        {hasDescription && (
+                                            <ChevronDown
+                                                size={16}
+                                                strokeWidth={2}
+                                                className={`food-item-description-arrow ${isExpanded ? 'expanded' : ''}`}
+                                                onClick={(e) => {
+                                                    e.stopPropagation();
+                                                    toggleDescription(item.name);
+                                                }}
+                                            />
+                                        )}
                                     </div>
                                 </div>
-                                <div className="food-item-indicators">
-                                    {item.isSpecial && <img src="assets/images/special.png" alt="Special" className="food-item-special-badge" />}
-                                    <div className={`food-item-veg-dot ${item.isVeg ? 'veg' : 'non-veg'}`}></div>
-                                </div>
+
+                                {hasDescription && (
+                                    <div className={`food-item-description-container ${isExpanded ? 'expanded' : ''}`}>
+                                        <div className="food-item-description-text">
+                                            {item.description}
+                                        </div>
+                                    </div>
+                                )}
                             </div>
                         );
                     })

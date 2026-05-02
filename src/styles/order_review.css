@@ -21,11 +21,17 @@
     font-family: 'Afacad', sans-serif;
 }
 
+.review-page {
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+}
+
 .review-page-container {
+    flex: 1;
     padding: 12px;
-    padding-top: 60px;
     padding-bottom: 120px;
-    min-height: calc(100vh - 41px);
+    background-color: #FFFAEB;
     overflow-y: auto;
     -webkit-overflow-scrolling: touch;
 }
@@ -183,12 +189,13 @@
 
 .review-page-summary-bar {
     position: fixed;
-    bottom: 0;
-    left: 0;
-    right: 0;
+    bottom: 16px;
+    left: 10px;
+    right: 10px;
     background-color: var(--white);
     padding: 10px;
-    box-shadow: 0 -2px 8px var(--shadow-light);
+    border-radius: 12px;
+    box-shadow: 0 4px 10px var(--shadow);
     z-index: 100;
 }
 
