@@ -151,7 +151,9 @@ const FoodItems = ({ restaurantData }) => {
                                         </div>
                                     </div>
 
-                                    <div className="food-item-indicators">
+                                    <div
+                                        className={`food-item-indicators${hasDescription ? ' food-item-indicators--with-chevron' : ''}`}
+                                    >
                                         {item.isSpecial && (
                                             <img
                                                 src="assets/images/special.png"
@@ -162,7 +164,7 @@ const FoodItems = ({ restaurantData }) => {
                                         <div className={`food-item-veg-dot ${item.isVeg ? 'veg' : 'non-veg'}`} />
                                         {hasDescription && (
                                             <ChevronDown
-                                                size={16}
+                                                size={20}
                                                 strokeWidth={2}
                                                 className={`food-item-description-arrow ${isExpanded ? 'expanded' : ''}`}
                                                 onClick={(e) => {

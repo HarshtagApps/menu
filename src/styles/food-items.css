@@ -129,10 +129,15 @@
 }
 
 .food-item-indicators {
+    position: relative;
     display: flex;
     flex-direction: column;
     align-items: center;
     gap: 6px;
+}
+
+.food-item-indicators--with-chevron {
+    padding-bottom: 26px;
 }
 
 .food-item-special-badge {
@@ -157,33 +162,44 @@
 }
 
 .food-item-description-arrow {
+    position: absolute;
+    bottom: 0;
+    left: 50%;
     cursor: pointer;
     transition: transform 0.3s ease;
     color: #666666;
+    transform: translateX(-50%);
 }
 
 .food-item-description-arrow.expanded {
-    transform: rotate(180deg);
+    transform: translateX(-50%) rotate(180deg);
 }
 
 .food-item-description-container {
     background-color: white;
-    border-top: none;
     border-radius: 0 0 8px 8px;
     overflow: hidden;
-    max-height: 0;
-    padding: 0 5px;
-    box-shadow: 0 3px 5px rgba(51, 51, 51, 0.2);
-    transition: max-height 0.3s ease, padding 0.3s ease;
+    display: grid;
+    grid-template-rows: 0fr;
+    padding: 0;
+    border: 0 solid rgba(0, 169, 254, 0.55);
+    box-shadow: none;
+    transition:
+        grid-template-rows 0.34s cubic-bezier(0.32, 0.72, 0, 1),
+        padding 0.34s cubic-bezier(0.32, 0.72, 0, 1);
 }
 
 .food-item-description-container.expanded {
-    max-height: 200px;
+    grid-template-rows: 1fr;
     padding: 5px;
-    border: 0.75px solid rgba(250, 5, 123, 0.5);
+    border-width: 0.75px;
+    box-shadow: 0 3px 5px rgba(51, 51, 51, 0.2);
 }
 
 .food-item-description-text {
+    min-height: 0;
+    overflow: hidden;
+    max-height: 200px;
     font-size: 14px;
     color: #555555;
     line-height: 1.4;
