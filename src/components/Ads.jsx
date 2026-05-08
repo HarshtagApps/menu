@@ -18,6 +18,14 @@ const Ads = ({ bannerAdsUrls, showBannerAds, bannerAdsMap, screenKey }) => {
         return bannerAdsMap[screenKey] || [];
     };
     const filteredAds = getScreenAds();
+
+    useEffect(() => {
+        filteredAds.forEach(url => {
+            const img = new Image();
+            img.src = url;
+        });
+    }, [filteredAds]);
+
     useEffect(() => {
         if (!filteredAds || filteredAds.length <= 1) return;
         const interval = setInterval(() => {

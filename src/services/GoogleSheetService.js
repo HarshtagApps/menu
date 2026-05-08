@@ -58,7 +58,8 @@ export const fetchMenuData = async (restaurantId) => {
                 bannerAdsMap: restoInfo.BannerAdsURL ?
                     (function () {
                         const map = {};
-                        const parts = restoInfo.BannerAdsURL.split('],');
+                        const cleanedData = restoInfo.BannerAdsURL.replace(/\n\s*/g, '').replace(/\s+/g, ' ');
+                        const parts = cleanedData.split('],');
                         parts.forEach(part => {
                             const cleanPart = part.replace(/\]$/, '');
                             const match = cleanPart.match(/^(\w+)\[(.*)$/);

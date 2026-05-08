@@ -298,34 +298,31 @@ const More = ({ restaurantData }) => {
                     bannerAdsMap={restoDetails?.bannerAdsMap}
                     screenKey="MoreAds"
                 />
-                <div style={{ height: '10px' }}></div>
 
-                <DynamicSettingCard items={socialSection} />
+                <div className="more-content">
+                    <DynamicSettingCard items={socialSection} />
 
-                <div style={{ height: '20px' }}></div>
+                    <DynamicSettingCard items={reviewSection} />
 
-                <DynamicSettingCard items={reviewSection} />
+                    <DynamicSettingCard items={utilitySection} />
 
-                <div style={{ height: '20px' }}></div>
-
-                <DynamicSettingCard items={utilitySection} />
-
-                <div style={{
-                    marginTop: 'auto',
-                    paddingBottom: '60px',
-                    display: 'flex',
-                    flexDirection: 'column',
-                    alignItems: 'center',
-                    gap: '4px'
-                }}>
-                    <div style={{ color: '#888', fontSize: '12px' }}>
-                        Powered by
+                    <div style={{
+                        marginTop: 'auto',
+                        paddingBottom: '60px',
+                        display: 'flex',
+                        flexDirection: 'column',
+                        alignItems: 'center',
+                        gap: '4px'
+                    }}>
+                        <div style={{ color: '#888', fontSize: '12px' }}>
+                            Powered by
+                        </div>
+                        <img
+                            src={ProjectImages.harshtag}
+                            alt="Harshtag Logo"
+                            style={{ height: '35px', objectFit: 'contain', opacity: 0.75 }}
+                        />
                     </div>
-                    <img
-                        src={ProjectImages.harshtag}
-                        alt="Harshtag Logo"
-                        style={{ height: '35px', objectFit: 'contain', opacity: 0.75 }}
-                    />
                 </div>
             </div>
 
