@@ -10,7 +10,37 @@ const Categories = ({ restaurantData }) => {
     const navigate = useNavigate();
     const [searchParams] = useSearchParams();
     const restaurantId = searchParams.get('r');
-    if (!restaurantData) return null;
+    if (!restaurantData) {
+        return (
+            <div style={{
+                display: 'flex',
+                flexDirection: 'column',
+                alignItems: 'center',
+                justifyContent: 'center',
+                height: '100vh',
+                padding: '20px',
+                textAlign: 'center'
+            }}>
+                <div style={{ fontSize: '16px', marginBottom: '20px', color: '#666' }}>
+                    There is some issue in your Internet Connection
+                </div>
+                <button
+                    onClick={() => window.location.reload()}
+                    style={{
+                        padding: '12px 24px',
+                        backgroundColor: '#FA057B',
+                        color: 'white',
+                        border: 'none',
+                        borderRadius: '8px',
+                        fontSize: '16px',
+                        cursor: 'pointer'
+                    }}
+                >
+                    Reload
+                </button>
+            </div>
+        );
+    }
     const { restoDetails, categories } = restaurantData;
     const isPremiumPlan = restoDetails?.plan === 'premium';
     const restoName = (restoDetails?.restoName || '').toUpperCase();
@@ -71,8 +101,8 @@ const Categories = ({ restaurantData }) => {
                 <div className="restaurant-divider"></div>
             </div>
 
-            <Ads 
-                bannerAdsUrls={restoDetails?.bannerAdsUrls} 
+            <Ads
+                bannerAdsUrls={restoDetails?.bannerAdsUrls}
                 showBannerAds={restoDetails?.showBannerAds}
                 bannerAdsMap={restoDetails?.bannerAdsMap}
                 screenKey="HomeAds"

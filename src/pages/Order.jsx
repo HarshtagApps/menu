@@ -139,7 +139,7 @@ const Order = ({ restaurantData, orderDetails, setOrderDetails }) => {
                 newItems[itemId] = { ...newItems[itemId] };
                 newItems[itemId][size] = {
                     ...newItems[itemId][size],
-                    notes: notes.trim()
+                    notes: notes
                 };
             }
             return { ...prev, items: newItems };
@@ -306,10 +306,16 @@ const Order = ({ restaurantData, orderDetails, setOrderDetails }) => {
                                         name="customerAddress"
                                         value={orderDetails.customerAddress}
                                         onChange={handleInputChange}
+                                        onKeyDown={(e) => {
+                                            if (e.key === "Enter" && !e.shiftKey) {
+                                                e.preventDefault();
+                                                e.target.blur();
+                                            }
+                                        }}
                                         className="order-input-field order-textarea-field"
                                         placeholder="Enter delivery address"
-                                        rows="3"
                                         autoCapitalize="sentences"
+                                        enterKeyHint="done"
                                     />
                                 </div>
                             ) : (

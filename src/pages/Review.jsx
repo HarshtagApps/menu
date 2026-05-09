@@ -18,6 +18,7 @@ const Review = ({ restaurantData, orderDetails, setOrderDetails }) => {
     const [searchParams] = useSearchParams();
     const [showPaymentModal, setShowPaymentModal] = React.useState(false);
     const restaurantId = searchParams.get('r');
+    const isIOS = /iPhone|iPad|iPod/.test(navigator.userAgent);
     useEffect(() => {
         if (restaurantData && restaurantData.restoDetails) {
             const restoName = (restaurantData.restoDetails.restoName || '').toUpperCase();
@@ -26,7 +27,18 @@ const Review = ({ restaurantData, orderDetails, setOrderDetails }) => {
                 pageTitle.textContent = restoName ? `${restoName} | Harshtag Apps` : 'Harshtag Apps';
             }
         }
-    }, [restaurantData]);
+        const savedOrder = sessionStorage.getItem('pendingOrder');
+        if (savedOrder) {
+            try {
+                const parsedOrder = JSON.parse(savedOrder);
+                setOrderDetails(parsedOrder);
+                sessionStorage.removeItem('pendingOrder');
+            } catch (error) {
+                console.error('Error restoring order:', error);
+                sessionStorage.removeItem('pendingOrder');
+            }
+        }
+    }, [restaurantData, setOrderDetails]);
     if (!restaurantData) return null;
     const { restoDetails } = restaurantData;
     const phoneNumber = restoDetails?.contact || '';
@@ -71,7 +83,7 @@ const Review = ({ restaurantData, orderDetails, setOrderDetails }) => {
             message += `_*Type:* Dine-in_\n`;
             message += `_*Table Number:* ${orderDetails.tableNumber.trim()}_\n\n`;
         } else {
-            message += `_*Type:* Online (Takeaway)_\n`;
+            message += `_*Type:* Online (Delivery)_\n`;
             message += `_*Address:* ${orderDetails.customerAddress.trim()}_\n\n`;
         }
         message += `🍴*_Ordered Items:_*\n`;
@@ -110,8 +122,13 @@ const Review = ({ restaurantData, orderDetails, setOrderDetails }) => {
         if (!upiId) return;
         const payeeName = restoDetails.restoName || 'Merchant';
         const note = `Order for ${orderDetails.customerName}`;
-        const upiUrl = `upi://pay?pa=${upiId}&pn=${encodeURIComponent(payeeName)}&am=${totalAmount.toFixed(2)}&cu=INR&tn=${encodeURIComponent(note)}`;
-        window.location.href = upiUrl;
+        sessionStorage.setItem('pendingOrder', JSON.stringify(orderDetails));
+        const paymentUrl = isIOS ?
+            `tez://upi/pay?pa=${upiId}&pn=${encodeURIComponent(payeeName)}&am=${totalAmount.toFixed(2)}&cu=INR&tn=${encodeURIComponent(note)}` ||
+            `phonepe://upi/pay?pa=${upiId}&pn=${encodeURIComponent(payeeName)}&am=${totalAmount.toFixed(2)}&cu=INR&tn=${encodeURIComponent(note)}` ||
+            `paytmmp://upi/pay?pa=${upiId}&pn=${encodeURIComponent(payeeName)}&am=${totalAmount.toFixed(2)}&cu=INR&tn=${encodeURIComponent(note)}` :
+            `upi://pay?pa=${upiId}&pn=${encodeURIComponent(payeeName)}&am=${totalAmount.toFixed(2)}&cu=INR&tn=${encodeURIComponent(note)}`;
+        window.location.href = paymentUrl;
         setShowPaymentModal(false);
     };
     const handleSendOrderClick = () => {
