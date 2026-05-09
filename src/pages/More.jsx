@@ -250,10 +250,25 @@ const More = ({ restaurantData }) => {
             icon: ProjectImages.location,
             label: 'See our Location',
             onTap: () => {
-                const url = locationProps.value.startsWith('http')
-                    ? locationProps.value
-                    : `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(locationProps.value)}`;
-                window.open(url, '_blank');
+                let destination;
+                if (locationProps.value.startsWith('http')) {
+                    try {
+                        const url = new URL(locationProps.value);
+                        if (url.searchParams.has('q')) {
+                            destination = url.searchParams.get('q');
+                        } else if (url.searchParams.has('placeid')) {
+                            destination = url.searchParams.get('placeid');
+                        } else {
+                            destination = locationProps.value;
+                        }
+                    } catch {
+                        destination = locationProps.value;
+                    }
+                } else {
+                    destination = locationProps.value;
+                }
+                const directionsUrl = `https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent(destination)}`;
+                window.open(directionsUrl, '_blank');
             },
             ...locationProps
         }
