@@ -4,6 +4,7 @@ import { loadRestaurantData } from './api';
 import Splash from './components/Splash';
 import Loading from './components/Loading';
 import './index.css';
+import { hexToCssFilter } from './utils/menuData';
 
 const Categories = React.lazy(() => import('./pages/Categories'));
 const FoodItems = React.lazy(() => import('./pages/FoodItems'));
@@ -19,7 +20,6 @@ function shouldShowSplashOnLoad() {
       return false;
     }
   } catch {
-    /* ignore */
   }
   if (typeof performance === 'undefined') return true;
   const nav = performance.getEntriesByType?.('navigation')?.[0];
@@ -88,7 +88,7 @@ const AppContent = () => {
         <img
           src="assets/images/harshtag.png"
           alt="Harshtag Logo"
-          style={{ maxWidth: '200px', marginBottom: '20px' }}
+          style={{ maxWidth: '200px', marginBottom: '20px', filter: hexToCssFilter('#00A9FE') }}
         />
         <div className="error-icon" style={{ fontSize: '2rem', marginBottom: '10px' }}>⚠️</div>
         <div className="error-title" style={{ fontSize: '1.2rem', fontWeight: 'bold', marginBottom: '5px' }}>

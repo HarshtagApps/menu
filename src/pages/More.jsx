@@ -3,7 +3,7 @@ import { useNavigate, useSearchParams } from 'react-router-dom';
 import { ChevronLeft, ChevronRight, Hourglass, Lock } from 'lucide-react';
 import '../styles/styles.css';
 import '../styles/More.css';
-import { ProjectImages } from '../utils/menuData';
+import { ProjectImages, hexToCssFilter } from '../utils/menuData';
 import Ads from '../components/Ads';
 
 const SettingTileItem = ({ icon, label, onTap, onDisabledTap, trailing, isEnabled = true, comingSoon = false }) => {
@@ -335,7 +335,7 @@ const More = ({ restaurantData }) => {
                         <img
                             src={ProjectImages.harshtag}
                             alt="Harshtag Logo"
-                            style={{ height: '35px', objectFit: 'contain', opacity: 0.75 }}
+                            style={{ height: '35px', objectFit: 'contain', filter: hexToCssFilter('#00A9FE') }}
                         />
                     </div>
                 </div>

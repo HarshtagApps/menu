@@ -88,3 +88,16 @@ export function getImageForCategory(categoryType) {
     if (!menuItem) return '';
     return menuItem.image;
 }
+
+export function hexToCssFilter(hex) {
+    const filters = {
+        '#00A9FE':
+            'brightness(0) saturate(100%) invert(57%) sepia(98%) saturate(3014%) hue-rotate(177deg) brightness(101%) contrast(102%)',
+        '#FFFFFF':
+            'brightness(0) saturate(100%) invert(100%)',
+        '#000000':
+            'brightness(0) saturate(100%)',
+    };
+
+    return filters[hex.toUpperCase()] || 'none';
+}
