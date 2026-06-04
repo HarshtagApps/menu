@@ -167,6 +167,10 @@
     font-weight: 400;
     color: #FA057B;
     font-family: 'Afacad', sans-serif;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 6px;
 }
 
 .order-items-qty-controls {

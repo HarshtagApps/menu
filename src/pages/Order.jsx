@@ -1,7 +1,7 @@
 import React, { useState, useMemo } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { ChevronLeft, ChevronRight, Search, X, Minus, Plus } from 'lucide-react';
-import { getImageForCategory } from '../utils/menuData';
+import { getImageForCategory, getEffectivePrice, PriceTags } from '../utils/menuData';
 import '../styles/order.css';
 import '../styles/order_items.css';
 import '../styles/styles.css';
@@ -20,20 +20,28 @@ const SearchItem = React.memo(({ item, orderDetails, updateQuantity, updateNotes
             <div className="order-items-price-variants">
                 {Object.entries(item.prices).map(([size, price]) => {
                     const qty = getQuantity(itemId, size);
+                    const effectivePrice = getEffectivePrice(item, size);
                     return (
                         <div key={size} className={`order-items-variant-container ${qty > 0 ? 'has-quantity' : ''}`}>
                             <div className="order-items-variant-row">
                                 <div className="variant-info">
                                     <div className="order-items-variant-size" style={{ fontSize: '14px', fontWeight: '500' }}>{getSizeLabel(size)}</div>
-                                    <div className="order-items-variant-price" style={{ fontSize: '14px' }}>₹ {price}</div>
+                                    <div className="order-items-variant-price" style={{ fontSize: '14px' }}>
+                                        <PriceTags
+                                            originalPrice={price}
+                                            item={item}
+                                            size={size}
+                                            prefix="₹ "
+                                        />
+                                    </div>
                                 </div>
 
                                 <div className="order-items-qty-controls">
-                                    <button className="order-items-qty-btn minus" onClick={() => updateQuantity(itemId, size, price, -1)}>
+                                    <button className="order-items-qty-btn minus" onClick={() => updateQuantity(itemId, size, effectivePrice, -1)}>
                                         <Minus size={18} strokeWidth={2} />
                                     </button>
                                     <div className="order-items-qty-display">{qty}</div>
-                                    <button className="order-items-qty-btn plus" onClick={() => updateQuantity(itemId, size, price, 1)}>
+                                    <button className="order-items-qty-btn plus" onClick={() => updateQuantity(itemId, size, effectivePrice, 1)}>
                                         <Plus size={18} strokeWidth={2} />
                                     </button>
                                 </div>

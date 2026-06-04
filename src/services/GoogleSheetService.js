@@ -1,7 +1,6 @@
 const SHEET_URL = 'https://script.google.com/macros/s/AKfycbxZ5Jip8qUnfNZMb4Md4VzWsv1vyxW2v5YQASXHE9MmTYfYkHKtTuXGp_rDxx8XDE1_NA/exec';
 
-export const fetchMenuData = async (restaurantId) => {
-    try {
+export const fetchMenuData = async (restaurantId) => {    try {
         const response = await fetch(SHEET_URL);
         if (!response.ok) throw new Error('Failed to fetch menu from Google Sheets');
         const allData = await response.json();
@@ -18,7 +17,7 @@ export const fetchMenuData = async (restaurantId) => {
         }
         const categoriesMap = {};
         rows.forEach(row => {
-            const { Category, ItemName, IsVeg, IsSpecial, Size, Price, Description } = row;
+            const { Category, ItemName, IsVeg, IsSpecial, Size, Price, Description, Discounted, DiscountEnds } = row;
             if (!categoriesMap[Category]) {
                 categoriesMap[Category] = {
                     categoryType: Category,
@@ -31,11 +30,19 @@ export const fetchMenuData = async (restaurantId) => {
                     isVeg: (IsVeg === true || IsVeg === 'TRUE'),
                     isSpecial: (IsSpecial === true || IsSpecial === 'TRUE'),
                     description: Description || '',
-                    prices: {}
+                    prices: {},
+                    discountedPrices: {},
+                    discountEnds: {}
                 };
             }
             const sizeKey = Size.toLowerCase();
             categoriesMap[Category].itemsMap[ItemName].prices[sizeKey] = Number(Price);
+            if (Discounted != null && Discounted !== '' && !Number.isNaN(Number(Discounted))) {
+                categoriesMap[Category].itemsMap[ItemName].discountedPrices[sizeKey] = Number(Discounted);
+            }
+            if (DiscountEnds != null && DiscountEnds !== '') {
+                categoriesMap[Category].itemsMap[ItemName].discountEnds[sizeKey] = DiscountEnds;
+            }
         });
         const categories = Object.values(categoriesMap).map(cat => ({
             categoryType: cat.categoryType,

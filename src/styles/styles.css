@@ -261,3 +261,59 @@ body {
         transform: rotate(360deg);
     }
 }
+
+.price-tag-wrapper {
+    display: inline-flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 4px;
+}
+
+.price-tag-group {
+    display: inline-flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 6px;
+}
+
+.price-tag {
+    font-size: 16px;
+    font-weight: 400;
+    color: #FFFFFF;
+    background-color: rgba(0, 169, 254, 0.75);
+    border: 1px solid #00A9FE;
+    border-radius: 2px;
+    padding: 2px;
+    font-family: 'Afacad', sans-serif;
+    white-space: nowrap;
+}
+
+.price-tag-price--struck {
+    text-decoration: line-through;
+    opacity: 0.85;
+}
+
+.price-tag--discounted {
+    background-color: #00C851;
+    border: 1px solid #00C851;
+}
+
+.price-tag-price--bold {
+    font-weight: 700;
+}
+
+.discount-countdown {
+    font-size: 13px;
+    font-weight: 600;
+    font-family: 'Afacad', sans-serif;
+    white-space: nowrap;
+    line-height: 1.2;
+}
+
+.discount-countdown-label {
+    color: #333333;
+}
+
+.discount-countdown-timer {
+    color: #00C851;
+}

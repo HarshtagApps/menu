@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { ChevronLeft, ChevronDown } from 'lucide-react';
-import { getImageForCategory } from '../utils/menuData';
+import { getImageForCategory, getEffectivePrice, PriceTags } from '../utils/menuData';
 import Ads from '../components/Ads';
 import '../styles/food-items.css';
 import '../styles/styles.css';
@@ -144,9 +144,13 @@ const FoodItems = ({ restaurantData }) => {
                                         <div className="food-item-name">{item.name}</div>
                                         <div className="food-item-price-tags">
                                             {Object.entries(item.prices).map(([size, price]) => (
-                                                <div key={size} className="food-item-price-tag">
-                                                    {getShortSize(size)}: ₹{price}
-                                                </div>
+                                                <PriceTags
+                                                    key={size}
+                                                    sizeLabel={getShortSize(size)}
+                                                    originalPrice={price}
+                                                    item={item}
+                                                    size={size}
+                                                />
                                             ))}
                                         </div>
                                     </div>
