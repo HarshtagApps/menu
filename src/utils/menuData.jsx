@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 
-export const ProjectImages = {    logo: 'assets/images/logo.png',
+export const ProjectImages = {
+    logo: 'assets/images/logo.png',
     menu: 'assets/images/menu.png',
     rice: 'assets/images/rice.png',
     dahi: 'assets/images/dahi.png',
@@ -9,6 +10,7 @@ export const ProjectImages = {    logo: 'assets/images/logo.png',
     cake: 'assets/images/cake.png',
     eggs: 'assets/images/eggs.png',
     call: 'assets/images/call.png',
+    corn: 'assets/images/corn.png',
     pizza: 'assets/images/pizza.png',
     momos: 'assets/images/momos.png',
     pasta: 'assets/images/pasta.png',
@@ -26,6 +28,7 @@ export const ProjectImages = {    logo: 'assets/images/logo.png',
     hotDog: 'assets/images/hotdog.png',
     indian: 'assets/images/indian.png',
     google: 'assets/images/google.png',
+    waffle: 'assets/images/waffle.png',
     gallery: 'assets/images/gallery.png',
     chinese: 'assets/images/chinese.png',
     cookies: 'assets/images/cookies.png',
@@ -42,6 +45,7 @@ export const ProjectImages = {    logo: 'assets/images/logo.png',
     instagram: 'assets/images/instagram.png',
     mainCourse: 'assets/images/mainCourse.png',
     frenchFries: 'assets/images/frenchFries.png',
+    garlicBread: 'assets/images/garlicBread.png',
 };
 
 export const MenuData = {
@@ -65,9 +69,11 @@ export const MenuData = {
         { image: ProjectImages.indian, name: "Indian" },
         { image: ProjectImages.sweets, name: "Sweets" },
         { image: ProjectImages.burger, name: "Burgers" },
+        { image: ProjectImages.waffle, name: "Waffles" },
         { image: ProjectImages.chinese, name: "Chinese" },
         { image: ProjectImages.noodles, name: "Noodles" },
         { image: ProjectImages.namkeen, name: "Namkeen" },
+        { image: ProjectImages.corn, name: "Sweet Corn" },
         { image: ProjectImages.sandwich, name: "Sandwich" },
         { image: ProjectImages.frenchFries, name: "Fries" },
         { image: ProjectImages.iceCream, name: "Ice Cream" },
@@ -79,6 +85,7 @@ export const MenuData = {
         { image: ProjectImages.coffee, name: "Tea & Coffee" },
         { image: ProjectImages.roti, name: "Roti & Parantha" },
         { image: ProjectImages.mainCourse, name: "Main Course" },
+        { image: ProjectImages.garlicBread, name: "Garlic Bread" },
     ]
 };
 
