@@ -29,13 +29,15 @@ export const ProjectImages = {
     indian: 'assets/images/indian.png',
     google: 'assets/images/google.png',
     waffle: 'assets/images/waffle.png',
+    shakes: 'assets/images/shakes.png',
     gallery: 'assets/images/gallery.png',
     chinese: 'assets/images/chinese.png',
     cookies: 'assets/images/cookies.png',
     noodles: 'assets/images/noodles.png',
-    shakes: 'assets/images/smoothie.png',
     special: 'assets/images/special.png',
     namkeen: 'assets/images/namkeen.png',
+    shakes2: 'assets/images/shakes2.png',
+    coffee2: 'assets/images/coffee2.png',
     harshtag: 'assets/images/harshtag.png',
     iceCream: 'assets/images/iceCream.png',
     mocktail: 'assets/images/mocktail.png',
@@ -70,10 +72,12 @@ export const MenuData = {
         { image: ProjectImages.sweets, name: "Sweets" },
         { image: ProjectImages.burger, name: "Burgers" },
         { image: ProjectImages.waffle, name: "Waffles" },
+        { image: ProjectImages.coffee2, name: "Coffee2" },
         { image: ProjectImages.chinese, name: "Chinese" },
         { image: ProjectImages.noodles, name: "Noodles" },
         { image: ProjectImages.namkeen, name: "Namkeen" },
         { image: ProjectImages.corn, name: "Sweet Corn" },
+        { image: ProjectImages.shakes2, name: "Shakes2" },
         { image: ProjectImages.sandwich, name: "Sandwich" },
         { image: ProjectImages.frenchFries, name: "Fries" },
         { image: ProjectImages.iceCream, name: "Ice Cream" },
@@ -285,9 +289,25 @@ export function PriceTags({ originalPrice, item, size, className = '', prefix = 
     );
 }
 
+// Sheet format: "ImageKey (Display Name)" e.g. "Namkeen (Kurkure)"
+export function getCategoryImageKey(categoryType) {
+    if (!categoryType) return '';
+    const match = String(categoryType).trim().match(/^(.+?)\s*\(([^)]+)\)\s*$/);
+    if (match) return match[1].trim();
+    return String(categoryType).trim();
+}
+
+export function getCategoryDisplayName(categoryType) {
+    if (!categoryType) return '';
+    const match = String(categoryType).trim().match(/^(.+?)\s*\(([^)]+)\)\s*$/);
+    if (match) return match[2].trim();
+    return String(categoryType).trim();
+}
+
 export function getImageForCategory(categoryType) {
+    const imageKey = getCategoryImageKey(categoryType);
     const menuItem = MenuData.items.find(
-        item => item.name.toLowerCase() === categoryType.toLowerCase()
+        item => item.name.toLowerCase() === imageKey.toLowerCase()
     );
     if (!menuItem) return '';
     return menuItem.image;

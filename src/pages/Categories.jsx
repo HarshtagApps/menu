@@ -1,6 +1,6 @@
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { AlignJustify } from 'lucide-react';
-import { getImageForCategory } from '../utils/menuData';
+import { getImageForCategory, getCategoryDisplayName } from '../utils/menuData';
 import { parseRestaurantName, getRestaurantNameClass } from '../utils/restaurantNameParser';
 import Ads from '../components/Ads';
 import '../styles/menu.css';
@@ -119,6 +119,7 @@ const Categories = ({ restaurantData }) => {
                     <div className="categories-grid">
                         {uniqueCategories.map((categoryType, index) => {
                             const image = getImageForCategory(categoryType);
+                            const displayName = getCategoryDisplayName(categoryType);
                             return (
                                 <div
                                     key={index}
@@ -127,12 +128,12 @@ const Categories = ({ restaurantData }) => {
                                 >
                                     <div className="category-image-container">
                                         {image ? (
-                                            <img src={image} alt={categoryType} className="category-image" />
+                                            <img src={image} alt={displayName} className="category-image" />
                                         ) : (
                                             <div className="category-icon">🍽️</div>
                                         )}
                                     </div>
-                                    <div className="category-name">{categoryType}</div>
+                                    <div className="category-name">{displayName}</div>
                                 </div>
                             );
                         })}

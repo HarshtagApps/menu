@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { ChevronLeft, Minus, Plus } from 'lucide-react';
-import { getImageForCategory, getEffectivePrice, PriceTags } from '../utils/menuData';
+import { getImageForCategory, getCategoryDisplayName, getEffectivePrice, PriceTags } from '../utils/menuData';
 import '../styles/order_items.css';
 import '../styles/styles.css';
 
@@ -25,6 +25,7 @@ const OrderItems = ({ restaurantData, orderDetails, setOrderDetails }) => {
     if (!restaurantData || !categoryType) return null;
 
     const category = restaurantData.categories.find(cat => cat.categoryType === categoryType);
+    const categoryDisplayName = getCategoryDisplayName(categoryType);
     const categoryItems = category?.items || [];
     const hasVegItems = categoryItems.some(item => item.isVeg);
     const hasNonVegItems = categoryItems.some(item => !item.isVeg);
@@ -142,7 +143,7 @@ const OrderItems = ({ restaurantData, orderDetails, setOrderDetails }) => {
                     <button className="back-button" onClick={() => navigate(-1)}>
                         <ChevronLeft size={30} strokeWidth={2} />
                     </button>
-                    <div className="appbar-title">{categoryType}</div>
+                    <div className="appbar-title">{categoryDisplayName}</div>
                     {showTypeToggle && (
                         <div className="food-type-toggle">
                             <button
@@ -252,7 +253,7 @@ const OrderItems = ({ restaurantData, orderDetails, setOrderDetails }) => {
             <div className="category-summary-bar">
                 {categoryItemCount > 0 && (
                     <div className="order-items-summary-info">
-                        <span>{categoryItemCount} Item{categoryItemCount > 1 ? 's' : ''} from {categoryType}</span>
+                        <span>{categoryItemCount} Item{categoryItemCount > 1 ? 's' : ''} from {categoryDisplayName}</span>
                         <span>₹{categorySubtotal.toFixed(2)}</span>
                     </div>
                 )}

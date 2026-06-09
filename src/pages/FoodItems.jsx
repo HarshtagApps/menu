@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { ChevronLeft, ChevronDown } from 'lucide-react';
-import { getImageForCategory, getEffectivePrice, PriceTags } from '../utils/menuData';
+import { getImageForCategory, getCategoryDisplayName, getEffectivePrice, PriceTags } from '../utils/menuData';
 import Ads from '../components/Ads';
 import '../styles/food-items.css';
 import '../styles/styles.css';
@@ -26,6 +26,7 @@ const FoodItems = ({ restaurantData }) => {
     if (!restaurantData || !categoryType) return null;
 
     const category = restaurantData.categories.find(cat => cat.categoryType === categoryType);
+    const categoryDisplayName = getCategoryDisplayName(categoryType);
     const restoName = restaurantData.restoDetails?.restoName?.toUpperCase() || '';
     const categoryItems = category?.items || [];
     const hasVegItems = categoryItems.some(item => item.isVeg);
@@ -78,7 +79,7 @@ const FoodItems = ({ restaurantData }) => {
                     <button className="back-button" onClick={() => navigate(-1)}>
                         <ChevronLeft size={30} strokeWidth={2} />
                     </button>
-                    <div className="appbar-title">{categoryType}</div>
+                    <div className="appbar-title">{categoryDisplayName}</div>
                     {showTypeToggle && (
                         <div className="food-type-toggle">
                             <button

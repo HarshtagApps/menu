@@ -1,7 +1,7 @@
 import React, { useState, useMemo } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { ChevronLeft, ChevronRight, Search, X, Minus, Plus } from 'lucide-react';
-import { getImageForCategory, getEffectivePrice, PriceTags } from '../utils/menuData';
+import { getImageForCategory, getCategoryDisplayName, getEffectivePrice, PriceTags } from '../utils/menuData';
 import '../styles/order.css';
 import '../styles/order_items.css';
 import '../styles/styles.css';
@@ -368,6 +368,7 @@ const Order = ({ restaurantData, orderDetails, setOrderDetails }) => {
                                 ) : (
                                     uniqueCategories.map((categoryType, index) => {
                                         const image = getImageForCategory(categoryType);
+                                        const displayName = getCategoryDisplayName(categoryType);
                                         const hasItems = categoryHasItems(categoryType);
                                         return (
                                             <div
@@ -377,12 +378,12 @@ const Order = ({ restaurantData, orderDetails, setOrderDetails }) => {
                                             >
                                                 <div className="order-category-image-container">
                                                     {image ? (
-                                                        <img src={image} alt={categoryType} className="order-category-image" />
+                                                        <img src={image} alt={displayName} className="order-category-image" />
                                                     ) : (
                                                         <div className="order-category-icon">🍽️</div>
                                                     )}
                                                 </div>
-                                                <div className="order-category-name">{categoryType}</div>
+                                                <div className="order-category-name">{displayName}</div>
                                                 {hasItems && <div className="order-category-indicator"></div>}
                                             </div>
                                         );

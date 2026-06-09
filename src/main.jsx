@@ -18,7 +18,9 @@ function restoreGithubPagesPath() {
 }
 
 restoreGithubPagesPath()
-initSecurity()
+if (import.meta.env.PROD) {
+  initSecurity()
+}
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>
