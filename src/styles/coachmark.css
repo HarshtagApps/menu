@@ -1,0 +1,162 @@
+.coachmark-root {
+    position: fixed;
+    inset: 0;
+    z-index: 1998;
+    pointer-events: none;
+}
+
+.coachmark-root.show {
+    animation: coachmark-root-fade-out 0.35s ease-in 4.65s forwards;
+}
+
+.coachmark-spotlight {
+    position: fixed;
+    border-radius: 50%;
+    background: transparent;
+    box-shadow: 0 0 0 9999px rgba(0, 0, 0, 0.58);
+    pointer-events: none;
+    animation: coachmark-spotlight-in 0.4s ease-out;
+}
+
+.coachmark-ripples {
+    position: fixed;
+    pointer-events: none;
+    overflow: visible;
+    z-index: 2;
+}
+
+.coachmark-ripple-core {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 14px;
+    height: 14px;
+    border-radius: 50%;
+    background: #FA057B;
+    transform: translate(-50%, -50%);
+    box-shadow: 0 0 0 5px rgba(250, 5, 123, 0.22);
+}
+
+.coachmark-ripple {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    background: rgba(250, 5, 123, 0.32);
+    border: none;
+    transform: translate(-50%, -50%) scale(0.35);
+    transform-origin: center center;
+    animation: coachmark-ripple-fill 2.2s ease-out infinite;
+}
+
+.coachmark-ripple--2 {
+    animation-delay: 0.73s;
+}
+
+.coachmark-ripple--3 {
+    animation-delay: 1.46s;
+}
+
+.coachmark-snackbar-bar {
+    position: fixed;
+    left: 50%;
+    width: 90%;
+    z-index: 1;
+    padding: 14px 18px;
+    background-color: #FA057B;
+    color: #ffffff;
+    border-radius: 12px;
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.25);
+    font-family: 'Afacad', sans-serif;
+    font-size: 14px;
+    font-weight: 500;
+    line-height: 1.35;
+    text-align: center;
+    pointer-events: none;
+    transform: translateX(-50%);
+}
+
+.coachmark-snackbar-pointer {
+    position: absolute;
+    top: -7px;
+    right: 16px;
+    width: 14px;
+    height: 14px;
+    background-color: #FA057B;
+    transform: rotate(45deg);
+    box-shadow: -2px -2px 4px rgba(0, 0, 0, 0.08);
+}
+
+.coachmark-snackbar-message {
+    display: block;
+}
+
+.coachmark-snackbar-bar.show {
+    animation:
+        coachmark-snackbar-in 0.35s ease-out,
+        coachmark-snackbar-out 0.35s ease-in 4.65s forwards;
+}
+
+@keyframes coachmark-spotlight-in {
+    from {
+        opacity: 0;
+        transform: scale(0.85);
+    }
+
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+@keyframes coachmark-ripple-fill {
+    0% {
+        transform: translate(-50%, -50%) scale(0.35);
+        opacity: 0.65;
+    }
+
+    55% {
+        opacity: 0.28;
+    }
+
+    100% {
+        transform: translate(-50%, -50%) scale(2.6);
+        opacity: 0;
+    }
+}
+
+@keyframes coachmark-snackbar-in {
+    from {
+        opacity: 0;
+        transform: translateX(-50%) translateY(-12px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateX(-50%) translateY(0);
+    }
+}
+
+@keyframes coachmark-snackbar-out {
+    from {
+        opacity: 1;
+        transform: translateX(-50%) translateY(0);
+    }
+
+    to {
+        opacity: 0;
+        transform: translateX(-50%) translateY(-8px);
+    }
+}
+
+@keyframes coachmark-root-fade-out {
+    from {
+        opacity: 1;
+    }
+
+    to {
+        opacity: 0;
+    }
+}

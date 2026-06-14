@@ -80,12 +80,23 @@
     text-align: center;
 }
 
+.order-button-wrapper {
+    position: absolute;
+    right: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.order-button-wrapper--coachmark {
+    z-index: 1999;
+    position: absolute;
+}
+
 .order-button {
     background: none;
     border: none;
     cursor: pointer;
-    position: absolute;
-    right: 0;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -98,12 +109,13 @@
 }
 
 .order-button-text {
-    font-size: 14px;
+    font-size: 11px;
     font-weight: 500;
     color: #333333;
     font-family: 'Afacad', sans-serif;
     line-height: 1;
-    margin-bottom: 6px;
+    margin-bottom: 5px;
+    text-align: center;
 }
 
 @media (min-width: 768px) and (orientation: portrait) {

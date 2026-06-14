@@ -1,15 +1,61 @@
+import { useEffect, useRef, useState } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { AlignJustify } from 'lucide-react';
 import { getImageForCategory, getCategoryDisplayName } from '../utils/menuData';
 import { parseRestaurantName, getRestaurantNameClass } from '../utils/restaurantNameParser';
 import Ads from '../components/Ads';
+import Coachmark from '../components/Coachmark';
 import '../styles/menu.css';
 import '../styles/styles.css';
+
+const ORDER_COACHMARK_KEY = 'menuOrderButtonCoachmarkSeen';
 
 const Categories = ({ restaurantData }) => {
     const navigate = useNavigate();
     const [searchParams] = useSearchParams();
     const restaurantId = searchParams.get('r');
+    const orderButtonRef = useRef(null);
+    const headerRef = useRef(null);
+    const [showOrderCoachmark, setShowOrderCoachmark] = useState(false);
+    const showOrderCoachmarkRef = useRef(false);
+    const isPremiumPlan = restaurantData?.restoDetails?.plan === 'premium';
+
+    const markCoachmarkSeen = () => {
+        try {
+            sessionStorage.setItem(ORDER_COACHMARK_KEY, '1');
+        } catch {
+        }
+    };
+
+    const dismissOrderCoachmark = () => {
+        markCoachmarkSeen();
+        setShowOrderCoachmark(false);
+    };
+
+    useEffect(() => {
+        showOrderCoachmarkRef.current = showOrderCoachmark;
+    }, [showOrderCoachmark]);
+
+    useEffect(() => {
+        return () => {
+            if (showOrderCoachmarkRef.current) {
+                markCoachmarkSeen();
+            }
+        };
+    }, []);
+
+    useEffect(() => {
+        if (!isPremiumPlan) return;
+
+        try {
+            if (sessionStorage.getItem(ORDER_COACHMARK_KEY) !== '1') {
+                setShowOrderCoachmark(true);
+            }
+        } catch {
+            setShowOrderCoachmark(true);
+        }
+    }, [isPremiumPlan]);
+
     if (!restaurantData) {
         return (
             <div style={{
@@ -42,22 +88,23 @@ const Categories = ({ restaurantData }) => {
         );
     }
     const { restoDetails, categories } = restaurantData;
-    const isPremiumPlan = restoDetails?.plan === 'premium';
     const restoName = (restoDetails?.restoName || '').toUpperCase();
     const restoAddress = restoDetails?.address || '';
     const restoContact = restoDetails?.contact || '';
     const uniqueCategories = [...new Set((categories || []).map(cat => cat.categoryType))];
+
     const handleCategoryClick = (categoryType) => {
         navigate(`/items?r=${restaurantId}&category=${encodeURIComponent(categoryType)}`);
     };
     const handleOrderClick = () => {
+        dismissOrderCoachmark();
         navigate(`/order?r=${restaurantId}`);
     };
 
 
     return (
         <div id="mainContent">
-            <div className="restaurant-header">
+            <div className="restaurant-header" ref={headerRef}>
                 <div className="restaurant-header-content">
                     <div className="restaurant-name">
                         {parseRestaurantName(restoName).map((segment, index) => (
@@ -92,9 +139,17 @@ const Categories = ({ restaurantData }) => {
                             </div>
                         </div>
                         {isPremiumPlan && (
-                            <button className="order-button" onClick={handleOrderClick}>
-                                <img src="assets/images/order.png" alt="Order" />
-                            </button>
+                            <div
+                                ref={orderButtonRef}
+                                className={`order-button-wrapper${showOrderCoachmark ? ' order-button-wrapper--coachmark' : ''}`}
+                            >
+                                <button className="order-button" onClick={handleOrderClick}>
+                                    <img src="assets/images/order.png" alt="Order" />
+                                </button>
+                                <div className="order-button-text">
+                                    Home Delivery
+                                </div>
+                            </div>
                         )}
                     </div>
                 </div>
@@ -140,6 +195,16 @@ const Categories = ({ restaurantData }) => {
                     </div>
                 )}
             </div>
+
+            {isPremiumPlan && (
+                <Coachmark
+                    targetRef={orderButtonRef}
+                    headerRef={headerRef}
+                    visible={showOrderCoachmark}
+                    onDismiss={dismissOrderCoachmark}
+                    message="Tap here for Home Delivery"
+                />
+            )}
         </div>
     );
 };
