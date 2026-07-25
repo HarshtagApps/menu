@@ -35,4 +35,7 @@ export const ProjectImages = {
     instagram: 'assets/images/instagram.png',
     mainCourse: 'assets/images/mainCourse.png',
     frenchFries: 'assets/images/frenchFries.png',
+    vacant: 'assets/images/vacant.png',
+    occupied: 'assets/images/occupied.png',
+    table: 'assets/images/table.png',
 };

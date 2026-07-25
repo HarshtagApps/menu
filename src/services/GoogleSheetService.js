@@ -63,6 +63,7 @@ export const fetchMenuData = async (restaurantId) => {    try {
                 location: restoInfo.Location || '',
                 reviewUrl: restoInfo.GoogleReview || restoInfo.ReviewURL || restoInfo.ReviewUrl || '',
                 gallery: restoInfo.Gallery || '',
+                tableReserve: restoInfo.TableReserve || '',
                 showBannerAds: (restoInfo.ShowBannerAds === true || restoInfo.ShowBannerAds === 'TRUE'),
                 bannerAdsUrls: restoInfo.BannerAdsURL ? restoInfo.BannerAdsURL.split(',').map(url => url.trim()).filter(url => url) : [],
                 bannerAdsMap: restoInfo.BannerAdsURL ?

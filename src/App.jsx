@@ -12,6 +12,8 @@ const Order = React.lazy(() => import('./pages/Order'));
 const OrderItems = React.lazy(() => import('./pages/OrderItems'));
 const Review = React.lazy(() => import('./pages/Review'));
 const More = React.lazy(() => import('./pages/More'));
+const Reserve = React.lazy(() => import('./pages/Reserve'));
+const TableSlots = React.lazy(() => import('./pages/TableSlots'));
 
 function shouldShowSplashOnLoad() {
   try {
@@ -119,6 +121,8 @@ const AppContent = () => {
         <Route path="/order-items" element={<OrderItems restaurantData={restaurantData} orderDetails={orderDetails} setOrderDetails={setOrderDetails} />} />
         <Route path="/review" element={<Review restaurantData={restaurantData} orderDetails={orderDetails} setOrderDetails={setOrderDetails} />} />
         <Route path="/more" element={<More restaurantData={restaurantData} />} />
+        <Route path="/reserve" element={<Reserve restaurantData={restaurantData} />} />
+        <Route path="/reserve/table" element={<TableSlots restaurantData={restaurantData} />} />
       </Routes>
     </React.Suspense>
   );

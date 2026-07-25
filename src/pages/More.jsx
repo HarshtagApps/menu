@@ -167,6 +167,7 @@ const More = ({ restaurantData }) => {
     const locationProps = getStatusProps(restoDetails.location, 'location');
     const reviewProps = getStatusProps(restoDetails.reviewUrl, 'review');
     const galleryProps = getStatusProps(restoDetails.gallery, 'gallery');
+    const tableReserveProps = getStatusProps(restoDetails.tableReserve, 'tableReserve');
 
     const handleShare = async () => {
         const appRoot = new URL(import.meta.env.BASE_URL, window.location.origin).href.replace(
@@ -275,6 +276,12 @@ const More = ({ restaurantData }) => {
     ];
 
     const utilitySection = [
+        {
+            icon: ProjectImages.table,
+            label: 'Reserve a Table',
+            onTap: () => navigate(`/reserve?r=${restaurantId}`),
+            ...tableReserveProps
+        },
         {
             icon: ProjectImages.share,
             label: 'Share with Friends',

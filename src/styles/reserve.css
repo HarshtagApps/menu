@@ -1,0 +1,424 @@
+.reserve-page {
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+    background-color: #FFFAEB;
+}
+
+.reserve-container {
+    flex: 1;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+    padding: 12px;
+    padding-bottom: 24px;
+}
+
+.reserve-date-section {
+    margin-bottom: 14px;
+}
+
+.reserve-date-heading {
+    font-family: 'Afacad', sans-serif;
+    font-size: 15px;
+    font-weight: 600;
+    color: #333333;
+    margin-bottom: 10px;
+}
+
+.reserve-date-scroller {
+    display: flex;
+    gap: 8px;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    padding-bottom: 4px;
+    scrollbar-width: none;
+}
+
+.reserve-date-scroller::-webkit-scrollbar {
+    display: none;
+}
+
+.reserve-date-chip {
+    flex: 0 0 auto;
+    min-width: 72px;
+    border: 1px solid #E0E0E0;
+    background: #FFFFFF;
+    border-radius: 12px;
+    padding: 10px 12px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 2px;
+    cursor: pointer;
+    font-family: 'Afacad', sans-serif;
+    -webkit-tap-highlight-color: transparent;
+    transition: background 0.12s ease, border-color 0.12s ease, color 0.12s ease;
+}
+
+.reserve-date-chip-top {
+    font-size: 12px;
+    font-weight: 600;
+    color: #888888;
+}
+
+.reserve-date-chip-bottom {
+    font-size: 14px;
+    font-weight: 600;
+    color: #333333;
+}
+
+.reserve-date-chip.active {
+    background: #FA057B;
+    border-color: #FA057B;
+}
+
+.reserve-date-chip.active .reserve-date-chip-top,
+.reserve-date-chip.active .reserve-date-chip-bottom {
+    color: #FFFFFF;
+}
+
+.reserve-date-chip:active {
+    transform: scale(0.97);
+}
+
+.reserve-meta {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    margin-bottom: 14px;
+    flex-wrap: wrap;
+}
+
+.reserve-meta-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: #FFFFFF;
+    border: 1px solid #E0E0E0;
+    border-radius: 8px;
+    padding: 8px 12px;
+    font-family: 'Afacad', sans-serif;
+    font-size: 14px;
+    font-weight: 600;
+    color: #333333;
+}
+
+.reserve-meta-hint {
+    font-family: 'Afacad', sans-serif;
+    font-size: 13px;
+    color: #888888;
+    font-weight: 500;
+}
+
+.reserve-legend {
+    display: flex;
+    gap: 14px;
+    margin-bottom: 14px;
+}
+
+.reserve-legend-item {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-family: 'Afacad', sans-serif;
+    font-size: 13px;
+    font-weight: 600;
+    color: #555555;
+}
+
+.reserve-legend-dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+}
+
+.reserve-legend-dot.vacant {
+    background: rgba(136, 136, 136, 0.45);
+}
+
+.reserve-legend-dot.reserved {
+    background: rgba(250, 5, 123, 0.75);
+}
+
+.reserve-table-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
+}
+
+@media (min-width: 600px) {
+    .reserve-table-grid {
+        grid-template-columns: repeat(4, 1fr);
+    }
+}
+
+.reserve-table-card {
+    background: #FFFFFF;
+    border-radius: 25px;
+    border: 1px solid #E0E0E0;
+    padding: 8px;
+    cursor: pointer;
+    display: flex;
+    flex-direction: column;
+    min-height: 180px;
+    user-select: none;
+    -webkit-tap-highlight-color: transparent;
+    transition: transform 0.12s ease, border-color 0.12s ease;
+}
+
+.reserve-table-card:active {
+    transform: scale(0.98);
+}
+
+.reserve-table-card.reserved {
+    border-color: rgba(250, 5, 123, 0.25);
+}
+
+.reserve-table-card.vacant {
+    border-color: #E0E0E0;
+}
+
+.reserve-table-top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 10px;
+}
+
+.reserve-table-label {
+    font-family: 'Afacad', sans-serif;
+    font-size: 13px;
+    font-weight: 600;
+    color: #333333;
+}
+
+.reserve-table-badge {
+    width: 25px;
+    height: 25px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Afacad', sans-serif;
+    font-size: 12px;
+    font-weight: 600;
+}
+
+.reserve-table-card.vacant .reserve-table-badge {
+    background: rgba(136, 136, 136, 0.2);
+    color: #333333;
+}
+
+.reserve-table-card.reserved .reserve-table-badge {
+    background: rgba(250, 5, 123, 0.75);
+    color: #FFFFFF;
+}
+
+.reserve-table-visual {
+    flex: 1;
+    border-radius: 15px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 100px;
+    position: relative;
+    overflow: hidden;
+}
+
+.reserve-table-card.vacant .reserve-table-visual {
+    background: rgba(136, 136, 136, 0.15);
+}
+
+.reserve-table-card.reserved .reserve-table-visual {
+    background: rgba(250, 5, 123, 0.35);
+}
+
+.reserve-table-visual img {
+    width: 75px;
+    height: 75px;
+    object-fit: contain;
+}
+
+.reserve-table-card.vacant .reserve-table-visual img {
+    filter: brightness(0) saturate(100%) opacity(0.7);
+}
+
+.reserve-table-status {
+    margin-top: 5px;
+    font-family: 'Afacad', sans-serif;
+    font-size: 13px;
+    font-weight: 600;
+}
+
+.reserve-table-card.vacant .reserve-table-status {
+    color: #888888;
+}
+
+.reserve-table-card.reserved .reserve-table-status {
+    color: rgba(250, 5, 123, 0.75);
+}
+
+.reserve-table-until {
+    font-family: 'Afacad', sans-serif;
+    font-size: 11px;
+    color: #888888;
+    margin-top: 2px;
+    font-weight: 500;
+}
+
+/* ---- Table slots detail ---- */
+
+.slots-page {
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+    background-color: #FFFAEB;
+}
+
+.slots-container {
+    flex: 1;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+    padding: 12px;
+    padding-bottom: 28px;
+}
+
+.slots-summary-card {
+    background: #FFFFFF;
+    border: 1px solid #E0E0E0;
+    border-radius: 12px;
+    padding: 14px 16px;
+    margin-bottom: 16px;
+}
+
+.slots-summary-title {
+    font-family: 'Afacad', sans-serif;
+    font-size: 18px;
+    font-weight: 600;
+    color: #333333;
+    margin-bottom: 4px;
+}
+
+.slots-summary-sub {
+    font-family: 'Afacad', sans-serif;
+    font-size: 13px;
+    color: #888888;
+    font-weight: 500;
+}
+
+.slots-section-title {
+    font-family: 'Afacad', sans-serif;
+    font-size: 15px;
+    font-weight: 600;
+    color: #333333;
+    margin-bottom: 10px;
+}
+
+.slots-list {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.slot-row {
+    background: #FFFFFF;
+    border: 1px solid #E0E0E0;
+    border-radius: 12px;
+    padding: 14px 14px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    cursor: pointer;
+    user-select: none;
+    -webkit-tap-highlight-color: transparent;
+    transition: border-color 0.12s ease, background 0.12s ease;
+}
+
+.slot-row:active:not(.reserved):not(.past) {
+    transform: scale(0.99);
+}
+
+.slot-row.vacant {
+    border-color: #E0E0E0;
+}
+
+.slot-row.reserved {
+    border-color: rgba(250, 5, 123, 0.35);
+    background: rgba(250, 5, 123, 0.06);
+    cursor: default;
+}
+
+.slot-row.past {
+    opacity: 0.45;
+    cursor: default;
+}
+
+.slot-row.selected {
+    border-color: rgba(0, 169, 254, 0.55);
+    background: rgba(0, 169, 254, 0.1);
+}
+
+.slot-row-left {
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+    min-width: 0;
+}
+
+.slot-time {
+    font-family: 'Afacad', sans-serif;
+    font-size: 15px;
+    font-weight: 600;
+    color: #333333;
+}
+
+.slot-meta {
+    font-family: 'Afacad', sans-serif;
+    font-size: 12px;
+    font-weight: 500;
+    color: #888888;
+}
+
+.slot-row.reserved .slot-meta {
+    color: rgba(250, 5, 123, 0.85);
+}
+
+.slot-pill {
+    flex-shrink: 0;
+    border-radius: 8px;
+    padding: 6px 10px;
+    font-family: 'Afacad', sans-serif;
+    font-size: 12px;
+    font-weight: 600;
+}
+
+.slot-pill.vacant {
+    background: rgba(136, 136, 136, 0.12);
+    color: #666666;
+}
+
+.slot-pill.reserved {
+    background: rgba(250, 5, 123, 0.15);
+    color: #FA057B;
+}
+
+.slot-pill.selected {
+    background: rgba(0, 169, 254, 0.18);
+    color: #00A9FE;
+}
+
+.slot-pill.past {
+    background: rgba(136, 136, 136, 0.1);
+    color: #999999;
+}
+
+.slots-footer-note {
+    margin-top: 18px;
+    text-align: center;
+    font-family: 'Afacad', sans-serif;
+    font-size: 12px;
+    color: #888888;
+    font-weight: 500;
+}
