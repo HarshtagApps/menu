@@ -33,13 +33,9 @@ const FoodItems = ({ restaurantData }) => {
     const hasNonVegItems = categoryItems.some(item => !item.isVeg);
     const showTypeToggle = hasVegItems && hasNonVegItems;
 
-    const sortedItems = categoryItems
-        .slice()
-        .sort((a, b) => {
-            if (a.isVeg === b.isVeg) return 0;
-            if (isNonVegEnabled) return a.isVeg ? 1 : -1;
-            return a.isVeg ? -1 : 1;
-        });
+    const filteredItems = showTypeToggle
+        ? categoryItems.filter(item => isNonVegEnabled ? !item.isVeg : item.isVeg)
+        : categoryItems;
 
     const handleSpecialClick = (name) => {
         const snackbar = document.getElementById("food-items-snackbar");
@@ -62,12 +58,14 @@ const FoodItems = ({ restaurantData }) => {
         return mapping[size.toLowerCase()] || size;
     };
 
-    const toggleDescription = (itemName) => {
+    const getItemId = (item) => item.id || item.name;
+
+    const toggleDescription = (itemId) => {
         const newExpanded = new Set(expandedDescriptions);
-        if (newExpanded.has(itemName)) {
-            newExpanded.delete(itemName);
+        if (newExpanded.has(itemId)) {
+            newExpanded.delete(itemId);
         } else {
-            newExpanded.add(itemName);
+            newExpanded.add(itemId);
         }
         setExpandedDescriptions(newExpanded);
     };
@@ -116,20 +114,21 @@ const FoodItems = ({ restaurantData }) => {
                         <div className="food-items-empty-title">No items in this category</div>
                     </div>
                 ) : (
-                    sortedItems.map((item, index) => {
+                    filteredItems.map((item) => {
+                        const itemId = getItemId(item);
                         const categoryImage = getImageForCategory(categoryType);
-                        const isExpanded = expandedDescriptions.has(item.name);
+                        const isExpanded = expandedDescriptions.has(itemId);
                         const hasDescription = !!item.description;
 
                         return (
-                            <div key={index} className="food-item-wrapper">
+                            <div key={itemId} className="food-item-wrapper">
                                 <div
                                     className={`food-item-card ${hasDescription && isExpanded ? 'description-open' : ''}`}
                                     onClick={() => {
                                         if (item.isSpecial) {
                                             handleSpecialClick(item.name);
                                         } else if (hasDescription) {
-                                            toggleDescription(item.name);
+                                            toggleDescription(itemId);
                                         }
                                     }}
                                 >
@@ -174,7 +173,7 @@ const FoodItems = ({ restaurantData }) => {
                                                 className={`food-item-description-arrow ${isExpanded ? 'expanded' : ''}`}
                                                 onClick={(e) => {
                                                     e.stopPropagation();
-                                                    toggleDescription(item.name);
+                                                    toggleDescription(itemId);
                                                 }}
                                             />
                                         )}

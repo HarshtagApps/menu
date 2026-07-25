@@ -24,10 +24,13 @@ export const fetchMenuData = async (restaurantId) => {    try {
                     itemsMap: {}
                 };
             }
-            if (!categoriesMap[Category].itemsMap[ItemName]) {
-                categoriesMap[Category].itemsMap[ItemName] = {
+            const isVeg = (IsVeg === true || IsVeg === 'TRUE');
+            const itemKey = `${ItemName}__${isVeg ? 'veg' : 'nonveg'}`;
+            if (!categoriesMap[Category].itemsMap[itemKey]) {
+                categoriesMap[Category].itemsMap[itemKey] = {
+                    id: itemKey,
                     name: ItemName,
-                    isVeg: (IsVeg === true || IsVeg === 'TRUE'),
+                    isVeg,
                     isSpecial: (IsSpecial === true || IsSpecial === 'TRUE'),
                     description: Description || '',
                     prices: {},
@@ -36,12 +39,12 @@ export const fetchMenuData = async (restaurantId) => {    try {
                 };
             }
             const sizeKey = Size.toLowerCase();
-            categoriesMap[Category].itemsMap[ItemName].prices[sizeKey] = Number(Price);
+            categoriesMap[Category].itemsMap[itemKey].prices[sizeKey] = Number(Price);
             if (Discounted != null && Discounted !== '' && !Number.isNaN(Number(Discounted))) {
-                categoriesMap[Category].itemsMap[ItemName].discountedPrices[sizeKey] = Number(Discounted);
+                categoriesMap[Category].itemsMap[itemKey].discountedPrices[sizeKey] = Number(Discounted);
             }
             if (DiscountEnds != null && DiscountEnds !== '') {
-                categoriesMap[Category].itemsMap[ItemName].discountEnds[sizeKey] = DiscountEnds;
+                categoriesMap[Category].itemsMap[itemKey].discountEnds[sizeKey] = DiscountEnds;
             }
         });
         const categories = Object.values(categoriesMap).map(cat => ({

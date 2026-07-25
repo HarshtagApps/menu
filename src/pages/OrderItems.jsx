@@ -83,10 +83,12 @@ const OrderItems = ({ restaurantData, orderDetails, setOrderDetails }) => {
         return orderDetails.items[itemId][size].quantity || 0;
     };
 
+    const getItemId = (item) => item.id || item.name;
+
     const calculateCategorySubtotal = () => {
         let subtotal = 0;
         categoryItems.forEach(item => {
-            const itemId = item.name;
+            const itemId = getItemId(item);
             if (orderDetails.items[itemId]) {
                 Object.values(orderDetails.items[itemId]).forEach(sizeData => {
                     subtotal += (sizeData.quantity || 0) * (sizeData.price || 0);
@@ -99,7 +101,7 @@ const OrderItems = ({ restaurantData, orderDetails, setOrderDetails }) => {
     const getCategoryItemCount = () => {
         let count = 0;
         categoryItems.forEach(item => {
-            const itemId = item.name;
+            const itemId = getItemId(item);
             if (orderDetails.items[itemId]) {
                 Object.values(orderDetails.items[itemId]).forEach(sizeData => {
                     count += sizeData.quantity || 0;
@@ -173,11 +175,11 @@ const OrderItems = ({ restaurantData, orderDetails, setOrderDetails }) => {
                         <div className="order-items-empty-text">No items in this category</div>
                     </div>
                 ) : (
-                    filteredItems.map((item, index) => {
-                        const itemId = item.name;
+                    filteredItems.map((item) => {
+                        const itemId = getItemId(item);
                         return (
                             <div
-                                key={index}
+                                key={itemId}
                                 className="order-items-card order-premium-item"
                                 onClick={item.isSpecial ? handleSpecialClick : undefined}
                             >

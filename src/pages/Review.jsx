@@ -44,22 +44,35 @@ const Review = ({ restaurantData, orderDetails, setOrderDetails }) => {
     const phoneNumber = restoDetails?.contact || '';
     const upiId = restoDetails?.upiId;
     const flatItems = useMemo(() => {
+        const findMenuItem = (itemId) => {
+            for (const cat of restaurantData.categories || []) {
+                const found = cat.items?.find(i => i.id === itemId || i.name === itemId);
+                if (found) return found;
+            }
+            return null;
+        };
+
         const items = [];
-        Object.entries(orderDetails.items).forEach(([itemName, sizes]) => {
+        Object.entries(orderDetails.items).forEach(([itemId, sizes]) => {
+            const menuItem = findMenuItem(itemId);
+            const displayName = menuItem?.name
+                || itemId.replace(/__(veg|nonveg)$/, '');
+            const isVeg = menuItem ? menuItem.isVeg : !itemId.endsWith('__nonveg');
             Object.entries(sizes).forEach(([size, data]) => {
                 items.push({
-                    name: itemName,
+                    id: itemId,
+                    name: displayName,
                     size,
                     quantity: data.quantity,
                     price: data.price,
                     notes: data.notes,
                     total: data.quantity * data.price,
-                    isVeg: true
+                    isVeg
                 });
             });
         });
         return items;
-    }, [orderDetails.items]);
+    }, [orderDetails.items, restaurantData.categories]);
     const totalAmount = flatItems.reduce((acc, item) => acc + item.total, 0);
     const formatSize = (size) => {
         switch (size.toLowerCase()) {
@@ -192,13 +205,13 @@ const Review = ({ restaurantData, orderDetails, setOrderDetails }) => {
                                 <div className="review-empty-text">No items in order</div>
                             </div>
                         ) : (
-                            flatItems.map((item, idx) => {
+                            flatItems.map((item) => {
                                 const vegIcon = item.isVeg
                                     ? <svg width="14" height="14" viewBox="0 0 24 24" fill="#00C851"><rect x="2" y="2" width="20" height="20" rx="2" /></svg>
                                     : <svg width="14" height="14" viewBox="0 0 24 24" fill="#FF4444"><rect x="2" y="2" width="20" height="20" rx="2" /></svg>;
 
                                 return (
-                                    <div key={idx} className="review-item-card">
+                                    <div key={`${item.id}-${item.size}`} className="review-item-card">
                                         <div className="review-item-header">
                                             <div className="review-item-name-row">
                                                 {vegIcon}

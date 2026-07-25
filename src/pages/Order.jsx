@@ -7,7 +7,7 @@ import '../styles/order_items.css';
 import '../styles/styles.css';
 
 const SearchItem = React.memo(({ item, orderDetails, updateQuantity, updateNotes, getQuantity, getSizeLabel }) => {
-    const itemId = item.name;
+    const itemId = item.id || item.name;
     return (
         <div className="order-items-card order-premium-item" style={{ marginBottom: '15px', padding: '10px' }}>
             <div className="order-items-header" style={{ marginBottom: '10px' }}>
@@ -211,7 +211,7 @@ const Order = ({ restaurantData, orderDetails, setOrderDetails }) => {
         if (!categoryData || !categoryData.items) return false;
 
         return categoryData.items.some(item => {
-            const itemId = item.name;
+            const itemId = item.id || item.name;
             return orderDetails.items[itemId] && Object.keys(orderDetails.items[itemId]).length > 0;
         });
     };
@@ -277,9 +277,9 @@ const Order = ({ restaurantData, orderDetails, setOrderDetails }) => {
                             </div>
                         ) : (
                             <div className="search-results-list">
-                                {filteredItems.map((item, index) => (
+                                {filteredItems.map((item) => (
                                     <SearchItem
-                                        key={index}
+                                        key={item.id || item.name}
                                         item={item}
                                         orderDetails={orderDetails}
                                         updateQuantity={updateQuantity}
