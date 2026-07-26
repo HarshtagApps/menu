@@ -94,7 +94,6 @@ export const MenuData = {
         { image: ProjectImages.iceCream, name: "Ice Cream" },
         { image: ProjectImages.frenchFries, name: "Snacks" },
         { image: ProjectImages.mocktail, name: "Mocktails" },
-        { image: ProjectImages.mocktail, name: "Beverages" },
         { image: ProjectImages.eggs, name: "Eggs/Omelette" },
         { image: ProjectImages.rice, name: "Rice & Biryani" },
         { image: ProjectImages.coffee, name: "Tea & Coffee" },
