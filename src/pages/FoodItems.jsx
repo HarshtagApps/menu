@@ -165,7 +165,7 @@ const FoodItems = ({ restaurantData }) => {
                                                 className="food-item-special-badge"
                                             />
                                         )}
-                                        <div className={`food-item-veg-dot ${item.isVeg ? 'veg' : 'non-veg'}`} />
+                                        <div className={`food-item-veg-dot ${item.foodType === 'egg' ? 'egg' : item.isVeg ? 'veg' : 'non-veg'}`} />
                                         {hasDescription && (
                                             <ChevronDown
                                                 size={20}

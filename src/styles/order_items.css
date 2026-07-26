@@ -116,6 +116,10 @@
     background-color: #00C851;
 }
 
+.order-items-veg-dot.egg {
+    background-color: #F5C518;
+}
+
 .order-items-veg-dot.non-veg {
     background-color: #FF4444;
 }

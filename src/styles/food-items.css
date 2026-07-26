@@ -146,6 +146,10 @@
     background-color: #00C851;
 }
 
+.food-item-veg-dot.egg {
+    background-color: #F5C518;
+}
+
 .food-item-veg-dot.non-veg {
     background-color: #FF4444;
 }

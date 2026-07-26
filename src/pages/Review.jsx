@@ -56,8 +56,10 @@ const Review = ({ restaurantData, orderDetails, setOrderDetails }) => {
         Object.entries(orderDetails.items).forEach(([itemId, sizes]) => {
             const menuItem = findMenuItem(itemId);
             const displayName = menuItem?.name
-                || itemId.replace(/__(veg|nonveg)$/, '');
-            const isVeg = menuItem ? menuItem.isVeg : !itemId.endsWith('__nonveg');
+                || itemId.replace(/__(veg|egg|nonveg)$/, '');
+            const foodType = menuItem?.foodType
+                || (itemId.endsWith('__egg') ? 'egg' : itemId.endsWith('__veg') ? 'veg' : 'nonveg');
+            const isVeg = menuItem ? menuItem.isVeg : foodType === 'veg';
             Object.entries(sizes).forEach(([size, data]) => {
                 items.push({
                     id: itemId,
@@ -67,7 +69,8 @@ const Review = ({ restaurantData, orderDetails, setOrderDetails }) => {
                     price: data.price,
                     notes: data.notes,
                     total: data.quantity * data.price,
-                    isVeg
+                    isVeg,
+                    foodType
                 });
             });
         });
@@ -101,7 +104,7 @@ const Review = ({ restaurantData, orderDetails, setOrderDetails }) => {
         }
         message += `🍴*_Ordered Items:_*\n`;
         flatItems.forEach((item, index) => {
-            const vegSymbol = item.isVeg ? '🟩' : '🟥';
+            const vegSymbol = item.foodType === 'egg' ? '🟨' : item.isVeg ? '🟩' : '🟥';
             const sizeInfo = item.size ? `${formatSize(item.size)} × ${item.quantity}` : `${item.quantity}`;
             message += `_*${index + 1})* ${vegSymbol} ${item.name}_\n`;
             message += `_${sizeInfo} = ₹${item.total}_\n`;
@@ -206,9 +209,14 @@ const Review = ({ restaurantData, orderDetails, setOrderDetails }) => {
                             </div>
                         ) : (
                             flatItems.map((item) => {
-                                const vegIcon = item.isVeg
-                                    ? <svg width="14" height="14" viewBox="0 0 24 24" fill="#00C851"><rect x="2" y="2" width="20" height="20" rx="2" /></svg>
-                                    : <svg width="14" height="14" viewBox="0 0 24 24" fill="#FF4444"><rect x="2" y="2" width="20" height="20" rx="2" /></svg>;
+                                const markerColor = item.foodType === 'egg'
+                                    ? '#F5C518'
+                                    : item.isVeg ? '#00C851' : '#FF4444';
+                                const vegIcon = (
+                                    <svg width="14" height="14" viewBox="0 0 24 24" fill={markerColor}>
+                                        <rect x="2" y="2" width="20" height="20" rx="2" />
+                                    </svg>
+                                );
 
                                 return (
                                     <div key={`${item.id}-${item.size}`} className="review-item-card">

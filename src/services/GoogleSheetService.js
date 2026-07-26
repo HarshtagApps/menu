@@ -24,13 +24,21 @@ export const fetchMenuData = async (restaurantId) => {    try {
                     itemsMap: {}
                 };
             }
-            const isVeg = (IsVeg === true || IsVeg === 'TRUE');
-            const itemKey = `${ItemName}__${isVeg ? 'veg' : 'nonveg'}`;
+            const isVegRaw = typeof IsVeg === 'string' ? IsVeg.trim().toUpperCase() : IsVeg;
+            let foodType = 'nonveg';
+            if (isVegRaw === true || isVegRaw === 'TRUE' || isVegRaw === 'VEG') {
+                foodType = 'veg';
+            } else if (isVegRaw === 'EGG') {
+                foodType = 'egg';
+            }
+            const isVeg = foodType === 'veg';
+            const itemKey = `${ItemName}__${foodType}`;
             if (!categoriesMap[Category].itemsMap[itemKey]) {
                 categoriesMap[Category].itemsMap[itemKey] = {
                     id: itemKey,
                     name: ItemName,
                     isVeg,
+                    foodType,
                     isSpecial: (IsSpecial === true || IsSpecial === 'TRUE'),
                     description: Description || '',
                     prices: {},

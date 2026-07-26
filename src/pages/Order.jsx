@@ -13,7 +13,7 @@ const SearchItem = React.memo(({ item, orderDetails, updateQuantity, updateNotes
             <div className="order-items-header" style={{ marginBottom: '10px' }}>
                 <div className="order-items-name" style={{ flex: 1, padding: '0', fontSize: '16px', fontWeight: '500' }}>{item.name}</div>
                 <div className="order-items-indicators" style={{ gap: '0' }}>
-                    <div className={`order-items-veg-dot ${item.isVeg ? 'veg' : 'non-veg'}`} style={{ width: '16px', height: '16px', borderRadius: '4px' }}></div>
+                    <div className={`order-items-veg-dot ${item.foodType === 'egg' ? 'egg' : item.isVeg ? 'veg' : 'non-veg'}`} style={{ width: '16px', height: '16px', borderRadius: '4px' }}></div>
                 </div>
             </div>
 
