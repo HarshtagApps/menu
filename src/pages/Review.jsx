@@ -90,32 +90,32 @@ const Review = ({ restaurantData, orderDetails, setOrderDetails }) => {
     const generateWhatsAppMessage = () => {
         const restoName = restoDetails?.restoName || 'Restaurant';
         let message = `*🍽️ New Order*\n\n`;
-        message += `_Hi ${restoName},_\n`;
-        message += `_I would like to place an order:_\n\n`;
+        message += `Hi ${restoName},\n`;
+        message += `I would like to place an order:\n\n`;
 
-        message += `👤*_Customer Details :_*\n`;
-        message += `_*Name:* ${orderDetails.customerName.trim()}_\n`;
+        message += `*Name:* ${orderDetails.customerName.trim()}\n`;
+        message += `*Number:* ${String(orderDetails.customerPhone || '').trim()}\n`;
         if (orderDetails.type === 'dinein') {
-            message += `_*Type:* Dine-in_\n`;
-            message += `_*Table Number:* ${orderDetails.tableNumber.trim()}_\n\n`;
+            message += `*Type:* Dine-in\n`;
+            message += `*Table Number:* ${orderDetails.tableNumber.trim()}\n\n`;
         } else {
-            message += `_*Type:* Online (Delivery)_\n`;
-            message += `_*Address:* ${orderDetails.customerAddress.trim()}_\n\n`;
+            message += `*Type:* Online (Delivery)\n`;
+            message += `*Address:* ${orderDetails.customerAddress.trim()}\n\n`;
         }
-        message += `🍴*_Ordered Items:_*\n`;
+        message += `🍴 *Ordered Items:*\n`;
         flatItems.forEach((item, index) => {
             const vegSymbol = item.foodType === 'egg' ? '🟨' : item.isVeg ? '🟩' : '🟥';
             const sizeInfo = item.size ? `${formatSize(item.size)} × ${item.quantity}` : `${item.quantity}`;
-            message += `_*${index + 1})* ${vegSymbol} ${item.name}_\n`;
-            message += `_${sizeInfo} = ₹${item.total}_\n`;
+            message += `*${index + 1})* ${vegSymbol} ${item.name}\n`;
+            message += `${sizeInfo} = ₹${item.total}\n`;
             if (item.notes) {
-                message += `_Note: ${item.notes}_\n`;
+                message += `Note: ${item.notes}\n`;
             }
             message += `\n`;
         });
-        message += `💸_*Total Amount:* ₹${totalAmount.toFixed(2)}_\n\n`;
-        message += `_Please confirm. Thanks!_\n`;
-        message += `_Powered by *HARSHTAG APPS*_`;
+        message += `💸 *Total Amount:* ₹${totalAmount.toFixed(2)}\n\n`;
+        message += `Please confirm. Thanks!\n`;
+        message += `Powered by *HARSHTAG APPS*`;
         return message;
     };
 
@@ -125,6 +125,7 @@ const Review = ({ restaurantData, orderDetails, setOrderDetails }) => {
         window.open(whatsappURL, '_blank');
         setOrderDetails({
             customerName: '',
+            customerPhone: '',
             customerAddress: '',
             tableNumber: '',
             type: 'online',
@@ -176,8 +177,12 @@ const Review = ({ restaurantData, orderDetails, setOrderDetails }) => {
                         <span>Customer Details</span>
                     </div>
                     <div className="review-detail-row">
-                        <span className="review-detail-label">Name</span>
+                        <span className="review-detail-label">Customer Name</span>
                         <span className="review-detail-value">{orderDetails.customerName || '-'}</span>
+                    </div>
+                    <div className="review-detail-row">
+                        <span className="review-detail-label">Customer Number</span>
+                        <span className="review-detail-value">{orderDetails.customerPhone || '-'}</span>
                     </div>
                     {orderDetails.type === 'dinein' ? (
                         <div className="review-detail-row">
@@ -186,7 +191,7 @@ const Review = ({ restaurantData, orderDetails, setOrderDetails }) => {
                         </div>
                     ) : (
                         <div className="review-detail-row">
-                            <span className="review-detail-label">Address</span>
+                            <span className="review-detail-label">Customer Address</span>
                             <span className="review-detail-value">{orderDetails.customerAddress || '-'}</span>
                         </div>
                     )}

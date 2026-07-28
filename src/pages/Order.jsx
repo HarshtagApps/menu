@@ -183,6 +183,11 @@ const Order = ({ restaurantData, orderDetails, setOrderDetails }) => {
             showStatusSnackbar('Please enter your Name');
             return;
         }
+        const phone = String(orderDetails.customerPhone || '').replace(/\D/g, '');
+        if (phone.length !== 10) {
+            showStatusSnackbar('Please enter a valid 10-digit Customer Number');
+            return;
+        }
         if (orderDetails.type === 'online' && (!orderDetails.customerAddress || orderDetails.customerAddress.trim().length === 0)) {
             showStatusSnackbar('Please enter your Delivery Address');
             return;
@@ -307,9 +312,27 @@ const Order = ({ restaurantData, orderDetails, setOrderDetails }) => {
                                 />
                             </div>
 
+                            <div className="order-input-group">
+                                <label className="order-input-label">Customer Number</label>
+                                <input
+                                    type="tel"
+                                    name="customerPhone"
+                                    value={orderDetails.customerPhone || ''}
+                                    onChange={(e) => {
+                                        const digitsOnly = e.target.value.replace(/\D/g, '').slice(0, 10);
+                                        setOrderDetails(prev => ({ ...prev, customerPhone: digitsOnly }));
+                                    }}
+                                    className="order-input-field"
+                                    placeholder="Enter 10-digit mobile number"
+                                    inputMode="numeric"
+                                    maxLength={10}
+                                    autoComplete="tel"
+                                />
+                            </div>
+
                             {orderDetails.type === 'online' ? (
                                 <div className="order-input-group">
-                                    <label className="order-input-label">Delivery Address</label>
+                                    <label className="order-input-label">Customer Address</label>
                                     <textarea
                                         name="customerAddress"
                                         value={orderDetails.customerAddress}

@@ -1,4 +1,4 @@
-import { fetchMenuData } from './services/GoogleSheetService';
+import { fetchMenuData, trackMenuView } from './services/GoogleSheetService';
 
 export async function loadRestaurantData(restaurantId) {
     if (!restaurantId) {
@@ -7,3 +7,5 @@ export async function loadRestaurantData(restaurantId) {
 
     return await fetchMenuData(restaurantId);
 }
+
+export { trackMenuView };

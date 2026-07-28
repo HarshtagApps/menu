@@ -1,6 +1,16 @@
 const SHEET_URL = 'https://script.google.com/macros/s/AKfycbxZ5Jip8qUnfNZMb4Md4VzWsv1vyxW2v5YQASXHE9MmTYfYkHKtTuXGp_rDxx8XDE1_NA/exec';
 
-export const fetchMenuData = async (restaurantId) => {    try {
+export const trackMenuView = (restaurantId) => {
+    if (!restaurantId) return;
+    const url = `${SHEET_URL}?action=trackView&r=${encodeURIComponent(restaurantId)}`;
+    try {
+        fetch(url, { method: 'GET', keepalive: true }).catch(() => { });
+    } catch {
+    }
+};
+
+export const fetchMenuData = async (restaurantId) => {
+    try {
         const response = await fetch(SHEET_URL);
         if (!response.ok) throw new Error('Failed to fetch menu from Google Sheets');
         const allData = await response.json();

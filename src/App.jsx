@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { BrowserRouter as Router, Routes, Route, useSearchParams } from 'react-router-dom';
-import { loadRestaurantData } from './api';
+import { loadRestaurantData, trackMenuView } from './api';
 import Splash from './components/Splash';
 import Loading from './components/Loading';
 import BackgroundMusic from './components/BackgroundMusic';
@@ -38,6 +38,7 @@ const AppContent = () => {
 
   const [orderDetails, setOrderDetails] = useState({
     customerName: '',
+    customerPhone: '',
     customerAddress: '',
     tableNumber: '',
     type: 'online',
@@ -45,6 +46,12 @@ const AppContent = () => {
   });
 
   const restaurantId = searchParams.get('r');
+
+  useEffect(() => {
+    if (showSplash && restaurantId) {
+      trackMenuView(restaurantId);
+    }
+  }, [showSplash, restaurantId]);
 
   useEffect(() => {
     if (!restaurantId) {
