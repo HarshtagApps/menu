@@ -14,7 +14,7 @@
 }
 
 .reserve-date-section {
-    margin-bottom: 14px;
+    margin-bottom: 20px;
 }
 
 .reserve-date-heading {
@@ -22,7 +22,7 @@
     font-size: 15px;
     font-weight: 600;
     color: #333333;
-    margin-bottom: 10px;
+    margin-bottom: 2px;
 }
 
 .reserve-date-scroller {
@@ -40,15 +40,15 @@
 
 .reserve-date-chip {
     flex: 0 0 auto;
-    min-width: 72px;
+    min-width: 75px;
     border: 1px solid #E0E0E0;
     background: #FFFFFF;
-    border-radius: 12px;
-    padding: 10px 12px;
+    border-radius: 5px;
+    padding: 4px 16px;
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 2px;
+    gap: 0;
     cursor: pointer;
     font-family: 'Afacad', sans-serif;
     -webkit-tap-highlight-color: transparent;
@@ -56,15 +56,17 @@
 }
 
 .reserve-date-chip-top {
-    font-size: 12px;
+    font-size: 11px;
     font-weight: 600;
     color: #888888;
+    line-height: 1.2;
 }
 
 .reserve-date-chip-bottom {
-    font-size: 14px;
+    font-size: 13px;
     font-weight: 600;
     color: #333333;
+    line-height: 1.2;
 }
 
 .reserve-date-chip.active {
@@ -114,7 +116,7 @@
 .reserve-legend {
     display: flex;
     gap: 14px;
-    margin-bottom: 14px;
+    margin-bottom: 2px;
 }
 
 .reserve-legend-item {
@@ -289,7 +291,7 @@
     border: 1px solid #E0E0E0;
     border-radius: 12px;
     padding: 14px 16px;
-    margin-bottom: 16px;
+    margin-bottom: 20px;
 }
 
 .slots-summary-title {
@@ -312,106 +314,94 @@
     font-size: 15px;
     font-weight: 600;
     color: #333333;
-    margin-bottom: 10px;
+    margin-bottom: 2px;
 }
 
-.slots-list {
-    display: flex;
-    flex-direction: column;
+.slots-chip-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
     gap: 10px;
 }
 
-.slot-row {
-    background: #FFFFFF;
+@media (min-width: 480px) {
+    .slots-chip-grid {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+}
+
+.slot-chip {
+    appearance: none;
     border: 1px solid #E0E0E0;
-    border-radius: 12px;
-    padding: 14px 14px;
+    background: #FFFFFF;
+    border-radius: 10px;
+    padding: 10px 12px;
     display: flex;
+    flex-direction: column;
     align-items: center;
-    justify-content: space-between;
-    gap: 12px;
+    justify-content: center;
+    gap: 2px;
     cursor: pointer;
-    user-select: none;
+    font-family: 'Afacad', sans-serif;
     -webkit-tap-highlight-color: transparent;
-    transition: border-color 0.12s ease, background 0.12s ease;
+    transition: background 0.12s ease, border-color 0.12s ease, color 0.12s ease;
+    min-height: 56px;
+    width: 100%;
 }
 
-.slot-row:active:not(.reserved):not(.past) {
-    transform: scale(0.99);
+.slot-chip:active:not(:disabled) {
+    transform: scale(0.97);
 }
 
-.slot-row.vacant {
-    border-color: #E0E0E0;
+.slot-chip-time {
+    font-size: 13px;
+    font-weight: 600;
+    color: #333333;
+    line-height: 1.2;
+    text-align: center;
 }
 
-.slot-row.reserved {
+.slot-chip-status {
+    font-size: 11px;
+    font-weight: 600;
+    color: #888888;
+    line-height: 1.2;
+}
+
+.slot-chip.vacant:hover {
+    border-color: #CCCCCC;
+}
+
+.slot-chip.selected {
+    background: #00A9FE;
+    border-color: #00A9FE;
+}
+
+.slot-chip.selected .slot-chip-time,
+.slot-chip.selected .slot-chip-status {
+    color: #FFFFFF;
+}
+
+.slot-chip.reserved {
     border-color: rgba(250, 5, 123, 0.35);
-    background: rgba(250, 5, 123, 0.06);
+    background: rgba(250, 5, 123, 0.08);
     cursor: default;
 }
 
-.slot-row.past {
+.slot-chip.reserved .slot-chip-time {
+    color: #FA057B;
+}
+
+.slot-chip.reserved .slot-chip-status {
+    color: rgba(250, 5, 123, 0.85);
+}
+
+.slot-chip.past {
     opacity: 0.45;
     cursor: default;
 }
 
-.slot-row.selected {
-    border-color: rgba(0, 169, 254, 0.55);
-    background: rgba(0, 169, 254, 0.1);
-}
-
-.slot-row-left {
-    display: flex;
-    flex-direction: column;
-    gap: 3px;
-    min-width: 0;
-}
-
-.slot-time {
-    font-family: 'Afacad', sans-serif;
-    font-size: 15px;
-    font-weight: 600;
-    color: #333333;
-}
-
-.slot-meta {
-    font-family: 'Afacad', sans-serif;
-    font-size: 12px;
-    font-weight: 500;
-    color: #888888;
-}
-
-.slot-row.reserved .slot-meta {
-    color: rgba(250, 5, 123, 0.85);
-}
-
-.slot-pill {
-    flex-shrink: 0;
-    border-radius: 8px;
-    padding: 6px 10px;
-    font-family: 'Afacad', sans-serif;
-    font-size: 12px;
-    font-weight: 600;
-}
-
-.slot-pill.vacant {
-    background: rgba(136, 136, 136, 0.12);
-    color: #666666;
-}
-
-.slot-pill.reserved {
-    background: rgba(250, 5, 123, 0.15);
-    color: #FA057B;
-}
-
-.slot-pill.selected {
-    background: rgba(0, 169, 254, 0.18);
-    color: #00A9FE;
-}
-
-.slot-pill.past {
-    background: rgba(136, 136, 136, 0.1);
-    color: #999999;
+.slot-chip:disabled {
+    cursor: default;
 }
 
 .slots-footer-note {

@@ -3,6 +3,7 @@ import { BrowserRouter as Router, Routes, Route, useSearchParams } from 'react-r
 import { loadRestaurantData } from './api';
 import Splash from './components/Splash';
 import Loading from './components/Loading';
+import BackgroundMusic from './components/BackgroundMusic';
 import './index.css';
 import { hexToCssFilter } from './utils/menuData';
 
@@ -66,18 +67,17 @@ const AppContent = () => {
     fetchData();
   }, [restaurantId]);
 
+  const backgroundMusicUrls = restaurantData?.restoDetails?.backgroundMusicUrls || [];
+
+  let content;
   if (showSplash) {
-    return <Splash onFinish={() => setShowSplash(false)} />;
-  }
-
-  if (loading) {
-    return <Loading />;
-  }
-
-  if (error) {
+    content = <Splash onFinish={() => setShowSplash(false)} />;
+  } else if (loading) {
+    content = <Loading />;
+  } else if (error) {
     const notFoundMatch = error.match(/The restaurant "(.*?)" was not found\./);
 
-    return (
+    content = (
       <div className="error-state" style={{
         textAlign: 'center',
         padding: '20px',
@@ -110,21 +110,30 @@ const AppContent = () => {
         </div>
       </div>
     );
+  } else {
+    content = (
+      <React.Suspense fallback={<Loading />}>
+        <Routes>
+          <Route path="/" element={<Categories restaurantData={restaurantData} />} />
+          <Route path="/items" element={<FoodItems restaurantData={restaurantData} orderDetails={orderDetails} setOrderDetails={setOrderDetails} />} />
+          <Route path="/order" element={<Order restaurantData={restaurantData} orderDetails={orderDetails} setOrderDetails={setOrderDetails} />} />
+          <Route path="/order-items" element={<OrderItems restaurantData={restaurantData} orderDetails={orderDetails} setOrderDetails={setOrderDetails} />} />
+          <Route path="/review" element={<Review restaurantData={restaurantData} orderDetails={orderDetails} setOrderDetails={setOrderDetails} />} />
+          <Route path="/more" element={<More restaurantData={restaurantData} />} />
+          <Route path="/reserve" element={<Reserve restaurantData={restaurantData} />} />
+          <Route path="/reserve/table" element={<TableSlots restaurantData={restaurantData} />} />
+        </Routes>
+      </React.Suspense>
+    );
   }
 
   return (
-    <React.Suspense fallback={<Loading />}>
-      <Routes>
-        <Route path="/" element={<Categories restaurantData={restaurantData} />} />
-        <Route path="/items" element={<FoodItems restaurantData={restaurantData} orderDetails={orderDetails} setOrderDetails={setOrderDetails} />} />
-        <Route path="/order" element={<Order restaurantData={restaurantData} orderDetails={orderDetails} setOrderDetails={setOrderDetails} />} />
-        <Route path="/order-items" element={<OrderItems restaurantData={restaurantData} orderDetails={orderDetails} setOrderDetails={setOrderDetails} />} />
-        <Route path="/review" element={<Review restaurantData={restaurantData} orderDetails={orderDetails} setOrderDetails={setOrderDetails} />} />
-        <Route path="/more" element={<More restaurantData={restaurantData} />} />
-        <Route path="/reserve" element={<Reserve restaurantData={restaurantData} />} />
-        <Route path="/reserve/table" element={<TableSlots restaurantData={restaurantData} />} />
-      </Routes>
-    </React.Suspense>
+    <>
+      {backgroundMusicUrls.length > 0 && (
+        <BackgroundMusic urls={backgroundMusicUrls} />
+      )}
+      {content}
+    </>
   );
 };
 

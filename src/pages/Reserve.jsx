@@ -1,6 +1,6 @@
 import React, { useMemo, useState, useEffect } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
-import { ChevronLeft, Clock } from 'lucide-react';
+import { ChevronLeft } from 'lucide-react';
 import { ProjectImages } from '../utils/menuData';
 import {
     getTables,
@@ -80,18 +80,6 @@ const Reserve = ({ restaurantData }) => {
                             );
                         })}
                     </div>
-                </div>
-
-                <div className="reserve-meta">
-                    <div className="reserve-meta-chip">
-                        <Clock size={16} strokeWidth={2} />
-                        10:00 AM – 10:00 PM
-                    </div>
-                    <div className="reserve-meta-hint">1.5 hr slots</div>
-                </div>
-
-                <div className="reserve-meta-hint" style={{ marginBottom: '12px' }}>
-                    Tap a table to see vacant &amp; reserved slots for the selected date
                 </div>
 
                 <div className="reserve-legend">

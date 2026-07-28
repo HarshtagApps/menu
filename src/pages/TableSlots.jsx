@@ -95,76 +95,37 @@ const TableSlots = ({ restaurantData }) => {
                     </div>
                 </div>
 
-                <div className="slots-summary-card">
-                    <div className="slots-summary-title">Table {tableNumber}</div>
-                    <div className="slots-summary-sub">
-                        {formatDateLabel(selectedDate)} · Open 10:00 AM – 10:00 PM · {SLOT_MINUTES / 60} hr slots
-                    </div>
-                    <div className="slots-summary-sub" style={{ marginTop: '6px' }}>
-                        {vacantCount} vacant · {reservedCount} reserved
-                    </div>
-                </div>
+                <div className="slots-section-title">Select time</div>
 
-                <div className="slots-section-title">Timeline</div>
-
-                <div className="slots-list">
+                <div className="slots-chip-grid">
                     {slots.map((slot) => {
                         const isSelected = selectedSlotId === slot.id;
                         const isReserved = slot.status === 'reserved';
                         const isPast = slot.isPast;
 
-                        let rowClass = 'slot-row';
-                        if (isPast) rowClass += ' past';
-                        else if (isReserved) rowClass += ' reserved';
-                        else if (isSelected) rowClass += ' selected vacant';
-                        else rowClass += ' vacant';
+                        let chipClass = 'slot-chip';
+                        if (isPast) chipClass += ' past';
+                        else if (isReserved) chipClass += ' reserved';
+                        else if (isSelected) chipClass += ' selected';
+                        else chipClass += ' vacant';
 
-                        let pillClass = 'slot-pill';
-                        let pillText = 'Vacant';
-                        if (isPast && isReserved) {
-                            pillClass += ' past';
-                            pillText = 'Ended';
-                        } else if (isPast) {
-                            pillClass += ' past';
-                            pillText = 'Past';
-                        } else if (isReserved) {
-                            pillClass += ' reserved';
-                            pillText = 'Reserved';
-                        } else if (isSelected) {
-                            pillClass += ' selected';
-                            pillText = 'Selected';
-                        } else {
-                            pillClass += ' vacant';
-                        }
-
-                        let meta = `${SLOT_MINUTES} min`;
-                        if (isReserved) {
-                            meta = slot.customerName
-                                ? `Reserved · ${slot.customerName} · until ${slot.endLabel}`
-                                : `Reserved until ${slot.endLabel}`;
-                        } else if (!isPast) {
-                            meta = `Vacant · ${slot.startLabel} to ${slot.endLabel}`;
-                        }
+                        let statusText = 'Vacant';
+                        if (isPast && isReserved) statusText = 'Ended';
+                        else if (isPast) statusText = 'Past';
+                        else if (isReserved) statusText = 'Reserved';
+                        else if (isSelected) statusText = 'Selected';
 
                         return (
-                            <div
+                            <button
                                 key={slot.id}
-                                className={rowClass}
+                                type="button"
+                                className={chipClass}
                                 onClick={() => handleSlotTap(slot)}
-                                role="button"
-                                tabIndex={isPast || isReserved ? -1 : 0}
-                                onKeyDown={(e) => {
-                                    if (e.key === 'Enter' || e.key === ' ') {
-                                        handleSlotTap(slot);
-                                    }
-                                }}
+                                disabled={isPast || isReserved}
                             >
-                                <div className="slot-row-left">
-                                    <div className="slot-time">{slot.rangeLabel}</div>
-                                    <div className="slot-meta">{meta}</div>
-                                </div>
-                                <span className={pillClass}>{pillText}</span>
-                            </div>
+                                <span className="slot-chip-time">{slot.rangeLabel}</span>
+                                <span className="slot-chip-status">{statusText}</span>
+                            </button>
                         );
                     })}
                 </div>
