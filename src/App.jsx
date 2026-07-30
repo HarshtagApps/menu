@@ -3,7 +3,6 @@ import { BrowserRouter as Router, Routes, Route, useSearchParams } from 'react-r
 import { loadRestaurantData, trackMenuView } from './api';
 import Splash from './components/Splash';
 import Loading from './components/Loading';
-import BackgroundMusic from './components/BackgroundMusic';
 import './index.css';
 import { hexToCssFilter } from './utils/menuData';
 
@@ -15,6 +14,7 @@ const Review = React.lazy(() => import('./pages/Review'));
 const More = React.lazy(() => import('./pages/More'));
 const Reserve = React.lazy(() => import('./pages/Reserve'));
 const TableSlots = React.lazy(() => import('./pages/TableSlots'));
+const BackgroundMusic = React.lazy(() => import('./components/BackgroundMusic'));
 
 function shouldShowSplashOnLoad() {
   try {
@@ -137,7 +137,13 @@ const AppContent = () => {
   return (
     <>
       {backgroundMusicUrls.length > 0 && (
-        <BackgroundMusic urls={backgroundMusicUrls} />
+        <React.Suspense fallback={null}>
+          <BackgroundMusic
+            urls={backgroundMusicUrls}
+            visible={!showSplash && !loading && !error}
+            restoName={restaurantData?.restoDetails?.restoName || ""}
+          />
+        </React.Suspense>
       )}
       {content}
     </>

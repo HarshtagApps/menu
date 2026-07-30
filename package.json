@@ -11,7 +11,9 @@
   },
   "dependencies": {
     "lottie-react": "^2.4.1",
+    "lucide-animated": "^1.0.5",
     "lucide-react": "^0.563.0",
+    "motion": "^12.43.0",
     "react": "^19.2.0",
     "react-dom": "^19.2.0",
     "react-router-dom": "^7.13.0"
