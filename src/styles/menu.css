@@ -1,7 +1,19 @@
+#mainContent {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    overflow: hidden;
+    background-color: #FFFAEB;
+}
+
+#mainContent > *:not(.menu-container) {
+    flex-shrink: 0;
+}
+
 .menu-container {
+    flex: 1;
+    min-height: 0;
     padding: 12px;
-    padding-top: 12px;
-    height: calc(100vh - 120px);
     overflow-y: auto;
     overflow-x: hidden;
     -webkit-overflow-scrolling: touch;

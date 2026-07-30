@@ -61,5 +61,49 @@
 }
 
 body.has-music-player {
-  padding-bottom: calc(48px + env(safe-area-inset-bottom, 0px));
+  --music-player-height: calc(48px + env(safe-area-inset-bottom, 0px));
+}
+
+body.has-music-player .food-items-container {
+  padding-bottom: calc(75px + var(--music-player-height));
+}
+
+body.has-music-player .menu-container {
+  padding-bottom: calc(12px + var(--music-player-height));
+}
+
+body.has-music-player .more-container {
+  padding-bottom: var(--music-player-height);
+}
+
+body.has-music-player .reserve-container {
+  padding-bottom: calc(24px + var(--music-player-height));
+}
+
+body.has-music-player .slots-container {
+  padding-bottom: calc(28px + var(--music-player-height));
+}
+
+body.has-music-player .order-container {
+  padding-bottom: calc(120px + var(--music-player-height));
+}
+
+body.has-music-player .order-items-container {
+  padding-bottom: calc(150px + var(--music-player-height));
+}
+
+body.has-music-player .review-page-container {
+  padding-bottom: calc(185px + var(--music-player-height));
+}
+
+body.has-music-player .category-summary-bar {
+  bottom: var(--music-player-height);
+}
+
+body.has-music-player .order-page-summary-bar{
+  bottom: calc(8px + var(--music-player-height));
+}
+
+body.has-music-player .review-page-summary-bar {
+  bottom: var(--music-player-height);
 }
