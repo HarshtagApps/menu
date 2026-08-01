@@ -12,6 +12,7 @@ export const ProjectImages = {
     call: 'assets/images/call.png',
     corn: 'assets/images/corn.png',
     dish: 'assets/images/dish.png',
+    threeD: 'assets/images/3d.png',
     pizza: 'assets/images/pizza.png',
     momos: 'assets/images/momos.png',
     pasta: 'assets/images/pasta.png',

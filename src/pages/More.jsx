@@ -283,7 +283,7 @@ const More = ({ restaurantData }) => {
             ...tableReserveProps
         },
         {
-            icon: ProjectImages.table,
+            icon: ProjectImages.threeD,
             label: 'Floor Plan Map',
             onTap: () => navigate(`/floor-plan?r=${restaurantId}`),
             ...tableReserveProps
