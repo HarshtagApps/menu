@@ -1,0 +1,308 @@
+.floor-plan-page {
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+    background-color: #FFFAEB;
+}
+
+.floor-plan-container {
+    flex: 1;
+    overflow-y: auto;
+    overflow-x: hidden;
+    -webkit-overflow-scrolling: touch;
+    padding: 8px 8px 32px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    min-height: 0;
+}
+
+.floor-plan-hint {
+    font-family: 'Afacad', sans-serif;
+    font-size: 13px;
+    color: #666666;
+    line-height: 1.35;
+    flex-shrink: 0;
+}
+
+.floor-plan-legend {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px 14px;
+    font-family: 'Afacad', sans-serif;
+    font-size: 12px;
+    color: #444444;
+    flex-shrink: 0;
+}
+
+.floor-plan-legend-item {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.floor-plan-legend-swatch {
+    width: 14px;
+    height: 14px;
+    border-radius: 2px;
+    border: 1.5px solid transparent;
+}
+
+.floor-plan-legend-swatch.table {
+    background: #E53935;
+    border-color: #B71C1C;
+}
+
+.floor-plan-legend-swatch.seating {
+    background: #90CAF9;
+    border-color: #42A5F5;
+}
+
+.floor-plan-legend-swatch.counter {
+    background: #FF9800;
+    border-color: #EF6C00;
+}
+
+.floor-plan-legend-swatch.door {
+    background: #A5D6A7;
+    border-color: #43A047;
+}
+
+.floor-plan-legend-swatch.stairs {
+    background: #888888;
+    border-color: #424242;
+}
+
+.floor-plan-canvas-wrap {
+    position: relative;
+    background: #A5D6A7;
+    border: 1px solid #2E7D32;
+    border-radius: 12px;
+    padding: 5px;
+    overflow: visible;
+    flex: 1 1 auto;
+    width: 100%;
+    min-height: calc(100vh - 160px);
+    box-sizing: border-box;
+}
+
+.floor-plan-svg {
+    width: 100%;
+    height: auto;
+    min-height: calc(100vh - 240px);
+    display: block;
+    user-select: none;
+}
+
+.floor-plan-floor {
+    fill: #FFFAEB;
+    stroke: none;
+}
+
+.floor-plan-outer-wall {
+    stroke: #BDBDBD;
+    stroke-linejoin: miter;
+}
+
+.floor-plan-wall {
+    stroke: #1F1F1F;
+    stroke-linecap: square;
+}
+
+.floor-plan-stair {
+    fill: #333333;
+    stroke: #1F1F1F;
+    stroke-width: 1;
+}
+
+.floor-plan-stair-label {
+    font-family: 'Afacad', sans-serif;
+    font-size: 14px;
+    font-weight: 700;
+    fill: #424242;
+}
+
+.floor-plan-zone--counter rect {
+    fill: #FF9800;
+    stroke: #E65100;
+    stroke-width: 2;
+}
+
+.floor-plan-zone-label {
+    font-family: 'Afacad', sans-serif;
+    font-size: 18px;
+    font-weight: 700;
+    fill: #FFFFFF;
+    pointer-events: none;
+}
+
+.floor-plan-door--entry rect,
+.floor-plan-door--exit rect {
+    fill: #90CAF9;
+    stroke: #42A5F5;
+    stroke-width: 2;
+    opacity: 1.0;
+}
+
+.floor-plan-window {
+    fill: #90CAF9;
+    stroke: #42A5F5;
+    stroke-width: 2;
+    opacity: 1.0;
+}
+
+.floor-plan-door-label {
+    font-family: 'Afacad', sans-serif;
+    font-size: 14px;
+    font-weight: 700;
+    fill: #1B5E20;
+    pointer-events: none;
+}
+
+.floor-plan-table-group.is-selected .floor-plan-seating {
+    fill: #FA057B;
+    opacity: 0.6;
+}
+
+.floor-plan-canva-chair-body {
+    fill: #F2F2F2;
+    stroke: #BDBDBD;
+    stroke-width: 2;
+    pointer-events: auto;
+}
+
+.floor-plan-canva-chair-back {
+    stroke: #BDBDBD;
+    stroke-width: 2;
+    stroke-linecap: round;
+    pointer-events: auto;
+}
+
+.floor-plan-canva-bench-body {
+    fill: #F2F2F2;
+    stroke: #BDBDBD;
+    stroke-width: 2;
+    pointer-events: auto;
+}
+
+.floor-plan-canva-bench-back {
+    stroke: #BDBDBD;
+    stroke-width: 3;
+    stroke-linecap: round;
+    pointer-events: auto;
+}
+
+.floor-plan-table-group.is-selected .floor-plan-canva-chair-body,
+.floor-plan-table-group.is-selected .floor-plan-canva-bench-body {
+    fill: #FA057B;
+    stroke: #FA057B;
+    opacity: 0.6;
+}
+
+.floor-plan-table-group.is-selected .floor-plan-canva-chair-back,
+.floor-plan-table-group.is-selected .floor-plan-canva-bench-back {
+    stroke: #FA057B;
+    opacity: 0.6;
+}
+
+.floor-plan-table-group:focus {
+    outline: none;
+}
+
+.floor-plan-canva-table {
+    fill: #D8D8D8;
+    stroke: #BDBDBD;
+    stroke-width: 2;
+    transition: fill 0.15s ease, stroke 0.15s ease;
+}
+
+.floor-plan-canva-table-pattern {
+    pointer-events: none;
+}
+
+.floor-plan-table-group.is-selected .floor-plan-canva-table,
+.floor-plan-table-group:hover .floor-plan-canva-table {
+    fill: #FA057B;
+    stroke: #C0045F;
+}
+
+.floor-plan-seating-label {
+    font-family: 'Afacad', sans-serif;
+    font-size: 10px;
+    font-weight: 700;
+    fill: #1565C0;
+    pointer-events: none;
+}
+
+.floor-plan-table-number {
+    font-family: 'Afacad', sans-serif;
+    font-size: 18px;
+    font-weight: 700;
+    fill: #000000;
+    pointer-events: none;
+}
+
+.floor-plan-number-circle {
+    fill: #FFFFFF;
+    stroke: #E0E0E0;
+    stroke-width: 1;
+    pointer-events: none;
+}
+
+.floor-plan-canva-table-label {
+    fill: #000000 !important;
+    font-size: 22px;
+}
+
+.floor-plan-detail {
+    background: #FFFFFF;
+    border: 1px solid #E0E0E0;
+    border-radius: 12px;
+    padding: 14px;
+    font-family: 'Afacad', sans-serif;
+    flex-shrink: 0;
+}
+
+.floor-plan-detail-title {
+    font-size: 16px;
+    font-weight: 700;
+    color: #333333;
+    margin-bottom: 6px;
+}
+
+.floor-plan-detail-meta {
+    font-size: 14px;
+    color: #666666;
+    margin-bottom: 12px;
+}
+
+.floor-plan-detail-actions {
+    display: flex;
+    gap: 10px;
+}
+
+.floor-plan-btn {
+    flex: 1;
+    border: none;
+    border-radius: 8px;
+    padding: 12px;
+    font-family: 'Afacad', sans-serif;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    -webkit-tap-highlight-color: transparent;
+}
+
+.floor-plan-btn-primary {
+    background: #FA057B;
+    color: #FFFFFF;
+}
+
+.floor-plan-btn-secondary {
+    background: #F0F0F0;
+    color: #333333;
+}
+
+body.has-music-player .floor-plan-container {
+    padding-bottom: 110px;
+}

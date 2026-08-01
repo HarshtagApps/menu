@@ -14,6 +14,7 @@ const Review = React.lazy(() => import('./pages/Review'));
 const More = React.lazy(() => import('./pages/More'));
 const Reserve = React.lazy(() => import('./pages/Reserve'));
 const TableSlots = React.lazy(() => import('./pages/TableSlots'));
+const FloorPlan = React.lazy(() => import('./pages/FloorPlan'));
 const BackgroundMusic = React.lazy(() => import('./components/BackgroundMusic'));
 
 function shouldShowSplashOnLoad() {
@@ -129,6 +130,7 @@ const AppContent = () => {
           <Route path="/more" element={<More restaurantData={restaurantData} />} />
           <Route path="/reserve" element={<Reserve restaurantData={restaurantData} />} />
           <Route path="/reserve/table" element={<TableSlots restaurantData={restaurantData} />} />
+          <Route path="/floor-plan" element={<FloorPlan restaurantData={restaurantData} />} />
         </Routes>
       </React.Suspense>
     );

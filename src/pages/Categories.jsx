@@ -90,7 +90,6 @@ const Categories = ({ restaurantData }) => {
     const { restoDetails, categories } = restaurantData;
     const restoName = (restoDetails?.restoName || '').toUpperCase();
     const restoAddress = restoDetails?.address || '';
-    const restoContact = restoDetails?.contact || '';
     const uniqueCategories = [...new Set((categories || []).map(cat => cat.categoryType))];
 
     const handleCategoryClick = (categoryType) => {
@@ -105,51 +104,47 @@ const Categories = ({ restaurantData }) => {
     return (
         <div id="mainContent">
             <div className="restaurant-header" ref={headerRef}>
-                <div className="restaurant-header-content">
-                    <div className="restaurant-name">
-                        {parseRestaurantName(restoName).map((segment, index) => (
-                            <span key={index} className={getRestaurantNameClass(segment.type)}>
-                                {segment.text}
-                            </span>
-                        ))}
-                    </div>
-                    <div className="restaurant-info-row">
-                        <button
-                            className="menu-button"
-                            onClick={() => navigate(`/more?r=${restaurantId}`)}
-                            style={{
-                                position: 'absolute',
-                                left: '0',
-                                background: 'none',
-                                border: 'none',
-                                color: '#333333',
-                                cursor: 'pointer',
-                                display: 'flex',
-                                alignItems: 'center',
-                                justifyContent: 'center',
-                                zIndex: 10
-                            }}
-                        >
-                            <AlignJustify size={30} strokeWidth={1.25} />
-                        </button>
-                        <div className="restaurant-info-column">
-                            <div className="restaurant-address">{restoAddress}</div>
-                            <div className="restaurant-contact">
-                                {restoContact ? `Ph: +91 ${restoContact}` : ''}
-                            </div>
+                <div className="home-appbar">
+                    <button
+                        type="button"
+                        className="home-appbar-leading"
+                        onClick={() => navigate(`/more?r=${restaurantId}`)}
+                        aria-label="More"
+                    >
+                        <AlignJustify size={28} strokeWidth={1.25} />
+                    </button>
+
+                    <div className="home-appbar-title">
+                        <div className="restaurant-name">
+                            {parseRestaurantName(restoName).map((segment, index) => (
+                                <span key={index} className={getRestaurantNameClass(segment.type)}>
+                                    {segment.text}
+                                </span>
+                            ))}
                         </div>
-                        {isPremiumPlan && (
+                        {restoAddress ? (
+                            <div className="restaurant-address">{restoAddress}</div>
+                        ) : null}
+                    </div>
+
+                    <div className="home-appbar-actions">
+                        {isPremiumPlan ? (
                             <div
                                 ref={orderButtonRef}
                                 className={`order-button-wrapper${showOrderCoachmark ? ' order-button-wrapper--coachmark' : ''}`}
                             >
-                                <button className="order-button" onClick={handleOrderClick}>
-                                    <img src="assets/images/order.png" alt="Order" />
+                                <button
+                                    type="button"
+                                    className="order-button"
+                                    onClick={handleOrderClick}
+                                    aria-label="Order Here"
+                                >
+                                    <img src="assets/images/order.png" alt="" />
+                                    <span className="order-button-text">Order Here</span>
                                 </button>
-                                <div className="order-button-text">
-                                    Home Delivery
-                                </div>
                             </div>
+                        ) : (
+                            <div className="home-appbar-actions-spacer" aria-hidden="true" />
                         )}
                     </div>
                 </div>

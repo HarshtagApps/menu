@@ -1,0 +1,283 @@
+{
+  "restaurantId": "demo",
+  "name": "Floor Plan",
+  "version": 1,
+  "viewBox": {
+    "width": 1920,
+    "height": 1700
+  },
+  "room": {
+    "x": 566,
+    "y": 77,
+    "width": 788,
+    "height": 1130
+  },
+  "wallThickness": 6,
+  "walls": [
+    {
+      "id": "w1",
+      "x1": 566,
+      "y1": 77,
+      "x2": 1354,
+      "y2": 77
+    },
+    {
+      "id": "w2",
+      "x1": 1354,
+      "y1": 77,
+      "x2": 1354,
+      "y2": 1207
+    },
+    {
+      "id": "w3",
+      "x1": 1354,
+      "y1": 1207,
+      "x2": 566,
+      "y2": 1207
+    },
+    {
+      "id": "w4",
+      "x1": 566,
+      "y1": 1207,
+      "x2": 566,
+      "y2": 77
+    },
+    {
+      "id": "w5",
+      "x1": 566,
+      "y1": 950,
+      "x2": 735,
+      "y2": 950
+    }
+  ],
+  "stairs": [
+    {
+      "id": "s1",
+      "x": 568,
+      "y": 1222,
+      "width": 201,
+      "height": 28
+    },
+    {
+      "id": "s2",
+      "x": 568,
+      "y": 1258,
+      "width": 201,
+      "height": 28
+    },
+    {
+      "id": "s3",
+      "x": 568,
+      "y": 1294,
+      "width": 201,
+      "height": 28
+    }
+  ],
+  "doors": [
+    {
+      "id": "entry",
+      "type": "entry",
+      "label": "ENTRY",
+      "x": 569,
+      "y": 1183,
+      "width": 201,
+      "height": 26
+    },
+    {
+      "id": "garden_washroom",
+      "type": "exit",
+      "label": "GARDEN & WASHROOM",
+      "x": 1146,
+      "y": 75,
+      "width": 204,
+      "height": 26
+    }
+  ],
+  "windows": [
+    {
+      "id": "w_entry",
+      "x": 810,
+      "y": 1200,
+      "width": 500,
+      "height": 10
+    },
+    {
+      "id": "w_right1",
+      "x": 1346,
+      "y": 400,
+      "width": 10,
+      "height": 275
+    },
+    {
+      "id": "w_right2",
+      "x": 1346,
+      "y": 815,
+      "width": 10,
+      "height": 275
+    }
+  ],
+  "zones": [
+    {
+      "id": "counter",
+      "type": "counter",
+      "label": "COUNTER AREA",
+      "x": 568,
+      "y": 80,
+      "width": 576,
+      "height": 165
+    }
+  ],
+  "tables": [
+    {
+      "id": "T1",
+      "number": 1,
+      "seats": 4,
+      "shape": "rect",
+      "seatingLayout": "booth",
+      "x": 1118,
+      "y": 985,
+      "width": 200,
+      "height": 105,
+      "seating": [
+        {
+          "x": 1118,
+          "y": 912,
+          "width": 200,
+          "height": 61
+        },
+        {
+          "x": 1118,
+          "y": 1103,
+          "width": 200,
+          "height": 61
+        }
+      ]
+    },
+    {
+      "id": "T2",
+      "number": 2,
+      "seats": 4,
+      "shape": "rect",
+      "seatingLayout": "booth",
+      "x": 1118,
+      "y": 680,
+      "width": 200,
+      "height": 105,
+      "seating": [
+        {
+          "x": 1118,
+          "y": 607,
+          "width": 200,
+          "height": 61
+        },
+        {
+          "x": 1118,
+          "y": 797,
+          "width": 200,
+          "height": 61
+        }
+      ]
+    },
+    {
+      "id": "T3",
+      "number": 3,
+      "seats": 4,
+      "shape": "rect",
+      "seatingLayout": "booth",
+      "x": 1118,
+      "y": 375,
+      "width": 200,
+      "height": 105,
+      "seating": [
+        {
+          "x": 1118,
+          "y": 299,
+          "width": 200,
+          "height": 61
+        },
+        {
+          "x": 1118,
+          "y": 495,
+          "width": 200,
+          "height": 61
+        }
+      ]
+    },
+    {
+      "id": "T6",
+      "number": 6,
+      "seats": 4,
+      "shape": "round",
+      "seatingLayout": "cross",
+      "x": 870,
+      "y": 370,
+      "width": 115,
+      "height": 115,
+      "seating": []
+    },
+    {
+      "id": "T5",
+      "number": 5,
+      "seats": 4,
+      "shape": "round",
+      "seatingLayout": "cross",
+      "x": 870,
+      "y": 680,
+      "width": 115,
+      "height": 115,
+      "seating": []
+    },
+    {
+      "id": "T4",
+      "number": 4,
+      "seats": 4,
+      "shape": "round",
+      "seatingLayout": "cross",
+      "x": 870,
+      "y": 990,
+      "width": 115,
+      "height": 115,
+      "seating": []
+    },
+    {
+      "id": "T8",
+      "number": 8,
+      "seats": 3,
+      "shape": "rect",
+      "seatingLayout": "booth",
+      "seatingSide": "left",
+      "x": 637,
+      "y": 300,
+      "width": 100,
+      "height": 275,
+      "seating": [
+        {
+          "x": 569,
+          "y": 300,
+          "width": 58,
+          "height": 275
+        }
+      ]
+    },
+    {
+      "id": "T7",
+      "number": 7,
+      "seats": 3,
+      "shape": "rect",
+      "seatingLayout": "booth",
+      "seatingSide": "left",
+      "x": 637,
+      "y": 634,
+      "width": 100,
+      "height": 275,
+      "seating": [
+        {
+          "x": 569,
+          "y": 634,
+          "width": 58,
+          "height": 275
+        }
+      ]
+    }
+  ]
+}

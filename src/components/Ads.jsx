@@ -81,7 +81,9 @@ const styles = {
         color: '#666666',
         fontSize: '12px',
         fontWeight: '500',
-        fontFamily: "'Afacad', sans-serif"
+        fontFamily: "'Afacad', sans-serif",
+        marginTop: '2px',
+        lineHeight: 1.2
     },
 
     bannerImage: {

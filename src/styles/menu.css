@@ -77,32 +77,16 @@
     line-height: 1.2;
 }
 
-.restaurant-info-row {
+.order-button-wrapper {
     display: flex;
+    flex-direction: column;
     align-items: center;
     justify-content: center;
-    gap: 20px;
-    width: 100%;
-    position: relative;
-}
-
-.restaurant-info-column {
-    display: flex;
-    flex-direction: column;
-    text-align: center;
-}
-
-.order-button-wrapper {
-    position: absolute;
-    right: 0;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
 }
 
 .order-button-wrapper--coachmark {
     z-index: 1999;
-    position: absolute;
+    position: relative;
 }
 
 .order-button {
@@ -112,22 +96,31 @@
     display: flex;
     flex-direction: column;
     align-items: center;
+    justify-content: center;
+    padding: 0;
+    -webkit-tap-highlight-color: transparent;
+    touch-action: manipulation;
+}
+
+.order-button:active {
+    opacity: 0.7;
 }
 
 .order-button img {
-    width: 40px;
-    height: 40px;
+    width: 36px;
+    height: 36px;
     display: block;
 }
 
 .order-button-text {
-    font-size: 11px;
+    font-size: 10px;
     font-weight: 500;
     color: #333333;
     font-family: 'Afacad', sans-serif;
-    line-height: 1;
-    margin-bottom: 5px;
+    line-height: 1.1;
+    margin-top: 2px;
     text-align: center;
+    white-space: nowrap;
 }
 
 @media (min-width: 768px) and (orientation: portrait) {
