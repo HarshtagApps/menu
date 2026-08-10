@@ -17,6 +17,102 @@
     margin-bottom: 20px;
 }
 
+.reserve-customer-section {
+    margin: 4px 0 16px;
+}
+
+.reserve-details-card {
+    background-color: #FFFFFF;
+    padding: 8px;
+    margin: 0 0 16px 0;
+    border-radius: 12px;
+    border: 1px solid #E0E0E0;
+    box-shadow: 0 2px 8px rgba(51, 51, 51, 0.25);
+}
+
+.reserve-details-title {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    font-family: 'Afacad', sans-serif;
+    font-size: 14px;
+    font-weight: 700;
+    margin-bottom: 12px;
+    color: #333333;
+}
+
+.reserve-details-title svg {
+    stroke: var(--primary-color);
+}
+
+.reserve-details-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 5px;
+    gap: 12px;
+}
+
+.reserve-details-row:last-child {
+    margin-bottom: 0;
+}
+
+.reserve-details-label {
+    font-family: 'Afacad', sans-serif;
+    font-size: 14px;
+    color: rgba(51, 51, 51, 0.7);
+    flex-shrink: 0;
+}
+
+.reserve-details-value {
+    font-family: 'Afacad', sans-serif;
+    font-size: 14px;
+    font-weight: 600;
+    color: #333333;
+    text-align: right;
+    word-break: break-word;
+}
+
+.reserve-input-group {
+    margin-bottom: 12px;
+}
+
+.reserve-input-group:last-child {
+    margin-bottom: 0;
+}
+
+.reserve-input-label {
+    display: block;
+    font-family: 'Afacad', sans-serif;
+    font-size: 14px;
+    font-weight: 600;
+    color: #333333;
+}
+
+.reserve-input-field {
+    width: 100%;
+    box-sizing: border-box;
+    padding: 10px 12px;
+    border: 1px solid #E0E0E0;
+    border-radius: 8px;
+    font-size: 16px;
+    font-family: 'Afacad', sans-serif;
+    background-color: #FFFFFF;
+    color: var(--primary-color);
+    transition: border-color 0.2s, box-shadow 0.2s;
+    box-shadow: 0 3px 6px rgba(51, 51, 51, 0.15);
+}
+
+.reserve-input-field:focus {
+    outline: none;
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 3px rgba(var(--primary-rgb), 0.1);
+}
+
+.reserve-input-field::placeholder {
+    color: #999999;
+}
+
 .reserve-date-heading {
     font-family: 'Afacad', sans-serif;
     font-size: 15px;
@@ -70,8 +166,8 @@
 }
 
 .reserve-date-chip.active {
-    background: #FA057B;
-    border-color: #FA057B;
+    background: var(--primary-color);
+    border-color: var(--primary-color);
 }
 
 .reserve-date-chip.active .reserve-date-chip-top,
@@ -140,7 +236,7 @@
 }
 
 .reserve-legend-dot.reserved {
-    background: rgba(250, 5, 123, 0.75);
+    background: rgba(var(--primary-rgb), 0.75);
 }
 
 .reserve-table-grid {
@@ -174,7 +270,7 @@
 }
 
 .reserve-table-card.reserved {
-    border-color: rgba(250, 5, 123, 0.25);
+    border-color: rgba(var(--primary-rgb), 0.25);
 }
 
 .reserve-table-card.vacant {
@@ -213,7 +309,7 @@
 }
 
 .reserve-table-card.reserved .reserve-table-badge {
-    background: rgba(250, 5, 123, 0.75);
+    background: rgba(var(--primary-rgb), 0.75);
     color: #FFFFFF;
 }
 
@@ -233,7 +329,7 @@
 }
 
 .reserve-table-card.reserved .reserve-table-visual {
-    background: rgba(250, 5, 123, 0.35);
+    background: rgba(var(--primary-rgb), 0.35);
 }
 
 .reserve-table-visual img {
@@ -258,7 +354,7 @@
 }
 
 .reserve-table-card.reserved .reserve-table-status {
-    color: rgba(250, 5, 123, 0.75);
+    color: rgba(var(--primary-rgb), 0.75);
 }
 
 .reserve-table-until {
@@ -283,7 +379,7 @@
     overflow-y: auto;
     -webkit-overflow-scrolling: touch;
     padding: 12px;
-    padding-bottom: 28px;
+    padding-bottom: 100px;
 }
 
 .slots-summary-card {
@@ -382,17 +478,17 @@
 }
 
 .slot-chip.reserved {
-    border-color: rgba(250, 5, 123, 0.35);
-    background: rgba(250, 5, 123, 0.08);
+    border-color: rgba(var(--primary-rgb), 0.35);
+    background: rgba(var(--primary-rgb), 0.08);
     cursor: default;
 }
 
 .slot-chip.reserved .slot-chip-time {
-    color: #FA057B;
+    color: var(--primary-color);
 }
 
 .slot-chip.reserved .slot-chip-status {
-    color: rgba(250, 5, 123, 0.85);
+    color: rgba(var(--primary-rgb), 0.85);
 }
 
 .slot-chip.past {
@@ -404,6 +500,42 @@
     cursor: default;
 }
 
+.seats-section-title {
+    margin-top: 18px;
+}
+
+.seats-chip-grid {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 8px;
+    margin-top: 4px;
+    margin-bottom: 4px;
+}
+
+.seats-chip {
+    border: 1px solid #E0E0E0;
+    background: #FFFFFF;
+    border-radius: 5px;
+    padding: 5px 10px;
+    font-family: 'Afacad', sans-serif;
+    font-size: 14px;
+    font-weight: 500;
+    color: #333333;
+    cursor: pointer;
+    -webkit-tap-highlight-color: transparent;
+    transition: background 0.15s ease, border-color 0.15s ease, color 0.15s ease;
+}
+
+.seats-chip:active {
+    transform: scale(0.97);
+}
+
+.seats-chip.selected {
+    background: var(--primary-color);
+    border-color: #C0045F;
+    color: #FFFFFF;
+}
+
 .slots-footer-note {
     margin-top: 18px;
     text-align: center;
@@ -411,4 +543,114 @@
     font-size: 12px;
     color: #888888;
     font-weight: 500;
+}
+
+.slots-continue-bar {
+    position: fixed;
+    bottom: 16px;
+    left: 10px;
+    right: 10px;
+    background-color: #FFFFFF;
+    padding: 10px;
+    border-radius: 12px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 12px;
+    box-shadow: 0 4px 10px rgba(51, 51, 51, 0.2);
+    z-index: 100;
+}
+
+.slots-continue-summary {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    min-width: 0;
+}
+
+.slots-continue-label {
+    font-family: 'Afacad', sans-serif;
+    font-size: 14px;
+    font-weight: 600;
+    color: #333333;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.slots-continue-meta {
+    font-family: 'Afacad', sans-serif;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--primary-color);
+}
+
+.slots-continue-btn {
+    flex-shrink: 0;
+    background-color: var(--primary-color);
+    color: #FFFFFF;
+    border: none;
+    border-radius: 8px;
+    padding: 12px 20px;
+    font-family: 'Afacad', sans-serif;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    -webkit-tap-highlight-color: transparent;
+}
+
+.slots-continue-btn:active {
+    transform: scale(0.98);
+    background-color: #d9046b;
+}
+
+.slots-continue-btn svg {
+    stroke: #FFFFFF;
+}
+
+.reserve-validation-snackbar {
+    visibility: hidden;
+    min-width: 95%;
+    background-color: #FF8800;
+    color: #FFFFFF;
+    text-align: left;
+    border-radius: 12px;
+    padding: 14px 18px;
+    position: fixed;
+    z-index: 9999;
+    top: 15px;
+    left: 50%;
+    transform: translateX(-50%);
+    font-family: 'Afacad', sans-serif;
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.25);
+    font-weight: 500;
+    box-sizing: border-box;
+}
+
+.reserve-validation-snackbar.show {
+    visibility: visible;
+    animation: reserveSnackbarIn 0.35s ease-out, reserveSnackbarOut 0.35s ease-in 4.65s forwards;
+}
+
+@keyframes reserveSnackbarIn {
+    from {
+        opacity: 0;
+        transform: translate(-50%, -20px);
+    }
+    to {
+        opacity: 1;
+        transform: translate(-50%, 0);
+    }
+}
+
+@keyframes reserveSnackbarOut {
+    from {
+        opacity: 1;
+    }
+    to {
+        opacity: 0;
+    }
 }

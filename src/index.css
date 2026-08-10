@@ -2,6 +2,13 @@
 
 :root {
   --primary-color: #FA057B;
+  --primary-rgb: 250, 5, 123;
+  --primary-light: rgba(250, 5, 123, 0.1);
+  --primary-soft: #F8BBD0;
+  --primary-border: #FA057B;
+  --primary-dark: #C0045F;
+  --primary-tint: #FFB3D4;
+  --primary-tint-strong: #FF9AC8;
   --bg-color: #FFFAEB;
 }
 

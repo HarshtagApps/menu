@@ -1,6 +1,4 @@
 :root {
-    --primary-color: #FA057B;
-    --primary-light: #F8BBD0;
     --background: #FFFAEB;
     --text-primary: #333333;
     --text-secondary: #666666;
@@ -78,7 +76,7 @@
 .order-input-field:focus {
     outline: none;
     border-color: var(--primary-color);
-    box-shadow: 0 0 0 3px rgba(250, 5, 123, 0.1);
+    box-shadow: 0 0 0 3px rgba(var(--primary-rgb), 0.1);
 }
 
 .order-input-field::placeholder {

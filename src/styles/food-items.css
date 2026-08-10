@@ -36,7 +36,7 @@
 
 .food-type-toggle button.active {
     background: #FFFFFF;
-    color: #FA057B;
+    color: var(--primary-color);
 }
 
 .food-item-wrapper {
@@ -46,7 +46,7 @@
 .food-item-card {
     background-color: #FFFFFF;
     border-radius: 8px;
-    border: 0.75px solid rgba(250, 5, 123, 0.5);
+    border: 0.75px solid rgba(var(--primary-rgb), 0.5);
     padding: 10px;
     display: flex;
     align-items: center;

@@ -74,7 +74,7 @@ const Categories = ({ restaurantData }) => {
                     onClick={() => window.location.reload()}
                     style={{
                         padding: '12px 24px',
-                        backgroundColor: '#FA057B',
+                        backgroundColor: 'var(--primary-color)',
                         color: 'white',
                         border: 'none',
                         borderRadius: '8px',

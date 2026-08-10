@@ -1,5 +1,9 @@
 import React from 'react';
 
+/** Pseudo-3D side offset (plan units). Tables sit slightly higher than seats. */
+const TABLE_EXTRUDE = { dx: 3, dy: 3.5 };
+const SEAT_EXTRUDE = { dx: 2, dy: 2.5 };
+
 const MultilineText = ({ label, x, y, className, lineHeight = 14 }) => {
     const lines = String(label || '').split('\n');
     const startY = y - ((lines.length - 1) * lineHeight) / 2;
@@ -44,6 +48,11 @@ const CanvaChair = ({ x, y, size, rotation = 0 }) => {
             className="floor-plan-canva-chair"
             transform={`rotate(${rotation} ${cx} ${cy})`}
         >
+            <path
+                className="floor-plan-canva-extrude floor-plan-canva-extrude--seat"
+                d={d}
+                transform={`translate(${SEAT_EXTRUDE.dx} ${SEAT_EXTRUDE.dy})`}
+            />
             <path className="floor-plan-canva-chair-body" d={d} />
             <line
                 className="floor-plan-canva-chair-back"
@@ -98,6 +107,12 @@ const RoundTableWithChairs = ({ table, selected }) => {
                 <CanvaChair key={c.key} x={c.x} y={c.y} size={chairSize} rotation={c.rotation} />
             ))}
 
+            <circle
+                className="floor-plan-canva-extrude floor-plan-canva-extrude--table"
+                cx={cx + TABLE_EXTRUDE.dx}
+                cy={cy + TABLE_EXTRUDE.dy}
+                r={radius}
+            />
             <circle
                 className="floor-plan-canva-table"
                 cx={cx}
@@ -207,6 +222,11 @@ const RectBoothTable = ({ table, selected }) => {
 
         return (
             <g className="floor-plan-canva-bench">
+                <path
+                    className="floor-plan-canva-extrude floor-plan-canva-extrude--seat"
+                    d={d}
+                    transform={`translate(${SEAT_EXTRUDE.dx} ${SEAT_EXTRUDE.dy})`}
+                />
                 <path className="floor-plan-canva-bench-body" d={d} />
                 <line
                     className="floor-plan-canva-bench-back"
@@ -242,6 +262,11 @@ const RectBoothTable = ({ table, selected }) => {
             { bench: sorted[0], side: 'top' },
             { bench: sorted[sorted.length - 1], side: 'bottom' }
         ];
+    } else if (seats.length === 1) {
+        const seat = seats[0];
+        const seatMidY = seat.y + seat.height / 2;
+        const side = seatMidY < cy ? 'top' : 'bottom';
+        benches = [{ bench: seat, side }];
     } else {
         const benchH = Math.max(22, table.height * 0.4);
         const gap = 8;
@@ -281,6 +306,15 @@ const RectBoothTable = ({ table, selected }) => {
                 <React.Fragment key={side}>{renderBench(bench, side)}</React.Fragment>
             ))}
 
+            <rect
+                className="floor-plan-canva-extrude floor-plan-canva-extrude--table"
+                x={table.x + TABLE_EXTRUDE.dx}
+                y={table.y + TABLE_EXTRUDE.dy}
+                width={table.width}
+                height={table.height}
+                rx={rx}
+                ry={rx}
+            />
             <rect
                 className="floor-plan-canva-table floor-plan-canva-table--rect"
                 x={table.x}
@@ -387,6 +421,117 @@ const FloorPlanMap = ({ plan, selectedTableId, onTableSelect }) => {
             role="img"
             aria-label={plan.name || 'Restaurant floor plan'}
         >
+            <defs>
+                <filter
+                    id="floor-plan-shadow-table"
+                    x="-30%"
+                    y="-30%"
+                    width="160%"
+                    height="160%"
+                >
+                    <feDropShadow
+                        dx="3"
+                        dy="4"
+                        stdDeviation="3.5"
+                        floodColor="#000000"
+                        floodOpacity="0.28"
+                    />
+                </filter>
+                <filter
+                    id="floor-plan-shadow-seat"
+                    x="-35%"
+                    y="-35%"
+                    width="170%"
+                    height="170%"
+                >
+                    <feDropShadow
+                        dx="2"
+                        dy="2.5"
+                        stdDeviation="2.5"
+                        floodColor="#000000"
+                        floodOpacity="0.22"
+                    />
+                </filter>
+                <filter
+                    id="floor-plan-shadow-zone"
+                    x="-20%"
+                    y="-20%"
+                    width="140%"
+                    height="140%"
+                >
+                    <feDropShadow
+                        dx="2"
+                        dy="3"
+                        stdDeviation="2.5"
+                        floodColor="#000000"
+                        floodOpacity="0.2"
+                    />
+                </filter>
+
+                <pattern
+                    id="floor-plan-floor-texture"
+                    width="28"
+                    height="28"
+                    patternUnits="userSpaceOnUse"
+                >
+                    <rect width="28" height="28" fill="#D9D9D9" />
+                    <path
+                        d="M0 28 L28 0"
+                        fill="none"
+                        stroke="#C0C0C0"
+                        strokeWidth="0.9"
+                    />
+                    <path
+                        d="M-8 28 L20 0 M8 28 L36 0"
+                        fill="none"
+                        stroke="#D0D0D0"
+                        strokeWidth="0.6"
+                    />
+                    <circle cx="8" cy="12" r="0.7" fill="#B8B8B8" />
+                    <circle cx="20" cy="20" r="0.55" fill="#C8C8C8" />
+                </pattern>
+
+                <linearGradient id="floor-plan-seat-fill" x1="0" y1="0" x2="0" y2="1">
+                    <stop offset="0%" stopColor="#FFFDF8" />
+                    <stop offset="45%" stopColor="#F7F0E4" />
+                    <stop offset="100%" stopColor="#EDE3D2" />
+                </linearGradient>
+
+                <linearGradient id="floor-plan-table-fill" x1="0" y1="0" x2="0" y2="1">
+                    <stop offset="0%" stopColor="#F5EDE3" />
+                    <stop offset="50%" stopColor="#E8D9C8" />
+                    <stop offset="100%" stopColor="#D9C4AE" />
+                </linearGradient>
+
+                <linearGradient id="floor-plan-table-fill-selected" x1="0" y1="0" x2="0" y2="1">
+                    <stop offset="0%" stopColor="var(--primary-tint)" />
+                    <stop offset="45%" stopColor="var(--primary-color)" />
+                    <stop offset="100%" stopColor="var(--primary-dark)" />
+                </linearGradient>
+
+                <linearGradient id="floor-plan-seat-fill-selected" x1="0" y1="0" x2="0" y2="1">
+                    <stop offset="0%" stopColor="var(--primary-soft)" />
+                    <stop offset="45%" stopColor="var(--primary-tint-strong)" />
+                    <stop offset="100%" stopColor="var(--primary-color)" />
+                </linearGradient>
+
+                <linearGradient id="floor-plan-counter-fill" x1="0" y1="0" x2="0" y2="1">
+                    <stop offset="0%" stopColor="#FFCC80" />
+                    <stop offset="55%" stopColor="#FF9800" />
+                    <stop offset="100%" stopColor="#EF6C00" />
+                </linearGradient>
+
+                <linearGradient id="floor-plan-door-fill" x1="0" y1="0" x2="1" y2="1">
+                    <stop offset="0%" stopColor="#BBDEFB" />
+                    <stop offset="100%" stopColor="#64B5F6" />
+                </linearGradient>
+
+                <linearGradient id="floor-plan-stair-fill" x1="0" y1="0" x2="0" y2="1">
+                    <stop offset="0%" stopColor="#555555" />
+                    <stop offset="100%" stopColor="#2A2A2A" />
+                </linearGradient>
+            </defs>
+
             <rect
                 className="floor-plan-floor"
                 x={innerX}
@@ -406,15 +551,24 @@ const FloorPlanMap = ({ plan, selectedTableId, onTableSelect }) => {
             />
 
             {(plan.stairs || []).map((step) => (
-                <rect
-                    key={step.id}
-                    className="floor-plan-stair"
-                    x={step.x}
-                    y={step.y}
-                    width={step.width}
-                    height={step.height}
-                    rx="2"
-                />
+                <g key={step.id}>
+                    <rect
+                        className="floor-plan-canva-extrude floor-plan-canva-extrude--seat"
+                        x={step.x + 2}
+                        y={step.y + 2.5}
+                        width={step.width}
+                        height={step.height}
+                        rx="2"
+                    />
+                    <rect
+                        className="floor-plan-stair"
+                        x={step.x}
+                        y={step.y}
+                        width={step.width}
+                        height={step.height}
+                        rx="2"
+                    />
+                </g>
             ))}
             {(plan.stairs || []).length > 0 && (
                 <text
@@ -430,6 +584,14 @@ const FloorPlanMap = ({ plan, selectedTableId, onTableSelect }) => {
             {(plan.zones || []).map((zone) => (
                 <g key={zone.id} className={`floor-plan-zone floor-plan-zone--${zone.type}`}>
                     <rect
+                        className="floor-plan-zone-extrude"
+                        x={zone.x + 3}
+                        y={zone.y + 3.5}
+                        width={zone.width}
+                        height={zone.height}
+                    />
+                    <rect
+                        className="floor-plan-zone-face"
                         x={zone.x}
                         y={zone.y}
                         width={zone.width}
@@ -460,6 +622,14 @@ const FloorPlanMap = ({ plan, selectedTableId, onTableSelect }) => {
             {(plan.doors || []).map((door) => (
                 <g key={door.id} className={`floor-plan-door floor-plan-door--${door.type}`}>
                     <rect
+                        className="floor-plan-door-extrude"
+                        x={door.x + 2}
+                        y={door.y + 2.5}
+                        width={door.width}
+                        height={door.height}
+                    />
+                    <rect
+                        className="floor-plan-door-face"
                         x={door.x}
                         y={door.y}
                         width={door.width}
@@ -476,14 +646,22 @@ const FloorPlanMap = ({ plan, selectedTableId, onTableSelect }) => {
             ))}
 
             {(plan.windows || []).map((window) => (
-                <rect
-                    key={window.id}
-                    className="floor-plan-window"
-                    x={window.x}
-                    y={window.y}
-                    width={window.width}
-                    height={window.height}
-                />
+                <g key={window.id} className="floor-plan-window-set">
+                    <rect
+                        className="floor-plan-door-extrude"
+                        x={window.x + 2}
+                        y={window.y + 2.5}
+                        width={window.width}
+                        height={window.height}
+                    />
+                    <rect
+                        className="floor-plan-window"
+                        x={window.x}
+                        y={window.y}
+                        width={window.width}
+                        height={window.height}
+                    />
+                </g>
             ))}
 
             {(plan.tables || []).map((table) => {
@@ -525,6 +703,13 @@ const FloorPlanMap = ({ plan, selectedTableId, onTableSelect }) => {
                                 {(table.seating || []).map((seat, idx) => (
                                     <g key={`${table.id}-seat-${idx}`}>
                                         <rect
+                                            className="floor-plan-canva-extrude floor-plan-canva-extrude--seat"
+                                            x={seat.x + SEAT_EXTRUDE.dx}
+                                            y={seat.y + SEAT_EXTRUDE.dy}
+                                            width={seat.width}
+                                            height={seat.height}
+                                        />
+                                        <rect
                                             className="floor-plan-seating"
                                             x={seat.x}
                                             y={seat.y}
@@ -544,21 +729,39 @@ const FloorPlanMap = ({ plan, selectedTableId, onTableSelect }) => {
                                 ))}
 
                                 {table.shape === 'round' ? (
-                                    <ellipse
-                                        className="floor-plan-table"
-                                        cx={cx}
-                                        cy={cy}
-                                        rx={table.width / 2}
-                                        ry={table.height / 2}
-                                    />
+                                    <>
+                                        <ellipse
+                                            className="floor-plan-canva-extrude floor-plan-canva-extrude--table"
+                                            cx={cx + TABLE_EXTRUDE.dx}
+                                            cy={cy + TABLE_EXTRUDE.dy}
+                                            rx={table.width / 2}
+                                            ry={table.height / 2}
+                                        />
+                                        <ellipse
+                                            className="floor-plan-table"
+                                            cx={cx}
+                                            cy={cy}
+                                            rx={table.width / 2}
+                                            ry={table.height / 2}
+                                        />
+                                    </>
                                 ) : (
-                                    <rect
-                                        className="floor-plan-table"
-                                        x={table.x}
-                                        y={table.y}
-                                        width={table.width}
-                                        height={table.height}
-                                    />
+                                    <>
+                                        <rect
+                                            className="floor-plan-canva-extrude floor-plan-canva-extrude--table"
+                                            x={table.x + TABLE_EXTRUDE.dx}
+                                            y={table.y + TABLE_EXTRUDE.dy}
+                                            width={table.width}
+                                            height={table.height}
+                                        />
+                                        <rect
+                                            className="floor-plan-table"
+                                            x={table.x}
+                                            y={table.y}
+                                            width={table.width}
+                                            height={table.height}
+                                        />
+                                    </>
                                 )}
 
                                 {table.labelMode === 'vertical' ? (

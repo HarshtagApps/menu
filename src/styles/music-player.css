@@ -11,7 +11,7 @@
   padding: 6px 14px calc(6px + env(safe-area-inset-bottom, 0px));
   background: var(--primary-color, #FA057B);
   color: #ffffff;
-  box-shadow: 0 -4px 20px rgba(250, 5, 123, 0.28);
+  box-shadow: 0 -4px 20px rgba(var(--primary-rgb), 0.28);
   font-family: 'Afacad', sans-serif;
   -webkit-tap-highlight-color: transparent;
 }

@@ -1,64 +1,128 @@
-import React, { useMemo, useState, useEffect } from 'react';
+import React, { useMemo, useState, useEffect, useRef } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
-import { ChevronLeft } from 'lucide-react';
+import { ChevronLeft, ChevronRight, User } from 'lucide-react';
 import {
     getSlotsForTable,
     getBookableDates,
     formatDateLabel,
-    formatDateChip,
-    toDateKey,
-    isToday,
-    SLOT_MINUTES
+    toDateKey
 } from '../utils/reservationData';
 import '../styles/styles.css';
 import '../styles/reserve.css';
 
 const TableSlots = ({ restaurantData }) => {
     const navigate = useNavigate();
-    const [searchParams, setSearchParams] = useSearchParams();
+    const [searchParams] = useSearchParams();
     const restaurantId = searchParams.get('r');
     const tableNumber = searchParams.get('table') || '1';
     const dateFromUrl = searchParams.get('date');
     const bookableDates = useMemo(() => getBookableDates(), []);
+    const snackbarTimerRef = useRef(null);
 
-    const initialDate =
+    const selectedDate =
         dateFromUrl && bookableDates.includes(dateFromUrl)
             ? dateFromUrl
             : toDateKey();
 
-    const [selectedDate, setSelectedDate] = useState(initialDate);
     const [selectedSlotId, setSelectedSlotId] = useState(null);
+    const [partySize, setPartySize] = useState(2);
+    const [customerName, setCustomerName] = useState('');
+    const [customerPhone, setCustomerPhone] = useState('');
 
     const slots = useMemo(
         () => getSlotsForTable(tableNumber, selectedDate),
         [tableNumber, selectedDate]
     );
 
-    useEffect(() => {
-        if (dateFromUrl && bookableDates.includes(dateFromUrl) && dateFromUrl !== selectedDate) {
-            setSelectedDate(dateFromUrl);
-            setSelectedSlotId(null);
-        }
-    }, [dateFromUrl, bookableDates, selectedDate]);
+    const selectedSlot = useMemo(
+        () => slots.find((s) => s.id === selectedSlotId) || null,
+        [slots, selectedSlotId]
+    );
 
-    const vacantCount = slots.filter((s) => s.status === 'vacant' && !s.isPast).length;
-    const reservedCount = slots.filter((s) => s.status === 'reserved').length;
+    const seatOptions = useMemo(() => Array.from({ length: 10 }, (_, i) => i + 1), []);
+
+    useEffect(() => {
+        try {
+            const raw = sessionStorage.getItem('reserveGuest');
+            if (!raw) return;
+            const guest = JSON.parse(raw);
+            if (guest?.customerName) setCustomerName(guest.customerName);
+            if (guest?.customerPhone) {
+                setCustomerPhone(String(guest.customerPhone).replace(/\D/g, '').slice(0, 10));
+            }
+        } catch {
+            /* ignore */
+        }
+    }, []);
+
+    useEffect(() => {
+        setSelectedSlotId(null);
+    }, [selectedDate, tableNumber]);
+
+    useEffect(() => {
+        return () => {
+            if (snackbarTimerRef.current) clearTimeout(snackbarTimerRef.current);
+        };
+    }, []);
 
     if (!restaurantData) return null;
 
-    const handleDateSelect = (dateKey) => {
-        setSelectedDate(dateKey);
-        setSelectedSlotId(null);
-        const next = new URLSearchParams(searchParams);
-        next.set('date', dateKey);
-        if (restaurantId) next.set('r', restaurantId);
-        if (tableNumber) next.set('table', tableNumber);
-        setSearchParams(next, { replace: true });
+    const showValidationSnackbar = (message) => {
+        const snackbar = document.getElementById('slots-validation-snackbar');
+        if (!snackbar) return;
+        snackbar.textContent = message;
+        snackbar.className = 'reserve-validation-snackbar show';
+        if (snackbarTimerRef.current) clearTimeout(snackbarTimerRef.current);
+        snackbarTimerRef.current = setTimeout(() => {
+            snackbar.className = 'reserve-validation-snackbar';
+        }, 5000);
     };
 
     const handleSlotTap = (slot) => {
         if (slot.isPast || slot.status === 'reserved') return;
         setSelectedSlotId((prev) => (prev === slot.id ? null : slot.id));
+    };
+
+    const handleContinue = () => {
+        if (!customerName || customerName.trim().length === 0) {
+            showValidationSnackbar('Please enter your Name on the previous screen');
+            return;
+        }
+        const phone = String(customerPhone || '').replace(/\D/g, '');
+        if (phone.length !== 10) {
+            showValidationSnackbar('Please enter a valid 10-digit Customer Number on the previous screen');
+            return;
+        }
+        if (!selectedSlot) {
+            showValidationSnackbar('Please select a time slot');
+            return;
+        }
+
+        const draft = {
+            restaurantId,
+            customerName: customerName.trim(),
+            customerPhone: phone,
+            tableNumber: String(tableNumber),
+            date: selectedDate,
+            slotId: selectedSlot.id,
+            slotLabel: selectedSlot.rangeLabel,
+            partySize
+        };
+
+        try {
+            sessionStorage.setItem('pendingReservation', JSON.stringify(draft));
+            sessionStorage.setItem(
+                'reserveGuest',
+                JSON.stringify({
+                    customerName: draft.customerName,
+                    customerPhone: draft.customerPhone
+                })
+            );
+        } catch {
+            /* ignore */
+        }
+
+        navigate(`/reserve/review?r=${restaurantId || ''}`);
     };
 
     return (
@@ -74,24 +138,26 @@ const TableSlots = ({ restaurantData }) => {
             </div>
 
             <div className="slots-container">
-                <div className="reserve-date-section" style={{ marginBottom: '14px' }}>
-                    <div className="reserve-date-heading">Select date</div>
-                    <div className="reserve-date-scroller">
-                        {bookableDates.map((dateKey) => {
-                            const chip = formatDateChip(dateKey);
-                            const active = dateKey === selectedDate;
-                            return (
-                                <button
-                                    key={dateKey}
-                                    type="button"
-                                    className={`reserve-date-chip ${active ? 'active' : ''} ${isToday(dateKey) ? 'is-today' : ''}`}
-                                    onClick={() => handleDateSelect(dateKey)}
-                                >
-                                    <span className="reserve-date-chip-top">{chip.top}</span>
-                                    <span className="reserve-date-chip-bottom">{chip.bottom}</span>
-                                </button>
-                            );
-                        })}
+                <div className="reserve-details-card">
+                    <div className="reserve-details-title">
+                        <User size={18} strokeWidth={2} />
+                        <span>Customer Details</span>
+                    </div>
+                    <div className="reserve-details-row">
+                        <span className="reserve-details-label">Customer Name</span>
+                        <span className="reserve-details-value">{customerName || '-'}</span>
+                    </div>
+                    <div className="reserve-details-row">
+                        <span className="reserve-details-label">Customer Number</span>
+                        <span className="reserve-details-value">{customerPhone || '-'}</span>
+                    </div>
+                    <div className="reserve-details-row">
+                        <span className="reserve-details-label">Date</span>
+                        <span className="reserve-details-value">{formatDateLabel(selectedDate)}</span>
+                    </div>
+                    <div className="reserve-details-row">
+                        <span className="reserve-details-label">Table</span>
+                        <span className="reserve-details-value">{tableNumber}</span>
                     </div>
                 </div>
 
@@ -130,16 +196,38 @@ const TableSlots = ({ restaurantData }) => {
                     })}
                 </div>
 
-                <div className="slots-footer-note">
-                    Booking &amp; advance payment coming next. UI preview only.
+                <div className="slots-section-title seats-section-title">How many seats?</div>
+                <div className="seats-chip-grid" role="group" aria-label="Number of seats">
+                    {seatOptions.map((n) => (
+                        <button
+                            key={n}
+                            type="button"
+                            className={`seats-chip${partySize === n ? ' selected' : ''}`}
+                            onClick={() => setPartySize(n)}
+                            aria-pressed={partySize === n}
+                        >
+                            {n}
+                        </button>
+                    ))}
                 </div>
-
-                {selectedSlotId && (
-                    <div className="slots-footer-note" style={{ color: '#00A9FE', fontWeight: 600 }}>
-                        Slot selected — payment flow will be added later.
-                    </div>
-                )}
             </div>
+
+            <div className="slots-continue-bar">
+                <div className="slots-continue-summary">
+                    <div className="slots-continue-label">
+                        {selectedSlot ? selectedSlot.rangeLabel : 'Select a time slot'}
+                    </div>
+                    <div className="slots-continue-meta">
+                        {partySize} {partySize === 1 ? 'seat' : 'seats'}
+                    </div>
+                </div>
+                <button type="button" className="slots-continue-btn" onClick={handleContinue}>
+                    <span>Continue</span>
+                    <ChevronRight size={16} strokeWidth={2} />
+                </button>
+            </div>
+
+            <div id="slots-validation-snackbar" className="reserve-validation-snackbar" />
         </div>
     );
 };

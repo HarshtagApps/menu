@@ -5,6 +5,7 @@ import Splash from './components/Splash';
 import Loading from './components/Loading';
 import './index.css';
 import { hexToCssFilter } from './utils/menuData';
+import { applyThemeColor } from './utils/theme';
 
 const Categories = React.lazy(() => import('./pages/Categories'));
 const FoodItems = React.lazy(() => import('./pages/FoodItems'));
@@ -14,6 +15,7 @@ const Review = React.lazy(() => import('./pages/Review'));
 const More = React.lazy(() => import('./pages/More'));
 const Reserve = React.lazy(() => import('./pages/Reserve'));
 const TableSlots = React.lazy(() => import('./pages/TableSlots'));
+const ReserveReview = React.lazy(() => import('./pages/ReserveReview'));
 const FloorPlan = React.lazy(() => import('./pages/FloorPlan'));
 const BackgroundMusic = React.lazy(() => import('./components/BackgroundMusic'));
 
@@ -64,6 +66,7 @@ const AppContent = () => {
     const fetchData = async () => {
       try {
         const data = await loadRestaurantData(restaurantId);
+        applyThemeColor(data?.restoDetails?.theme);
         setRestaurantData(data);
       } catch (err) {
         setError(err.message);
@@ -130,6 +133,7 @@ const AppContent = () => {
           <Route path="/more" element={<More restaurantData={restaurantData} />} />
           <Route path="/reserve" element={<Reserve restaurantData={restaurantData} />} />
           <Route path="/reserve/table" element={<TableSlots restaurantData={restaurantData} />} />
+          <Route path="/reserve/review" element={<ReserveReview restaurantData={restaurantData} />} />
           <Route path="/floor-plan" element={<FloorPlan restaurantData={restaurantData} />} />
         </Routes>
       </React.Suspense>

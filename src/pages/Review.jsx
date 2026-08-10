@@ -337,7 +337,7 @@ const Review = ({ restaurantData, orderDetails, setOrderDetails }) => {
                                     justifyContent: 'center',
                                     gap: '8px',
                                     padding: '12px',
-                                    backgroundColor: '#FA057B',
+                                    backgroundColor: 'var(--primary-color)',
                                     color: 'white',
                                     border: 'none',
                                     borderRadius: '8px',
@@ -386,7 +386,7 @@ const Review = ({ restaurantData, orderDetails, setOrderDetails }) => {
                                 border: 'none',
                                 padding: 0,
                                 fontSize: '13px',
-                                color: '#FA057B',
+                                color: 'var(--primary-color)',
                                 cursor: 'pointer',
                                 alignSelf: 'center'
                             }}

@@ -98,9 +98,9 @@ const DynamicSettingCard = ({ items }) => {
         <div style={{
             width: '100%',
             padding: '2px 12px',
-            backgroundColor: 'rgba(250, 5, 123, 0.25)',
+            backgroundColor: 'rgba(var(--primary-rgb), 0.25)',
             borderRadius: '12px',
-            border: '2px solid rgba(250, 5, 123, 0.75)',
+            border: '2px solid rgba(var(--primary-rgb), 0.75)',
             display: 'flex',
             flexDirection: 'column'
         }}>

@@ -1,3 +1,5 @@
+import { resolveThemeColor } from '../utils/theme';
+
 const SHEET_URL = 'https://script.google.com/macros/s/AKfycbxZ5Jip8qUnfNZMb4Md4VzWsv1vyxW2v5YQASXHE9MmTYfYkHKtTuXGp_rDxx8XDE1_NA/exec';
 
 export const trackMenuView = (restaurantId) => {
@@ -76,6 +78,7 @@ export const fetchMenuData = async (restaurantId) => {
                 address: restoInfo.Address || '',
                 contact: restoInfo.Contact || '',
                 plan: restoInfo.Plan || 'basic',
+                theme: resolveThemeColor(restoInfo.Theme || restoInfo.THEME),
                 upiId: restoInfo.UpiID || restoInfo.upiId || '',
                 instagram: restoInfo.Instagram || '',
                 location: restoInfo.Location || '',

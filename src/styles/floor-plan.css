@@ -49,13 +49,13 @@
 }
 
 .floor-plan-legend-swatch.table {
-    background: #E53935;
-    border-color: #B71C1C;
+    background: #E8D9C8;
+    border-color: #C4AE96;
 }
 
 .floor-plan-legend-swatch.seating {
-    background: #90CAF9;
-    border-color: #42A5F5;
+    background: #F7F0E4;
+    border-color: #D4C7B2;
 }
 
 .floor-plan-legend-swatch.counter {
@@ -95,24 +95,25 @@
 }
 
 .floor-plan-floor {
-    fill: #FFFAEB;
+    fill: url(#floor-plan-floor-texture);
     stroke: none;
 }
 
 .floor-plan-outer-wall {
-    stroke: #BDBDBD;
+    stroke: #9E9E9E;
     stroke-linejoin: miter;
 }
 
 .floor-plan-wall {
-    stroke: #1F1F1F;
+    stroke: #3D3D3D;
     stroke-linecap: square;
 }
 
 .floor-plan-stair {
-    fill: #333333;
+    fill: url(#floor-plan-stair-fill);
     stroke: #1F1F1F;
     stroke-width: 1;
+    filter: url(#floor-plan-shadow-zone);
 }
 
 .floor-plan-stair-label {
@@ -122,10 +123,18 @@
     fill: #424242;
 }
 
-.floor-plan-zone--counter rect {
-    fill: #FF9800;
+.floor-plan-zone-extrude {
+    fill: #E65100;
+    stroke: none;
+    pointer-events: none;
+    opacity: 0.85;
+}
+
+.floor-plan-zone--counter .floor-plan-zone-face {
+    fill: url(#floor-plan-counter-fill);
     stroke: #E65100;
     stroke-width: 2;
+    filter: url(#floor-plan-shadow-zone);
 }
 
 .floor-plan-zone-label {
@@ -136,19 +145,26 @@
     pointer-events: none;
 }
 
-.floor-plan-door--entry rect,
-.floor-plan-door--exit rect {
-    fill: #90CAF9;
+.floor-plan-door-extrude {
+    fill: #5BA3D9;
+    stroke: none;
+    pointer-events: none;
+    opacity: 0.8;
+}
+
+.floor-plan-door--entry .floor-plan-door-face,
+.floor-plan-door--exit .floor-plan-door-face {
+    fill: url(#floor-plan-door-fill);
     stroke: #42A5F5;
     stroke-width: 2;
-    opacity: 1.0;
+    filter: url(#floor-plan-shadow-zone);
 }
 
 .floor-plan-window {
-    fill: #90CAF9;
+    fill: url(#floor-plan-door-fill);
     stroke: #42A5F5;
     stroke-width: 2;
-    opacity: 1.0;
+    filter: url(#floor-plan-shadow-zone);
 }
 
 .floor-plan-door-label {
@@ -160,33 +176,57 @@
 }
 
 .floor-plan-table-group.is-selected .floor-plan-seating {
-    fill: #FA057B;
-    opacity: 0.6;
+    fill: url(#floor-plan-seat-fill-selected);
+    stroke: #E86AA3;
+    opacity: 1;
+}
+
+.floor-plan-canva-extrude {
+    stroke: none;
+    pointer-events: none;
+}
+
+.floor-plan-canva-extrude--table {
+    fill: #C4AE96;
+}
+
+.floor-plan-canva-extrude--seat {
+    fill: #C9BBA8;
+}
+
+.floor-plan-table-group.is-selected .floor-plan-canva-extrude--table {
+    fill: #A01658;
+}
+
+.floor-plan-table-group.is-selected .floor-plan-canva-extrude--seat {
+    fill: #D45A92;
 }
 
 .floor-plan-canva-chair-body {
-    fill: #F2F2F2;
-    stroke: #BDBDBD;
+    fill: url(#floor-plan-seat-fill);
+    stroke: #D4C7B2;
     stroke-width: 2;
+    filter: url(#floor-plan-shadow-seat);
     pointer-events: auto;
 }
 
 .floor-plan-canva-chair-back {
-    stroke: #BDBDBD;
+    stroke: #C9BBA8;
     stroke-width: 2;
     stroke-linecap: round;
     pointer-events: auto;
 }
 
 .floor-plan-canva-bench-body {
-    fill: #F2F2F2;
-    stroke: #BDBDBD;
+    fill: url(#floor-plan-seat-fill);
+    stroke: #D4C7B2;
     stroke-width: 2;
+    filter: url(#floor-plan-shadow-seat);
     pointer-events: auto;
 }
 
 .floor-plan-canva-bench-back {
-    stroke: #BDBDBD;
+    stroke: #C9BBA8;
     stroke-width: 3;
     stroke-linecap: round;
     pointer-events: auto;
@@ -194,15 +234,15 @@
 
 .floor-plan-table-group.is-selected .floor-plan-canva-chair-body,
 .floor-plan-table-group.is-selected .floor-plan-canva-bench-body {
-    fill: #FA057B;
-    stroke: #FA057B;
-    opacity: 0.6;
+    fill: url(#floor-plan-seat-fill-selected);
+    stroke: #E86AA3;
+    opacity: 1;
 }
 
 .floor-plan-table-group.is-selected .floor-plan-canva-chair-back,
 .floor-plan-table-group.is-selected .floor-plan-canva-bench-back {
-    stroke: #FA057B;
-    opacity: 0.6;
+    stroke: #D45A92;
+    opacity: 1;
 }
 
 .floor-plan-table-group:focus {
@@ -210,10 +250,25 @@
 }
 
 .floor-plan-canva-table {
-    fill: #D8D8D8;
-    stroke: #BDBDBD;
+    fill: url(#floor-plan-table-fill);
+    stroke: #C4AE96;
     stroke-width: 2;
+    filter: url(#floor-plan-shadow-table);
     transition: fill 0.15s ease, stroke 0.15s ease;
+}
+
+.floor-plan-table {
+    fill: url(#floor-plan-table-fill);
+    stroke: #C4AE96;
+    stroke-width: 2;
+    filter: url(#floor-plan-shadow-table);
+}
+
+.floor-plan-seating {
+    fill: url(#floor-plan-seat-fill);
+    stroke: #D4C7B2;
+    stroke-width: 2;
+    filter: url(#floor-plan-shadow-seat);
 }
 
 .floor-plan-canva-table-pattern {
@@ -222,8 +277,17 @@
 
 .floor-plan-table-group.is-selected .floor-plan-canva-table,
 .floor-plan-table-group:hover .floor-plan-canva-table {
-    fill: #FA057B;
+    fill: url(#floor-plan-table-fill-selected);
     stroke: #C0045F;
+}
+
+.floor-plan-table-group.is-selected .floor-plan-table {
+    fill: url(#floor-plan-table-fill-selected);
+    stroke: #C0045F;
+}
+
+.floor-plan-table-group.is-selected .floor-plan-canva-table-pattern path {
+    stroke: #FFE0EF;
 }
 
 .floor-plan-seating-label {
@@ -294,7 +358,7 @@
 }
 
 .floor-plan-btn-primary {
-    background: #FA057B;
+    background: var(--primary-color);
     color: #FFFFFF;
 }
 

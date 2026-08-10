@@ -25,6 +25,9 @@ const Reserve = ({ restaurantData }) => {
             : toDateKey();
 
     const [selectedDate, setSelectedDate] = useState(initialDate);
+    const [customerName, setCustomerName] = useState('');
+    const [customerPhone, setCustomerPhone] = useState('');
+    const snackbarTimerRef = React.useRef(null);
     const tables = useMemo(() => getTables(selectedDate), [selectedDate]);
 
     useEffect(() => {
@@ -33,7 +36,24 @@ const Reserve = ({ restaurantData }) => {
         }
     }, [dateFromUrl, bookableDates, selectedDate]);
 
+    useEffect(() => {
+        return () => {
+            if (snackbarTimerRef.current) clearTimeout(snackbarTimerRef.current);
+        };
+    }, []);
+
     if (!restaurantData) return null;
+
+    const showValidationSnackbar = (message) => {
+        const snackbar = document.getElementById('reserve-validation-snackbar');
+        if (!snackbar) return;
+        snackbar.textContent = message;
+        snackbar.className = 'reserve-validation-snackbar show';
+        if (snackbarTimerRef.current) clearTimeout(snackbarTimerRef.current);
+        snackbarTimerRef.current = setTimeout(() => {
+            snackbar.className = 'reserve-validation-snackbar';
+        }, 5000);
+    };
 
     const handleDateSelect = (dateKey) => {
         setSelectedDate(dateKey);
@@ -43,6 +63,27 @@ const Reserve = ({ restaurantData }) => {
     };
 
     const handleTableTap = (tableNumber) => {
+        if (!customerName || customerName.trim().length === 0) {
+            showValidationSnackbar('Please enter your Name');
+            return;
+        }
+        const phone = String(customerPhone || '').replace(/\D/g, '');
+        if (phone.length !== 10) {
+            showValidationSnackbar('Please enter a valid 10-digit Customer Number');
+            return;
+        }
+
+        try {
+            sessionStorage.setItem(
+                'reserveGuest',
+                JSON.stringify({
+                    customerName: customerName.trim(),
+                    customerPhone: phone
+                })
+            );
+        } catch {
+            /* ignore */
+        }
         navigate(
             `/reserve/table?r=${restaurantId}&table=${tableNumber}&date=${selectedDate}`
         );
@@ -61,6 +102,44 @@ const Reserve = ({ restaurantData }) => {
             </div>
 
             <div className="reserve-container">
+                <div className="reserve-customer-section">
+                    <div className="reserve-input-group">
+                        <label className="reserve-input-label" htmlFor="reserve-page-customer-name">
+                            Customer Name
+                        </label>
+                        <input
+                            id="reserve-page-customer-name"
+                            type="text"
+                            value={customerName}
+                            onChange={(e) => setCustomerName(e.target.value)}
+                            className="reserve-input-field"
+                            placeholder="Enter customer name"
+                            autoCapitalize="words"
+                            autoComplete="name"
+                        />
+                    </div>
+
+                    <div className="reserve-input-group">
+                        <label className="reserve-input-label" htmlFor="reserve-page-customer-phone">
+                            Customer Number
+                        </label>
+                        <input
+                            id="reserve-page-customer-phone"
+                            type="tel"
+                            value={customerPhone}
+                            onChange={(e) => {
+                                const digitsOnly = e.target.value.replace(/\D/g, '').slice(0, 10);
+                                setCustomerPhone(digitsOnly);
+                            }}
+                            className="reserve-input-field"
+                            placeholder="Enter 10-digit mobile number"
+                            inputMode="numeric"
+                            maxLength={10}
+                            autoComplete="tel"
+                        />
+                    </div>
+                </div>
+
                 <div className="reserve-date-section">
                     <div className="reserve-date-heading">Select date</div>
                     <div className="reserve-date-scroller">
@@ -136,6 +215,8 @@ const Reserve = ({ restaurantData }) => {
                     })}
                 </div>
             </div>
+
+            <div id="reserve-validation-snackbar" className="reserve-validation-snackbar" />
         </div>
     );
 };
