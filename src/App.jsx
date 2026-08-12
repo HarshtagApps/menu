@@ -6,6 +6,11 @@ import Loading from './components/Loading';
 import './index.css';
 import { hexToCssFilter } from './utils/menuData';
 import { applyThemeColor } from './utils/theme';
+import {
+  ERROR_CODES,
+  createMenuError,
+  getErrorCopy,
+} from './utils/errorCodes';
 
 const Categories = React.lazy(() => import('./pages/Categories'));
 const FoodItems = React.lazy(() => import('./pages/FoodItems'));
@@ -58,7 +63,14 @@ const AppContent = () => {
 
   useEffect(() => {
     if (!restaurantId) {
-      setError('No restaurant specified.');
+      // N82503R — no ?r= restaurant id in URL
+      const err = createMenuError(ERROR_CODES.NO_RESTAURANT);
+      setError({
+        title: err.title,
+        message: err.message,
+        hint: err.hint,
+        code: err.code,
+      });
       setLoading(false);
       return;
     }
@@ -69,7 +81,14 @@ const AppContent = () => {
         applyThemeColor(data?.restoDetails?.theme);
         setRestaurantData(data);
       } catch (err) {
-        setError(err.message);
+        const code = err.code || ERROR_CODES.UNKNOWN;
+        const copy = getErrorCopy(code);
+        setError({
+          title: err.title || copy.title,
+          message: err.message || copy.message,
+          hint: err.hint ?? copy.hint,
+          code,
+        });
       } finally {
         setLoading(false);
       }
@@ -86,8 +105,6 @@ const AppContent = () => {
   } else if (loading) {
     content = <Loading />;
   } else if (error) {
-    const notFoundMatch = error.match(/The restaurant "(.*?)" was not found\./);
-
     content = (
       <div className="error-state" style={{
         textAlign: 'center',
@@ -105,20 +122,21 @@ const AppContent = () => {
         />
         <div className="error-icon" style={{ fontSize: '2rem', marginBottom: '10px' }}>⚠️</div>
         <div className="error-title" style={{ fontSize: '1.2rem', fontWeight: 'bold', marginBottom: '5px' }}>
-          Restaurant Not Found
+          {error.title}
         </div>
         <div className="error-subtitle" style={{ color: '#666' }}>
-          {notFoundMatch ? (
-            <>
-              The restaurant "<strong>{notFoundMatch[1]}</strong>" was not found.
-            </>
-          ) : (
-            error
-          )}
+          {error.message}
         </div>
-        <div style={{ color: '#666', marginTop: '5px' }}>
-          Please check the URL and try again.
-        </div>
+        {error.hint ? (
+          <div style={{ color: '#666', marginTop: '5px' }}>
+            {error.hint}
+          </div>
+        ) : null}
+        {error.code && (
+          <div style={{ color: '#999', marginTop: '16px', fontSize: '0.85rem', letterSpacing: '0.04em' }}>
+            Code: {error.code}
+          </div>
+        )}
       </div>
     );
   } else {

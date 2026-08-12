@@ -1,4 +1,5 @@
 import { resolveThemeColor } from '../utils/theme';
+import { ERROR_CODES, createMenuError } from '../utils/errorCodes';
 
 const SHEET_URL = 'https://script.google.com/macros/s/AKfycbxZ5Jip8qUnfNZMb4Md4VzWsv1vyxW2v5YQASXHE9MmTYfYkHKtTuXGp_rDxx8XDE1_NA/exec';
 
@@ -13,19 +14,37 @@ export const trackMenuView = (restaurantId) => {
 
 export const fetchMenuData = async (restaurantId) => {
     try {
-        const response = await fetch(SHEET_URL);
-        if (!response.ok) throw new Error('Failed to fetch menu from Google Sheets');
-        const allData = await response.json();
+        let response;
+        try {
+            response = await fetch(SHEET_URL);
+        } catch {
+            // G48291S — network / blocked request to sheet endpoint
+            throw createMenuError(ERROR_CODES.GOOGLE_SHEETS_FETCH);
+        }
+        if (!response.ok) {
+            // G48291S — sheet endpoint returned non-OK HTTP status
+            throw createMenuError(ERROR_CODES.GOOGLE_SHEETS_FETCH);
+        }
+        let allData;
+        try {
+            allData = await response.json();
+        } catch {
+            // G57304S — sheet response was not valid JSON
+            throw createMenuError(ERROR_CODES.GOOGLE_SHEETS_PARSE);
+        }
         const restoInfo = allData.info?.[restaurantId];
         if (!restoInfo) {
-            throw new Error(`The restaurant "${restaurantId}" was not found.`);
+            // N61802F — restaurant ID missing from sheet info
+            throw createMenuError(ERROR_CODES.NOT_FOUND);
         }
         if (restoInfo.Access === false || restoInfo.Access === 'FALSE') {
-            throw new Error(`The restaurant "${restaurantId}" was not found.`);
+            // A19374F — Access is FALSE in the sheet
+            throw createMenuError(ERROR_CODES.ACCESS_FALSE);
         }
         const rows = allData.menus?.[restaurantId];
         if (!rows || rows.length === 0) {
-            throw new Error(`The restaurant "${restaurantId}" was not found.`);
+            // E70415M — no menu rows for this restaurant
+            throw createMenuError(ERROR_CODES.EMPTY_MENU);
         }
         const categoriesMap = {};
         rows.forEach(row => {
@@ -115,6 +134,8 @@ export const fetchMenuData = async (restaurantId) => {
         };
     } catch (error) {
         console.error('Sheet fetch error:', error);
-        throw error;
+        if (error?.name === 'MenuError' && error.code) throw error;
+        // U39160E — unexpected error while loading menu
+        throw createMenuError(ERROR_CODES.UNKNOWN);
     }
 };
