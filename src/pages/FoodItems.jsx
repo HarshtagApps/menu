@@ -12,7 +12,6 @@ const FoodItems = ({ restaurantData }) => {
     const [showSnackbar, setShowSnackbar] = useState(false);
     const [isNonVegEnabled, setIsNonVegEnabled] = useState(false);
     const [expandedDescriptions, setExpandedDescriptions] = useState(new Set());
-
     const restaurantId = searchParams.get('r');
     const categoryType = searchParams.get('category');
 

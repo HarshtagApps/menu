@@ -4,6 +4,7 @@ import { loadRestaurantData, trackMenuView } from './api';
 import Splash from './components/Splash';
 import Loading from './components/Loading';
 import './index.css';
+import './styles/splash.css';
 import { hexToCssFilter } from './utils/menuData';
 import { applyThemeColor } from './utils/theme';
 import {
@@ -113,14 +114,9 @@ const AppContent = () => {
         flexDirection: 'column',
         alignItems: 'center',
         justifyContent: 'center',
-        minHeight: '100vh'
+        minHeight: '100vh',
+        position: 'relative'
       }}>
-        <img
-          src="assets/images/harshtag.png"
-          alt="Harshtag Logo"
-          style={{ maxWidth: '200px', marginBottom: '20px', filter: hexToCssFilter('#00A9FE') }}
-        />
-        <div className="error-icon" style={{ fontSize: '2rem', marginBottom: '10px' }}>⚠️</div>
         <div className="error-title" style={{ fontSize: '1.2rem', fontWeight: 'bold', marginBottom: '5px' }}>
           {error.title}
         </div>
@@ -133,10 +129,19 @@ const AppContent = () => {
           </div>
         ) : null}
         {error.code && (
-          <div style={{ color: '#999', marginTop: '16px', fontSize: '0.85rem', letterSpacing: '0.04em' }}>
+          <div style={{ color: '#999', marginTop: '5px', fontSize: '0.85rem', letterSpacing: '0.04em' }}>
             Code: {error.code}
           </div>
         )}
+        <div className="splash-footer">
+          <div className="splash-developed">Powered by</div>
+          <img
+            src="assets/images/harshtag.png"
+            alt="Harshtag"
+            className="error-powered-logo"
+            style={{ filter: hexToCssFilter('#00A9FE') }}
+          />
+        </div>
       </div>
     );
   } else {

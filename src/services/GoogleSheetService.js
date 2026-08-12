@@ -16,7 +16,7 @@ export const fetchMenuData = async (restaurantId) => {
     try {
         let response;
         try {
-            response = await fetch(SHEET_URL);
+            response = await fetch(`${SHEET_URL}?r=${encodeURIComponent(restaurantId)}`);
         } catch {
             // G48291S — network / blocked request to sheet endpoint
             throw createMenuError(ERROR_CODES.GOOGLE_SHEETS_FETCH);

@@ -237,6 +237,18 @@ body {
     min-height: 100vh;
     padding: 20px;
     background-color: #FFFAEB;
+    position: relative;
+}
+
+.error-state .splash-developed {
+    color: #333333;
+}
+
+.error-powered-logo {
+    display: block;
+    margin: 4px auto 0;
+    max-width: 120px;
+    height: auto;
 }
 
 .error-icon {
