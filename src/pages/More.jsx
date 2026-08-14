@@ -297,12 +297,7 @@ const More = ({ restaurantData }) => {
         {
             icon: ProjectImages.gallery,
             label: "Restaurant's Gallery",
-            onTap: () => {
-                const url = galleryProps.value.startsWith('http')
-                    ? galleryProps.value
-                    : `https://${galleryProps.value}`;
-                window.open(url, '_blank');
-            },
+            onTap: () => navigate(`/gallery?r=${restaurantId}`),
             ...galleryProps
         }
     ];
