@@ -13,8 +13,12 @@ function parseGalleryUrls(raw) {
 
 const Gallery = ({ restaurantData }) => {
   const navigate = useNavigate();
+  const restoName =
+    restaurantData?.restoDetails?.restoName?.trim() || 'Restaurant';
   const images = parseGalleryUrls(restaurantData?.restoDetails?.gallery || '');
   const [activeIndex, setActiveIndex] = useState(null);
+
+  const closePreview = () => setActiveIndex(null);
 
   return (
     <div className="gallery-page">
@@ -57,22 +61,33 @@ const Gallery = ({ restaurantData }) => {
           className="gallery-lightbox"
           role="dialog"
           aria-modal="true"
-          onClick={() => setActiveIndex(null)}
+          onClick={closePreview}
         >
-          <button
-            type="button"
-            className="gallery-lightbox-close"
-            aria-label="Close"
-            onClick={() => setActiveIndex(null)}
-          >
-            <X size={28} strokeWidth={2} />
-          </button>
-          <img
-            src={images[activeIndex]}
-            alt=""
-            className="gallery-lightbox-image"
+          <div
+            className="gallery-preview-card"
             onClick={(e) => e.stopPropagation()}
-          />
+          >
+            <div className="gallery-preview-header">
+              <span className="gallery-preview-name">{restoName}</span>
+              <button
+                type="button"
+                className="gallery-preview-close"
+                aria-label="Close"
+                onClick={closePreview}
+              >
+                <X size={22} strokeWidth={2} />
+              </button>
+            </div>
+            <img
+              src={images[activeIndex]}
+              alt=""
+              className="gallery-preview-image"
+            />
+          </div>
+          <div className="gallery-preview-powered">
+            <div className="gallery-preview-powered-label">Powered by</div>
+            <div className="gallery-preview-powered-brand">HARSHTAG</div>
+          </div>
         </div>
       ) : null}
     </div>

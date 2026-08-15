@@ -1,8 +1,13 @@
 import { useState, useEffect } from 'react';
 
+const FADE_MS = 200;
+
 const Ads = ({ bannerAdsUrls, showBannerAds, bannerAdsMap, screenKey }) => {
     const [currentBannerIndex, setCurrentBannerIndex] = useState(0);
+    const [displayIndex, setDisplayIndex] = useState(0);
+    const [visible, setVisible] = useState(true);
     const [isDesktop, setIsDesktop] = useState(false);
+
     useEffect(() => {
         const checkScreen = () => {
             setIsDesktop(window.innerWidth >= 1024);
@@ -11,6 +16,7 @@ const Ads = ({ bannerAdsUrls, showBannerAds, bannerAdsMap, screenKey }) => {
         window.addEventListener('resize', checkScreen);
         return () => window.removeEventListener('resize', checkScreen);
     }, []);
+
     const getScreenAds = () => {
         if (!screenKey || !bannerAdsMap) {
             return bannerAdsUrls || [];
@@ -35,6 +41,17 @@ const Ads = ({ bannerAdsUrls, showBannerAds, bannerAdsMap, screenKey }) => {
         }, 7500);
         return () => clearInterval(interval);
     }, [filteredAds]);
+
+    useEffect(() => {
+        if (currentBannerIndex === displayIndex) return;
+        setVisible(false);
+        const t = setTimeout(() => {
+            setDisplayIndex(currentBannerIndex);
+            setVisible(true);
+        }, FADE_MS);
+        return () => clearTimeout(t);
+    }, [currentBannerIndex, displayIndex]);
+
     if (
         isDesktop ||
         !showBannerAds ||
@@ -44,18 +61,21 @@ const Ads = ({ bannerAdsUrls, showBannerAds, bannerAdsMap, screenKey }) => {
         return null;
     }
 
+    const safeIndex = Math.min(displayIndex, filteredAds.length - 1);
+
     return (
         <div>
-            <style>{styles.fadeIn}</style>
             <div style={styles.advertisementText}>
                 Powered by HARSHTAG Ads
             </div>
             <div style={styles.adsContainer}>
                 <img
-                    key={currentBannerIndex}
-                    src={filteredAds[currentBannerIndex]}
+                    src={filteredAds[safeIndex]}
                     alt="Banner Ad"
-                    style={styles.bannerImage}
+                    style={{
+                        ...styles.bannerImage,
+                        opacity: visible ? 1 : 0,
+                    }}
                     onError={(e) => {
                         e.target.style.display = 'none';
                     }}
@@ -72,7 +92,9 @@ const styles = {
         width: '100%',
         margin: '1px 0',
         padding: '0 5px',
-        position: 'relative'
+        position: 'relative',
+        aspectRatio: '41 / 7',
+        overflow: 'hidden',
     },
 
     advertisementText: {
@@ -92,14 +114,7 @@ const styles = {
         borderRadius: '10px',
         boxShadow: '0 2px 8px rgba(0, 0, 0, 0.1)',
         objectFit: 'contain',
-        transition: 'transform 0.2s ease',
-        animation: 'fadeIn 0.5s ease-in-out'
+        transition: `opacity ${FADE_MS}ms ease-in-out`,
+        display: 'block',
     },
-
-    fadeIn: `
-        @keyframes fadeIn {
-            from { opacity: 0; }
-            to { opacity: 1; }
-        }
-    `
 };

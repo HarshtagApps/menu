@@ -277,6 +277,18 @@ const More = ({ restaurantData }) => {
 
     const utilitySection = [
         {
+            icon: ProjectImages.share,
+            label: 'Share with Friends',
+            onTap: handleShare,
+            isEnabled: true
+        },
+        {
+            icon: ProjectImages.gallery,
+            label: "Restaurant's Gallery",
+            onTap: () => navigate(`/gallery?r=${restaurantId}`),
+            ...galleryProps
+        },
+        {
             icon: ProjectImages.table,
             label: 'Reserve a Table',
             onTap: () => navigate(`/reserve?r=${restaurantId}`),
@@ -288,18 +300,6 @@ const More = ({ restaurantData }) => {
             onTap: () => navigate(`/floor-plan?r=${restaurantId}`),
             ...tableReserveProps
         },
-        {
-            icon: ProjectImages.share,
-            label: 'Share with Friends',
-            onTap: handleShare,
-            isEnabled: true
-        },
-        {
-            icon: ProjectImages.gallery,
-            label: "Restaurant's Gallery",
-            onTap: () => navigate(`/gallery?r=${restaurantId}`),
-            ...galleryProps
-        }
     ];
 
     return (
