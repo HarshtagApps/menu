@@ -1,12 +1,11 @@
-.music-player-bar {
+.music-player-bar,
+.hint-messenger-bar {
   position: fixed;
   left: 0;
   right: 0;
   bottom: 0;
-  z-index: 250;
   display: flex;
   align-items: center;
-  justify-content: space-between;
   gap: 12px;
   padding: 6px 14px calc(6px + env(safe-area-inset-bottom, 0px));
   background: var(--primary-color, #FA057B);
@@ -14,6 +13,25 @@
   box-shadow: 0 -4px 20px rgba(var(--primary-rgb), 0.28);
   font-family: 'Afacad', sans-serif;
   -webkit-tap-highlight-color: transparent;
+}
+
+.music-player-bar {
+  z-index: 250;
+  justify-content: space-between;
+}
+
+.hint-messenger-bar {
+  z-index: 2000;
+  justify-content: center;
+  pointer-events: none;
+  padding-top: 11px;
+  padding-bottom: calc(11px + env(safe-area-inset-bottom, 0px));
+}
+
+.hint-messenger-bar .music-player-text {
+  white-space: normal;
+  text-align: center;
+  font-size: 20px;
 }
 
 .music-player-left {
@@ -62,6 +80,10 @@
 
 body.has-music-player {
   --music-player-height: calc(48px + env(safe-area-inset-bottom, 0px));
+}
+
+body.hide-music-player .music-player-bar {
+  display: none;
 }
 
 body.has-music-player .food-items-container {

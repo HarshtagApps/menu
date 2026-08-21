@@ -10,6 +10,11 @@
     background-color: #FFFAEB;
     overflow-y: auto;
     -webkit-overflow-scrolling: touch;
+    transition: background-color 0.25s ease;
+}
+
+.food-items-ads {
+    transition: background-color 0.25s ease;
 }
 
 .food-type-toggle {
@@ -41,6 +46,26 @@
 
 .food-item-wrapper {
     margin-bottom: 12px;
+}
+
+.food-item-aurora {
+    width: 100%;
+}
+
+.food-item-aurora.is-active .food-item-card {
+    border-color: transparent;
+    box-shadow: none;
+}
+
+.food-items-hint-dim {
+    position: fixed;
+    inset: 0;
+    z-index: 1990;
+    margin: 0;
+    padding: 0;
+    border: none;
+    background: transparent;
+    cursor: pointer;
 }
 
 .food-item-card {

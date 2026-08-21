@@ -11,6 +11,7 @@
     background-color: #FFFAEB;
     overflow-y: auto;
     -webkit-overflow-scrolling: touch;
+    transition: background-color 0.25s ease;
 }
 
 .food-type-toggle {
@@ -37,6 +38,20 @@
 .food-type-toggle button.active {
     background: #FFFFFF;
     color: var(--primary-color);
+}
+
+.order-items-aurora {
+    width: 100%;
+    margin-bottom: 12px;
+}
+
+.order-items-aurora .order-items-card {
+    margin-bottom: 0;
+}
+
+.order-items-aurora.is-active .order-items-card {
+    border-color: transparent;
+    box-shadow: none;
 }
 
 .order-items-card {

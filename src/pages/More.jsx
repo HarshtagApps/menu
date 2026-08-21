@@ -174,7 +174,7 @@ const More = ({ restaurantData }) => {
             /\/+$/,
             ''
         );
-        const shareUrl = `${appRoot}/#/?r=${encodeURIComponent(restaurantId)}`;
+        const shareUrl = `${appRoot}/?r=${encodeURIComponent(restaurantId)}`;
         const shareData = {
             title: restoDetails.restoName,
             text: `Hey! Check out the menu for ${restoDetails.restoName}`,

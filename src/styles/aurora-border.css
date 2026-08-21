@@ -1,0 +1,224 @@
+@keyframes aurora-blur-linear {
+  0%,
+  to {
+    filter: blur(2px);
+  }
+  50% {
+    filter: blur(5px);
+  }
+}
+
+@keyframes aurora-color-crossfade {
+  0%,
+  31%,
+  to {
+    opacity: 0;
+  }
+  3%,
+  28% {
+    opacity: 1;
+  }
+}
+
+@keyframes aurora-color-crossfade-hold {
+  0% {
+    opacity: 0;
+  }
+  3%,
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes aurora-gradient-spin {
+  0% {
+    transform: rotate(0.44turn);
+  }
+  to {
+    transform: rotate(518.4deg);
+  }
+}
+
+.aurora-border {
+  position: relative;
+  display: var(--aurora-display, block);
+  border-radius: var(--aurora-radius, 8px);
+  overflow: visible;
+}
+
+.aurora-border.is-active {
+  padding: var(--aurora-thickness, 1px);
+}
+
+/* Extra paint box so blur can bloom around the hard 1px ring */
+.aurora-border__layers {
+  position: absolute;
+  inset: calc(var(--aurora-glow, 12px) * -1);
+  z-index: 0;
+  overflow: visible;
+  pointer-events: none;
+}
+
+.aurora-border__shell {
+  position: absolute;
+  inset: var(--aurora-glow, 12px);
+  border-radius: var(--aurora-radius, 8px);
+  overflow: visible;
+}
+
+.aurora-border__blur,
+.aurora-border__soft {
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  overflow: hidden;
+  overflow: clip;
+  z-index: -1;
+}
+
+.aurora-border__blur {
+  animation: aurora-blur-linear var(--aurora-spin-duration, 1.15s) linear
+    var(--aurora-spin-iteration, infinite) var(--aurora-fill-mode, none);
+  opacity: 0.8;
+}
+
+.aurora-border__soft {
+  opacity: 0.4;
+  filter: blur(0.5px);
+}
+
+.aurora-border__spin {
+  position: absolute;
+  inset: 0;
+  animation: aurora-gradient-spin var(--aurora-spin-duration, 1.15s)
+    cubic-bezier(0.62, 0.25, 0.29, 0.7) var(--aurora-spin-iteration, infinite)
+    var(--aurora-fill-mode, none);
+  scale: 10;
+}
+
+.aurora-border__swatch {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  animation-name: aurora-color-crossfade;
+  animation-duration: var(--aurora-crossfade-duration, 6s);
+  animation-timing-function: linear;
+  animation-iteration-count: var(--aurora-iteration, infinite);
+  animation-fill-mode: var(--aurora-fill-mode, none);
+}
+
+.aurora-border:not(.aurora-loop) .aurora-border__swatch:nth-child(4) {
+  animation-name: aurora-color-crossfade-hold;
+}
+
+.aurora-border__swatch:nth-child(1) {
+  animation-delay: 0s;
+}
+
+.aurora-border__swatch:nth-child(2) {
+  animation-delay: calc(var(--aurora-crossfade-duration, 6s) * 0.25);
+}
+
+.aurora-border__swatch:nth-child(3) {
+  animation-delay: calc(var(--aurora-crossfade-duration, 6s) * 0.5);
+}
+
+.aurora-border__swatch:nth-child(4) {
+  animation-delay: calc(var(--aurora-crossfade-duration, 6s) * 0.75);
+}
+
+.aurora-border__blur .aurora-border__swatch:nth-child(1) {
+  background: conic-gradient(
+    from 100deg,
+    transparent 0,
+    #fa057b 20%,
+    #fa057b 30%,
+    transparent 50%
+  );
+}
+
+.aurora-border__blur .aurora-border__swatch:nth-child(2) {
+  background: conic-gradient(
+    from 100deg,
+    transparent 0,
+    #00a9fe 20%,
+    #00a9fe 30%,
+    transparent 50%
+  );
+}
+
+.aurora-border__blur .aurora-border__swatch:nth-child(3) {
+  background: conic-gradient(
+    from 100deg,
+    transparent 0,
+    #7f56d9 20%,
+    #7f56d9 30%,
+    transparent 50%
+  );
+}
+
+.aurora-border__blur .aurora-border__swatch:nth-child(4) {
+  background: conic-gradient(
+    from 100deg,
+    transparent 0,
+    #ffbb33 20%,
+    #ffbb33 30%,
+    transparent 50%
+  );
+}
+
+.aurora-border__soft .aurora-border__swatch:nth-child(1) {
+  background: conic-gradient(
+    from 120deg,
+    transparent 0,
+    #fa057b 20%,
+    #fa057b 35%,
+    transparent 50%
+  );
+}
+
+.aurora-border__soft .aurora-border__swatch:nth-child(2) {
+  background: conic-gradient(
+    from 120deg,
+    transparent 0,
+    #00a9fe 20%,
+    #00a9fe 35%,
+    transparent 50%
+  );
+}
+
+.aurora-border__soft .aurora-border__swatch:nth-child(3) {
+  background: conic-gradient(
+    from 120deg,
+    transparent 0,
+    #7f56d9 20%,
+    #7f56d9 35%,
+    transparent 50%
+  );
+}
+
+.aurora-border__soft .aurora-border__swatch:nth-child(4) {
+  background: conic-gradient(
+    from 120deg,
+    transparent 0,
+    #ffbb33 20%,
+    #ffbb33 35%,
+    transparent 50%
+  );
+}
+
+.aurora-border__fill {
+  position: absolute;
+  inset: var(--aurora-thickness, 1px);
+  border-radius: inherit;
+  background: var(--aurora-fill, #ffffff);
+  z-index: 0;
+}
+
+.aurora-border__content {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  border-radius: inherit;
+  min-width: 0;
+}

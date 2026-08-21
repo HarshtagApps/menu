@@ -2,7 +2,10 @@ import { useEffect, useState } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { ChevronLeft, Minus, Plus } from 'lucide-react';
 import { getImageForCategory, getCategoryDisplayName, getEffectivePrice, PriceTags } from '../utils/menuData';
+import AuroraBorder from '../components/AuroraBorder';
+import { FOCUS_DIM_FILL, FOCUS_DIM_MS, FOCUS_DIM_SPEED } from '../utils/focusDim';
 import '../styles/order_items.css';
+import '../styles/focus-dim.css';
 import '../styles/styles.css';
 
 const OrderItems = ({ restaurantData, orderDetails, setOrderDetails }) => {
@@ -10,7 +13,10 @@ const OrderItems = ({ restaurantData, orderDetails, setOrderDetails }) => {
     const [searchParams] = useSearchParams();
     const restaurantId = searchParams.get('r');
     const categoryType = searchParams.get('category');
-    const [isNonVegEnabled, setIsNonVegEnabled] = useState(false);
+    const focusItem = searchParams.get('focus');
+    const dietParam = searchParams.get('diet');
+    const [isNonVegEnabled, setIsNonVegEnabled] = useState(() => dietParam === 'nonveg');
+    const [showFocusHint, setShowFocusHint] = useState(() => !!focusItem);
 
     useEffect(() => {
         if (restaurantData && restaurantData.restoDetails) {
@@ -21,6 +27,40 @@ const OrderItems = ({ restaurantData, orderDetails, setOrderDetails }) => {
             }
         }
     }, [restaurantData]);
+
+    useEffect(() => {
+        if (dietParam === 'nonveg') setIsNonVegEnabled(true);
+        else if (dietParam === 'veg') setIsNonVegEnabled(false);
+    }, [dietParam]);
+
+    useEffect(() => {
+        if (!focusItem) {
+            setShowFocusHint(false);
+            return;
+        }
+        setShowFocusHint(true);
+        const timer = window.setTimeout(() => setShowFocusHint(false), FOCUS_DIM_MS);
+        return () => window.clearTimeout(timer);
+    }, [focusItem, categoryType]);
+
+    useEffect(() => {
+        if (!focusItem) return;
+        const timer = window.setTimeout(() => {
+            const el = document.getElementById('order-item-focus');
+            const scroller = el?.closest('.order-items-container');
+            if (!el || !(scroller instanceof HTMLElement)) return;
+            const elRect = el.getBoundingClientRect();
+            const scrollerRect = scroller.getBoundingClientRect();
+            const top =
+                scroller.scrollTop +
+                (elRect.top - scrollerRect.top) -
+                scroller.clientHeight / 2 +
+                elRect.height / 2;
+            scroller.scrollTo({ top: Math.max(0, top), behavior: 'smooth' });
+            window.scrollTo(0, 0);
+        }, 80);
+        return () => window.clearTimeout(timer);
+    }, [focusItem, isNonVegEnabled, categoryType]);
 
     if (!restaurantData || !categoryType) return null;
 
@@ -139,7 +179,7 @@ const OrderItems = ({ restaurantData, orderDetails, setOrderDetails }) => {
     const categoryImage = getImageForCategory(categoryType);
 
     return (
-        <div className="order-items-page">
+        <div className={`order-items-page${showFocusHint ? ' focus-dim' : ''}`}>
             <div className="secondary-appbar">
                 <div className="appbar-content">
                     <button className="back-button" onClick={() => navigate(-1)}>
@@ -177,9 +217,9 @@ const OrderItems = ({ restaurantData, orderDetails, setOrderDetails }) => {
                 ) : (
                     filteredItems.map((item) => {
                         const itemId = getItemId(item);
-                        return (
+                        const isFocused = focusItem === item.name;
+                        const card = (
                             <div
-                                key={itemId}
                                 className="order-items-card order-premium-item"
                                 onClick={item.isSpecial ? handleSpecialClick : undefined}
                             >
@@ -245,6 +285,23 @@ const OrderItems = ({ restaurantData, orderDetails, setOrderDetails }) => {
                                     })}
                                 </div>
                             </div>
+                        );
+                        return (
+                            <AuroraBorder
+                                key={itemId}
+                                id={isFocused ? 'order-item-focus' : undefined}
+                                active={isFocused}
+                                radius={8}
+                                fill={showFocusHint ? FOCUS_DIM_FILL : '#ffffff'}
+                                borderWidth={1.25}
+                                speed={FOCUS_DIM_SPEED}
+                                loop={false}
+                                className={`order-items-aurora${
+                                    isFocused && showFocusHint ? ' focus-dim-target' : ''
+                                }`}
+                            >
+                                {card}
+                            </AuroraBorder>
                         );
                     })
                 )}

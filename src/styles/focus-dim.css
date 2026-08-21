@@ -1,0 +1,46 @@
+/* Shared focus-dim: darkGrey page + low opacity outside the target */
+
+.focus-dim {
+  background-color: #333333;
+}
+
+.focus-dim .food-items-container,
+.focus-dim .order-items-container,
+.focus-dim .food-items-ads {
+  background-color: #333333;
+  transition: background-color 0.25s ease;
+}
+
+.focus-dim .food-item-card,
+.focus-dim .food-item-description-container,
+.focus-dim .order-items-card {
+  background-color: #333333;
+}
+
+.focus-dim .food-item-name,
+.focus-dim .food-item-description-text,
+.focus-dim .order-premium-item .order-items-name,
+.focus-dim .order-items-variant-size {
+  color: #ffffff;
+}
+
+.focus-dim .food-item-description-arrow {
+  color: #cccccc;
+}
+
+.focus-dim .secondary-appbar,
+.focus-dim .food-items-ads,
+.focus-dim .category-summary-bar,
+.focus-dim .food-item-wrapper:not(.focus-dim-target),
+.focus-dim .order-items-aurora:not(.focus-dim-target) {
+  opacity: 0.04;
+  pointer-events: none;
+  transition: opacity 0.25s ease;
+}
+
+.focus-dim .focus-dim-target {
+  opacity: 1;
+  z-index: 1999;
+  position: relative;
+  pointer-events: auto;
+}
