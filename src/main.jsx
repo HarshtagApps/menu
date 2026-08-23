@@ -3,7 +3,7 @@ import { createRoot } from 'react-dom/client'
 import './index.css'
 import App from './App.jsx'
 import './styles/styles.css'
-import { initSecurity } from './security.js'
+// import { initSecurity } from './security.js'
 
 function restoreGithubPagesPath() {
   try {
@@ -18,9 +18,9 @@ function restoreGithubPagesPath() {
 }
 
 restoreGithubPagesPath()
-if (import.meta.env.PROD) {
-  initSecurity()
-}
+// if (import.meta.env.PROD) {
+//   initSecurity()
+// }
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>

@@ -84,10 +84,10 @@ const FoodItems = ({ restaurantData }) => {
 
     useEffect(() => {
         if (!showDoubleTapHint) return;
-        document.body.classList.add('hide-music-player');
+        document.body.classList.add('dim-music-player');
         const timer = window.setTimeout(dismissDoubleTapHint, FOCUS_DIM_MS);
         return () => {
-            document.body.classList.remove('hide-music-player');
+            document.body.classList.remove('dim-music-player');
             window.clearTimeout(timer);
         };
     }, [showDoubleTapHint, hintNonce]);
@@ -213,9 +213,11 @@ const FoodItems = ({ restaurantData }) => {
                             (hintItemId != null
                                 ? getItemId(item) === hintItemId
                                 : index === 0);
+                        const showDescriptionPanel = hasDescription || isHintTarget;
+                        const isDescriptionOpen = isExpanded || isHintTarget;
                         const card = (
                                 <div
-                                    className={`food-item-card ${hasDescription && isExpanded ? 'description-open' : ''}`}
+                                    className={`food-item-card ${showDescriptionPanel && isDescriptionOpen ? 'description-open' : ''}`}
                                     onClick={() => handleItemCardClick(item)}
                                     onContextMenu={(e) => e.preventDefault()}
                                 >
@@ -243,7 +245,7 @@ const FoodItems = ({ restaurantData }) => {
                                     </div>
 
                                     <div
-                                        className={`food-item-indicators${hasDescription ? ' food-item-indicators--with-chevron' : ''}`}
+                                        className={`food-item-indicators${showDescriptionPanel ? ' food-item-indicators--with-chevron' : ''}`}
                                     >
                                         {item.isSpecial && (
                                             <img
@@ -253,13 +255,14 @@ const FoodItems = ({ restaurantData }) => {
                                             />
                                         )}
                                         <div className={`food-item-veg-dot ${item.foodType === 'egg' ? 'egg' : item.isVeg ? 'veg' : 'non-veg'}`} />
-                                        {hasDescription && (
+                                        {showDescriptionPanel && (
                                             <ChevronDown
                                                 size={20}
                                                 strokeWidth={2}
-                                                className={`food-item-description-arrow ${isExpanded ? 'expanded' : ''}`}
+                                                className={`food-item-description-arrow ${isDescriptionOpen ? 'expanded' : ''}`}
                                                 onClick={(e) => {
                                                     e.stopPropagation();
+                                                    if (isHintTarget) return;
                                                     toggleDescription(itemId);
                                                 }}
                                             />
@@ -289,10 +292,12 @@ const FoodItems = ({ restaurantData }) => {
                                     card
                                 )}
 
-                                {hasDescription && (
-                                    <div className={`food-item-description-container ${isExpanded ? 'expanded' : ''}`}>
+                                {showDescriptionPanel && (
+                                    <div className={`food-item-description-container ${isDescriptionOpen ? 'expanded' : ''}`}>
                                         <div className="food-item-description-text">
-                                            {item.description}
+                                            {isHintTarget
+                                                ? DOUBLE_TAP_HINT_MESSAGE
+                                                : item.description}
                                         </div>
                                     </div>
                                 )}
@@ -473,17 +478,12 @@ const FoodItems = ({ restaurantData }) => {
         @keyframes fadeOut { from { opacity: 1; } to { opacity: 0; } }
       `}} />
             {showDoubleTapHint && (
-                <>
-                    <button
-                        type="button"
-                        className="food-items-hint-dim"
-                        aria-label="Dismiss hint"
-                        onClick={dismissDoubleTapHint}
-                    />
-                    <div className="hint-messenger-bar" role="status">
-                        <span className="music-player-text">{DOUBLE_TAP_HINT_MESSAGE}</span>
-                    </div>
-                </>
+                <button
+                    type="button"
+                    className="food-items-hint-dim"
+                    aria-label="Dismiss hint"
+                    onClick={dismissDoubleTapHint}
+                />
             )}
         </div>
     );
