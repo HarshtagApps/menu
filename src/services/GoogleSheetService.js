@@ -1,5 +1,6 @@
 import { resolveThemeColor } from '../utils/theme';
 import { ERROR_CODES, createMenuError } from '../utils/errorCodes';
+import { ACCESS_STATUS, normalizeAccess } from '../utils/accessStatus';
 
 const SHEET_URL = 'https://script.google.com/macros/s/AKfycbxZ5Jip8qUnfNZMb4Md4VzWsv1vyxW2v5YQASXHE9MmTYfYkHKtTuXGp_rDxx8XDE1_NA/exec';
 
@@ -37,9 +38,14 @@ export const fetchMenuData = async (restaurantId) => {
             // N61802F — restaurant ID missing from sheet info
             throw createMenuError(ERROR_CODES.NOT_FOUND);
         }
-        if (restoInfo.Access === false || restoInfo.Access === 'FALSE') {
+        const access = normalizeAccess(restoInfo.Access);
+        if (access === ACCESS_STATUS.FALSE) {
             // A19374F — Access is FALSE in the sheet
             throw createMenuError(ERROR_CODES.ACCESS_FALSE);
+        }
+        if (access === ACCESS_STATUS.UNDERCONST) {
+            // A28461U — Access is UNDERCONST (under-construction screen)
+            throw createMenuError(ERROR_CODES.ACCESS_UNDERCONST);
         }
         const rows = allData.menus?.[restaurantId];
         if (!rows || rows.length === 0) {

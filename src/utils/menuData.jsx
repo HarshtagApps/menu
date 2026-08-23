@@ -336,6 +336,8 @@ export function hexToCssFilter(hex) {
             'brightness(0) saturate(100%) invert(100%)',
         '#000000':
             'brightness(0) saturate(100%)',
+        '#333333':
+            'brightness(0) saturate(100%) invert(20%)',
     };
 
     return filters[hex.toUpperCase()] || 'none';

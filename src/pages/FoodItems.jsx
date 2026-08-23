@@ -287,19 +287,25 @@ const FoodItems = ({ restaurantData }) => {
                                         className="food-item-aurora"
                                     >
                                         {card}
+                                        {showDescriptionPanel && (
+                                            <div className={`food-item-description-container ${isDescriptionOpen ? 'expanded' : ''}`}>
+                                                <div className="food-item-description-text food-item-hint-message">
+                                                    {DOUBLE_TAP_HINT_MESSAGE}
+                                                </div>
+                                            </div>
+                                        )}
                                     </AuroraBorder>
                                 ) : (
-                                    card
-                                )}
-
-                                {showDescriptionPanel && (
-                                    <div className={`food-item-description-container ${isDescriptionOpen ? 'expanded' : ''}`}>
-                                        <div className="food-item-description-text">
-                                            {isHintTarget
-                                                ? DOUBLE_TAP_HINT_MESSAGE
-                                                : item.description}
-                                        </div>
-                                    </div>
+                                    <>
+                                        {card}
+                                        {showDescriptionPanel && (
+                                            <div className={`food-item-description-container ${isDescriptionOpen ? 'expanded' : ''}`}>
+                                                <div className="food-item-description-text">
+                                                    {item.description}
+                                                </div>
+                                            </div>
+                                        )}
+                                    </>
                                 )}
                             </div>
                         );

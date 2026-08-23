@@ -2,6 +2,7 @@
  *   G48291S = Google Sheets HTTP/fetch failed (!response.ok or network)
  *   G57304S = Google Sheets response could not be read/parsed as JSON
  *   A19374F = Access is FALSE in the sheet (restaurant disabled / removed)
+ *   A28461U = Access is UNDERCONST in the sheet (site under construction)
  *   N61802F = Restaurant ID not found in sheet info
  *   E70415M = Empty menu (no menu rows for this restaurant)
  *   N82503R = No restaurant ID in URL (?r= missing) / ID required
@@ -12,6 +13,7 @@ export const ERROR_CODES = {
   GOOGLE_SHEETS_FETCH: 'G48291S',
   GOOGLE_SHEETS_PARSE: 'G57304S',
   ACCESS_FALSE: 'A19374F',
+  ACCESS_UNDERCONST: 'A28461U',
   NOT_FOUND: 'N61802F',
   EMPTY_MENU: 'E70415M',
   NO_RESTAURANT: 'N82503R',
@@ -30,8 +32,14 @@ export const ERROR_COPY = {
     hint: 'Close this tab and retry, or try again later.',
   },
   [ERROR_CODES.ACCESS_FALSE]: {
-    title: 'Restaurant removed',
-    message: 'This restaurant has been removed.',
+    title: 'Restaurant Not Found',
+    message: 'This restaurant is unavailable or has been removed.',
+    hint: '',
+  },
+  [ERROR_CODES.ACCESS_UNDERCONST]: {
+    title: 'Under Construction',
+    message:
+      "We're improving things for a better experience.\nThanks for your patience. Will be available soon.",
     hint: '',
   },
   [ERROR_CODES.NOT_FOUND]: {
@@ -41,7 +49,8 @@ export const ERROR_COPY = {
   },
   [ERROR_CODES.EMPTY_MENU]: {
     title: 'Something went wrong',
-    message: "We couldn't load this restaurant as no menu is available for this restaurant yet.",
+    message:
+      "We couldn't load this restaurant as no menu is available for this restaurant yet.",
     hint: '',
   },
   [ERROR_CODES.NO_RESTAURANT]: {
@@ -72,3 +81,11 @@ export function createMenuError(code) {
   err.name = 'MenuError';
   return err;
 }
+
+/** Status / access gates that use the common AccessStatusScreen. */
+export const ACCESS_STATUS_CODES = new Set([
+  ERROR_CODES.ACCESS_FALSE,
+  ERROR_CODES.ACCESS_UNDERCONST,
+  ERROR_CODES.NOT_FOUND,
+  ERROR_CODES.NO_RESTAURANT,
+]);

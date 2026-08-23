@@ -11,7 +11,9 @@ import {
   ERROR_CODES,
   createMenuError,
   getErrorCopy,
+  ACCESS_STATUS_CODES,
 } from './utils/errorCodes';
+import AccessStatusScreen from './pages/AccessStatusScreen';
 
 const Categories = React.lazy(() => import('./pages/Categories'));
 const FoodItems = React.lazy(() => import('./pages/FoodItems'));
@@ -107,7 +109,9 @@ const AppContent = () => {
   } else if (loading) {
     content = <Loading />;
   } else if (error) {
-    content = (
+    content = ACCESS_STATUS_CODES.has(error.code) ? (
+      <AccessStatusScreen code={error.code} />
+    ) : (
       <div className="error-state" style={{
         textAlign: 'center',
         padding: '20px',

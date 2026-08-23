@@ -57,6 +57,12 @@
     box-shadow: none;
 }
 
+.food-item-aurora.is-active .food-item-description-container.expanded {
+    border-color: transparent;
+    border-top-color: #E0E0E0;
+    box-shadow: none;
+}
+
 .food-items-hint-dim {
     position: fixed;
     inset: 0;
@@ -211,6 +217,7 @@
     grid-template-rows: 1fr;
     padding: 5px;
     border-width: 0.75px;
+    border-top: 0.75px solid rgba(var(--primary-rgb), 0.35);
     box-shadow: 0 3px 5px rgba(51, 51, 51, 0.2);
 }
 
@@ -222,6 +229,10 @@
     color: #555555;
     line-height: 1.4;
     font-family: 'Afacad', sans-serif;
+}
+
+.food-item-hint-message {
+    font-size: 16px;
 }
 
 .food-items-empty-state {
