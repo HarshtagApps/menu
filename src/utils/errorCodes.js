@@ -39,7 +39,7 @@ export const ERROR_COPY = {
   [ERROR_CODES.ACCESS_UNDERCONST]: {
     title: 'Under Construction',
     message:
-      "We're improving things for a better experience.\nThanks for your patience. Will be available soon.",
+      "We're improving things for a better experience.\nThanks for your patience. We will be available soon.",
     hint: '',
   },
   [ERROR_CODES.NOT_FOUND]: {

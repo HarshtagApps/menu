@@ -7,6 +7,7 @@ import Ads from '../components/Ads';
 import AuroraBorder from '../components/AuroraBorder';
 import orderLottie from '../assets/orderLottie.json';
 import { FOCUS_DIM_FILL, FOCUS_DIM_MS, FOCUS_DIM_SPEED } from '../utils/focusDim';
+import { FEATURE_FLAGS } from '../utils/featureFlags';
 import '../styles/food-items.css';
 import '../styles/focus-dim.css';
 import '../styles/music-player.css';
@@ -15,6 +16,7 @@ import '../styles/styles.css';
 const DOUBLE_TAP_MS = 600;
 const DOUBLE_TAP_HINT_KEY = 'menuDoubleTapCoachmarkSeen';
 const DOUBLE_TAP_HINT_MESSAGE = 'Double tap any item to order it';
+const HIGHLIGHT_UX = FEATURE_FLAGS.menuItemHighlightUx;
 
 const FoodItems = ({ restaurantData }) => {
     const navigate = useNavigate();
@@ -70,6 +72,7 @@ const FoodItems = ({ restaurantData }) => {
     }, [restaurantData]);
 
     useEffect(() => {
+        if (!HIGHLIGHT_UX) return;
         if (!restaurantData || !categoryType) return;
         const category = restaurantData.categories.find(cat => cat.categoryType === categoryType);
         if (!(category?.items || []).length) return;
@@ -83,7 +86,7 @@ const FoodItems = ({ restaurantData }) => {
     }, [restaurantData, categoryType]);
 
     useEffect(() => {
-        if (!showDoubleTapHint) return;
+        if (!HIGHLIGHT_UX || !showDoubleTapHint) return;
         document.body.classList.add('dim-music-player');
         const timer = window.setTimeout(dismissDoubleTapHint, FOCUS_DIM_MS);
         return () => {

@@ -4,6 +4,7 @@ import { ChevronLeft, Minus, Plus } from 'lucide-react';
 import { getImageForCategory, getCategoryDisplayName, getEffectivePrice, PriceTags } from '../utils/menuData';
 import AuroraBorder from '../components/AuroraBorder';
 import { FOCUS_DIM_FILL, FOCUS_DIM_MS, FOCUS_DIM_SPEED } from '../utils/focusDim';
+import { FEATURE_FLAGS } from '../utils/featureFlags';
 import '../styles/order_items.css';
 import '../styles/focus-dim.css';
 import '../styles/styles.css';
@@ -16,7 +17,8 @@ const OrderItems = ({ restaurantData, orderDetails, setOrderDetails }) => {
     const focusItem = searchParams.get('focus');
     const dietParam = searchParams.get('diet');
     const [isNonVegEnabled, setIsNonVegEnabled] = useState(() => dietParam === 'nonveg');
-    const [showFocusHint, setShowFocusHint] = useState(() => !!focusItem);
+    const highlightUx = FEATURE_FLAGS.menuItemHighlightUx;
+    const [showFocusHint, setShowFocusHint] = useState(() => highlightUx && !!focusItem);
 
     useEffect(() => {
         if (restaurantData && restaurantData.restoDetails) {
@@ -34,14 +36,14 @@ const OrderItems = ({ restaurantData, orderDetails, setOrderDetails }) => {
     }, [dietParam]);
 
     useEffect(() => {
-        if (!focusItem) {
+        if (!highlightUx || !focusItem) {
             setShowFocusHint(false);
             return;
         }
         setShowFocusHint(true);
         const timer = window.setTimeout(() => setShowFocusHint(false), FOCUS_DIM_MS);
         return () => window.clearTimeout(timer);
-    }, [focusItem, categoryType]);
+    }, [focusItem, categoryType, highlightUx]);
 
     useEffect(() => {
         if (!focusItem) return;
@@ -290,7 +292,7 @@ const OrderItems = ({ restaurantData, orderDetails, setOrderDetails }) => {
                             <AuroraBorder
                                 key={itemId}
                                 id={isFocused ? 'order-item-focus' : undefined}
-                                active={isFocused}
+                                active={highlightUx && isFocused}
                                 radius={8}
                                 fill={showFocusHint ? FOCUS_DIM_FILL : '#ffffff'}
                                 borderWidth={1.25}
