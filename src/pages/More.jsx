@@ -289,6 +289,12 @@ const More = ({ restaurantData }) => {
             ...galleryProps
         },
         {
+            icon: ProjectImages.broadcast,
+            label: 'Terms & Conditions',
+            onTap: () => navigate(`/terms?r=${restaurantId}`),
+            isEnabled: true
+        },
+        {
             icon: ProjectImages.table,
             label: 'Reserve a Table',
             onTap: () => navigate(`/reserve?r=${restaurantId}`),

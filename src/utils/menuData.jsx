@@ -54,6 +54,7 @@ export const ProjectImages = {
     occupied: 'assets/images/occupied.png',
     instagram: 'assets/images/instagram.png',
     beverages: 'assets/images/beverages.png',
+    broadcast: 'assets/images/broadcast.png',
     colddrinks: 'assets/images/colddrink.png',
     mainCourse: 'assets/images/mainCourse.png',
     frenchFries: 'assets/images/frenchFries.png',
