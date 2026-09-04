@@ -1,6 +1,7 @@
 import { resolveThemeColor } from '../utils/theme';
 import { ERROR_CODES, createMenuError } from '../utils/errorCodes';
 import { ACCESS_STATUS, normalizeAccess } from '../utils/accessStatus';
+import { parseDelivery } from '../utils/delivery';
 
 const SHEET_URL = 'https://script.google.com/macros/s/AKfycbxZ5Jip8qUnfNZMb4Md4VzWsv1vyxW2v5YQASXHE9MmTYfYkHKtTuXGp_rDxx8XDE1_NA/exec';
 
@@ -134,7 +135,8 @@ export const fetchMenuData = async (restaurantId) => {
                             }
                         });
                         return map;
-                    })() : {}
+                    })() : {},
+                delivery: parseDelivery(restoInfo.Delivery),
             },
             categories
         };

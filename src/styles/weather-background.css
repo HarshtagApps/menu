@@ -1,0 +1,486 @@
+/* Full-screen weather backdrop (phone weather-app style) */
+.weather-bg {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  overflow: hidden;
+  pointer-events: none;
+  opacity: 0.85;
+  transition: opacity 0.45s ease;
+}
+
+.weather-bg.is-ready {
+  opacity: 1;
+}
+
+.weather-bg-sky,
+.weather-bg-glow,
+.weather-bg-stars,
+.weather-bg-moon,
+.weather-bg-sun,
+.weather-bg-clouds,
+.weather-bg-fog,
+.weather-bg-rain,
+.weather-bg-snow,
+.weather-bg-lightning,
+.weather-bg-vignette {
+  position: absolute;
+  inset: 0;
+}
+
+.weather-bg-sky {
+  background: linear-gradient(180deg, #5eb7ff 0%, #a8d8ff 42%, #e8f4ff 78%, #f3f6f9 100%);
+  transition: background 0.7s ease;
+}
+
+.weather-bg.is-cloudy .weather-bg-sky {
+  background: linear-gradient(180deg, #7d8fa3 0%, #a8b4c2 45%, #cfd6de 100%);
+}
+
+.weather-bg.is-fog .weather-bg-sky {
+  background: linear-gradient(180deg, #9aa3ad 0%, #c2c8cf 50%, #dde1e5 100%);
+}
+
+.weather-bg.is-drizzle .weather-bg-sky,
+.weather-bg.is-rain .weather-bg-sky {
+  background: linear-gradient(180deg, #5a6d82 0%, #7e91a6 48%, #a9b7c6 100%);
+}
+
+.weather-bg.is-day.is-drizzle .weather-bg-sky {
+  background: linear-gradient(180deg, #7eabcf 0%, #a3c4de 48%, #d2e3f2 100%);
+}
+
+.weather-bg.is-day.is-rain .weather-bg-sky {
+  background: linear-gradient(180deg, #6f9bc0 0%, #92b6d4 48%, #c5d9ea 100%);
+}
+
+.weather-bg.is-heavyrain .weather-bg-sky,
+.weather-bg.is-storm .weather-bg-sky {
+  background: linear-gradient(180deg, #2c3644 0%, #455564 50%, #6a7a8a 100%);
+}
+
+.weather-bg.is-day.is-heavyrain .weather-bg-sky {
+  background: linear-gradient(180deg, #5f87a8 0%, #7fa3c0 50%, #b0c8dc 100%);
+}
+
+.weather-bg.is-day.is-storm .weather-bg-sky {
+  background: linear-gradient(180deg, #547896 0%, #7393ae 50%, #a2b9cc 100%);
+}
+
+.weather-bg.is-snow .weather-bg-sky {
+  background: linear-gradient(180deg, #8fa3b8 0%, #c5d4e4 55%, #eef3f8 100%);
+}
+
+/* Night tints the existing weather sky (does not replace rain/cloud look) */
+.weather-bg.is-night .weather-bg-sky {
+  filter: brightness(0.42) saturate(0.75);
+}
+
+.weather-bg.is-night.is-clear .weather-bg-sky {
+  filter: none;
+  background: linear-gradient(180deg, #050914 0%, #0f1c38 45%, #1a2a4a 100%);
+}
+
+.weather-bg.is-night.is-cloudy .weather-bg-sky {
+  filter: none;
+  background: linear-gradient(180deg, #0a101c 0%, #1a2438 50%, #2a3548 100%);
+}
+
+.weather-bg-glow {
+  opacity: 0;
+  transition: opacity 0.6s ease;
+}
+
+.weather-bg.is-day.is-clear .weather-bg-glow {
+  opacity: 1;
+  background:
+    radial-gradient(ellipse 55% 40% at 78% 12%, rgba(255, 230, 140, 0.55), transparent 70%),
+    radial-gradient(ellipse 80% 50% at 50% 100%, rgba(255, 255, 255, 0.35), transparent 70%);
+}
+
+.weather-bg.is-day.is-drizzle .weather-bg-glow,
+.weather-bg.is-day.is-rain .weather-bg-glow {
+  opacity: 0.7;
+  background:
+    radial-gradient(ellipse 60% 35% at 70% 8%, rgba(255, 255, 255, 0.28), transparent 70%),
+    radial-gradient(ellipse 80% 45% at 50% 100%, rgba(255, 255, 255, 0.22), transparent 70%);
+}
+
+.weather-bg.is-night.is-clear .weather-bg-glow {
+  opacity: 1;
+  background:
+    radial-gradient(ellipse 40% 28% at 72% 16%, rgba(180, 200, 255, 0.18), transparent 65%),
+    radial-gradient(ellipse 70% 40% at 50% 100%, rgba(40, 60, 120, 0.35), transparent 70%);
+}
+
+/* Stars — clear / light-cloud night */
+.weather-bg-stars {
+  opacity: 0;
+  background-image:
+    radial-gradient(1.5px 1.5px at 8% 12%, #fff, transparent),
+    radial-gradient(1px 1px at 18% 28%, #fff, transparent),
+    radial-gradient(1.5px 1.5px at 28% 8%, #fff, transparent),
+    radial-gradient(1px 1px at 38% 22%, #fff, transparent),
+    radial-gradient(2px 2px at 48% 14%, #fff, transparent),
+    radial-gradient(1px 1px at 58% 30%, #fff, transparent),
+    radial-gradient(1.5px 1.5px at 68% 10%, #fff, transparent),
+    radial-gradient(1px 1px at 78% 24%, #fff, transparent),
+    radial-gradient(1.5px 1.5px at 88% 16%, #fff, transparent),
+    radial-gradient(1px 1px at 12% 42%, #fff, transparent),
+    radial-gradient(1.5px 1.5px at 22% 55%, #fff, transparent),
+    radial-gradient(1px 1px at 42% 48%, #fff, transparent),
+    radial-gradient(2px 2px at 62% 40%, #fff, transparent),
+    radial-gradient(1px 1px at 82% 52%, #fff, transparent),
+    radial-gradient(1.5px 1.5px at 92% 38%, #fff, transparent),
+    radial-gradient(1px 1px at 5% 68%, #fff, transparent),
+    radial-gradient(1px 1px at 35% 72%, #fff, transparent),
+    radial-gradient(1.5px 1.5px at 55% 62%, #fff, transparent),
+    radial-gradient(1px 1px at 75% 70%, #fff, transparent),
+    radial-gradient(1px 1px at 95% 65%, #fff, transparent);
+  animation: weather-stars-twinkle 4.5s ease-in-out infinite;
+  transition: opacity 0.6s ease;
+}
+
+.weather-bg.is-night.is-clear .weather-bg-stars {
+  opacity: 0.95;
+}
+
+.weather-bg.is-night.is-cloudy .weather-bg-stars {
+  opacity: 0.35;
+  animation: none;
+}
+
+.weather-bg-moon {
+  width: 56px;
+  height: 56px;
+  top: 11%;
+  left: auto;
+  right: 14%;
+  bottom: auto;
+  border-radius: 50%;
+  background: radial-gradient(circle at 35% 35%, #f5f0e0, #d8d2bc 70%);
+  box-shadow: 0 0 40px rgba(220, 230, 255, 0.35);
+  opacity: 0;
+  transition: opacity 0.6s ease;
+}
+
+.weather-bg.is-night.is-clear .weather-bg-moon,
+.weather-bg.is-night.is-cloudy .weather-bg-moon {
+  opacity: 0.9;
+}
+
+.weather-bg.is-night.is-cloudy .weather-bg-moon {
+  opacity: 0.45;
+  filter: brightness(0.85);
+}
+
+.weather-bg-sun {
+  width: 72px;
+  height: 72px;
+  top: 10%;
+  left: auto;
+  right: 12%;
+  bottom: auto;
+  border-radius: 50%;
+  background: radial-gradient(circle at 40% 40%, #fff6c8, #ffcc4d 65%, #ff9f1a 100%);
+  box-shadow: 0 0 50px rgba(255, 200, 80, 0.55);
+  opacity: 0;
+  transition: opacity 0.6s ease;
+}
+
+.weather-bg.is-day.is-clear .weather-bg-sun {
+  opacity: 1;
+}
+
+.weather-bg-clouds {
+  opacity: 0;
+  transition: opacity 0.5s ease;
+  /* Wider than screen so drift never leaves a hard cut edge */
+  inset: auto;
+  top: 0;
+  bottom: 0;
+  left: -50%;
+  width: 200%;
+  pointer-events: none;
+}
+
+.weather-bg-clouds--back {
+  background:
+    radial-gradient(ellipse 150px 52px at 6% 20%, rgba(255, 255, 255, 0.5), transparent 70%),
+    radial-gradient(ellipse 140px 50px at 18% 26%, rgba(255, 255, 255, 0.55), transparent 70%),
+    radial-gradient(ellipse 180px 60px at 36% 16%, rgba(255, 255, 255, 0.5), transparent 70%),
+    radial-gradient(ellipse 130px 48px at 52% 24%, rgba(255, 255, 255, 0.45), transparent 70%),
+    radial-gradient(ellipse 160px 54px at 68% 18%, rgba(255, 255, 255, 0.5), transparent 70%),
+    radial-gradient(ellipse 140px 50px at 84% 28%, rgba(255, 255, 255, 0.48), transparent 70%),
+    radial-gradient(ellipse 150px 52px at 96% 20%, rgba(255, 255, 255, 0.45), transparent 70%);
+  animation: weather-clouds-drift 42s ease-in-out infinite alternate;
+}
+
+.weather-bg-clouds--front {
+  background:
+    radial-gradient(ellipse 160px 55px at 12% 34%, rgba(255, 255, 255, 0.38), transparent 70%),
+    radial-gradient(ellipse 150px 52px at 32% 30%, rgba(255, 255, 255, 0.4), transparent 70%),
+    radial-gradient(ellipse 140px 48px at 55% 36%, rgba(255, 255, 255, 0.35), transparent 70%),
+    radial-gradient(ellipse 155px 52px at 75% 28%, rgba(255, 255, 255, 0.38), transparent 70%),
+    radial-gradient(ellipse 145px 50px at 92% 34%, rgba(255, 255, 255, 0.36), transparent 70%);
+  animation: weather-clouds-drift 56s ease-in-out infinite alternate-reverse;
+}
+
+.weather-bg.is-cloudy .weather-bg-clouds,
+.weather-bg.is-drizzle .weather-bg-clouds,
+.weather-bg.is-rain .weather-bg-clouds,
+.weather-bg.is-heavyrain .weather-bg-clouds,
+.weather-bg.is-storm .weather-bg-clouds,
+.weather-bg.is-snow .weather-bg-clouds,
+.weather-bg.is-fog .weather-bg-clouds {
+  opacity: 0.9;
+}
+
+.weather-bg.is-storm .weather-bg-clouds--back,
+.weather-bg.is-heavyrain .weather-bg-clouds--back {
+  background:
+    radial-gradient(ellipse 150px 52px at 6% 20%, rgba(60, 70, 85, 0.65), transparent 70%),
+    radial-gradient(ellipse 140px 50px at 18% 26%, rgba(55, 65, 80, 0.7), transparent 70%),
+    radial-gradient(ellipse 180px 60px at 36% 16%, rgba(50, 60, 75, 0.75), transparent 70%),
+    radial-gradient(ellipse 130px 48px at 52% 24%, rgba(55, 65, 80, 0.65), transparent 70%),
+    radial-gradient(ellipse 160px 54px at 68% 18%, rgba(50, 60, 75, 0.7), transparent 70%),
+    radial-gradient(ellipse 140px 50px at 84% 28%, rgba(55, 65, 80, 0.65), transparent 70%),
+    radial-gradient(ellipse 150px 52px at 96% 20%, rgba(60, 70, 85, 0.6), transparent 70%);
+}
+
+.weather-bg.is-night .weather-bg-clouds--back {
+  filter: brightness(0.55);
+}
+
+.weather-bg.is-night .weather-bg-clouds--front {
+  filter: brightness(0.5);
+  opacity: 0.55;
+}
+
+.weather-bg-fog {
+  opacity: 0;
+  background: linear-gradient(
+    180deg,
+    rgba(210, 215, 220, 0.1) 0%,
+    rgba(220, 225, 230, 0.45) 40%,
+    rgba(235, 238, 240, 0.7) 100%
+  );
+  transition: opacity 0.5s ease;
+}
+
+.weather-bg.is-fog .weather-bg-fog {
+  opacity: 1;
+  animation: weather-fog-pulse 6s ease-in-out infinite;
+}
+
+.weather-bg-rain {
+  opacity: 0;
+  overflow: hidden;
+  pointer-events: none;
+  /* Static tilt + slight scale covers corners without animating skew */
+  transform: rotate(8deg) scale(1.15);
+  transform-origin: center center;
+  transition: opacity 0.4s ease;
+  contain: strict;
+}
+
+.weather-bg-rain-sheet {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  height: 200%;
+  will-change: transform;
+  backface-visibility: hidden;
+  background-repeat: repeat;
+  /* Small tile = cheap paint; sparse thin drops */
+  background-size: 160px 200px;
+  background-image:
+    radial-gradient(0.6px 7px at 12% 18%, rgba(230, 240, 255, 0.5) 98%, transparent),
+    radial-gradient(0.5px 4px at 38% 42%, rgba(230, 240, 255, 0.32) 98%, transparent),
+    radial-gradient(0.7px 9px at 61% 12%, rgba(230, 240, 255, 0.42) 98%, transparent),
+    radial-gradient(0.5px 5px at 84% 58%, rgba(230, 240, 255, 0.35) 98%, transparent),
+    radial-gradient(0.6px 7px at 27% 76%, rgba(230, 240, 255, 0.4) 98%, transparent),
+    radial-gradient(0.5px 3px at 73% 88%, rgba(230, 240, 255, 0.28) 98%, transparent),
+    radial-gradient(0.6px 6px at 9% 94%, rgba(230, 240, 255, 0.32) 98%, transparent),
+    radial-gradient(0.5px 8px at 52% 64%, rgba(230, 240, 255, 0.38) 98%, transparent);
+}
+
+.weather-bg-rain-sheet--fast {
+  opacity: 0.75;
+  animation: weather-rain-sheet 1.6s linear infinite;
+}
+
+.weather-bg-rain-sheet--slow {
+  opacity: 0.4;
+  background-size: 200px 260px;
+  background-image:
+    radial-gradient(0.5px 10px at 22% 30%, rgba(230, 240, 255, 0.35) 98%, transparent),
+    radial-gradient(0.6px 5px at 48% 8%, rgba(230, 240, 255, 0.28) 98%, transparent),
+    radial-gradient(0.5px 7px at 71% 52%, rgba(230, 240, 255, 0.32) 98%, transparent),
+    radial-gradient(0.5px 4px at 15% 70%, rgba(230, 240, 255, 0.24) 98%, transparent),
+    radial-gradient(0.6px 6px at 88% 24%, rgba(230, 240, 255, 0.3) 98%, transparent),
+    radial-gradient(0.5px 5px at 59% 86%, rgba(230, 240, 255, 0.26) 98%, transparent);
+  animation: weather-rain-sheet 2.4s linear infinite;
+  animation-delay: -0.7s;
+}
+
+.weather-bg.is-drizzle .weather-bg-rain {
+  opacity: 0.45;
+}
+
+.weather-bg.is-drizzle .weather-bg-rain-sheet--fast {
+  animation-duration: 2s;
+  opacity: 0.55;
+}
+
+.weather-bg.is-drizzle .weather-bg-rain-sheet--slow {
+  animation-duration: 2.8s;
+  opacity: 0.25;
+}
+
+.weather-bg.is-rain .weather-bg-rain {
+  opacity: 0.75;
+}
+
+.weather-bg.is-heavyrain .weather-bg-rain,
+.weather-bg.is-storm .weather-bg-rain {
+  opacity: 0.9;
+}
+
+.weather-bg.is-heavyrain .weather-bg-rain-sheet--fast,
+.weather-bg.is-storm .weather-bg-rain-sheet--fast {
+  animation-duration: 1.2s;
+  opacity: 0.9;
+}
+
+.weather-bg.is-heavyrain .weather-bg-rain-sheet--slow,
+.weather-bg.is-storm .weather-bg-rain-sheet--slow {
+  animation-duration: 1.9s;
+  opacity: 0.45;
+}
+
+.weather-bg-snow {
+  opacity: 0;
+  background-image:
+    radial-gradient(circle 2.5px at 10% 15%, #fff 99%, transparent),
+    radial-gradient(circle 2px at 25% 40%, #fff 99%, transparent),
+    radial-gradient(circle 2.5px at 40% 10%, #fff 99%, transparent),
+    radial-gradient(circle 2px at 55% 35%, #fff 99%, transparent),
+    radial-gradient(circle 3px at 70% 20%, #fff 99%, transparent),
+    radial-gradient(circle 2px at 85% 45%, #fff 99%, transparent),
+    radial-gradient(circle 2.5px at 15% 65%, #fff 99%, transparent),
+    radial-gradient(circle 2px at 45% 70%, #fff 99%, transparent),
+    radial-gradient(circle 2.5px at 65% 55%, #fff 99%, transparent),
+    radial-gradient(circle 2px at 90% 75%, #fff 99%, transparent);
+  background-size: 160% 160%;
+  animation: weather-snow-fall 9s linear infinite;
+  transition: opacity 0.4s ease;
+}
+
+.weather-bg.is-snow .weather-bg-snow {
+  opacity: 0.95;
+}
+
+.weather-bg-lightning {
+  opacity: 0;
+  background: rgba(255, 255, 255, 0.5);
+  mix-blend-mode: screen;
+}
+
+.weather-bg.is-storm .weather-bg-lightning {
+  animation: weather-lightning 5s ease-in-out infinite;
+}
+
+.weather-bg-vignette {
+  background: radial-gradient(ellipse at center, transparent 45%, rgba(0, 0, 0, 0.18) 100%);
+  opacity: 0.7;
+}
+
+.weather-bg.is-day.is-drizzle .weather-bg-vignette,
+.weather-bg.is-day.is-rain .weather-bg-vignette {
+  opacity: 0.35;
+}
+
+.weather-bg.is-night .weather-bg-vignette {
+  background: radial-gradient(ellipse at center, transparent 40%, rgba(0, 0, 0, 0.4) 100%);
+}
+
+@keyframes weather-clouds-drift {
+  from {
+    transform: translate3d(0, 0, 0);
+  }
+  to {
+    /* Stay inside the extra 50% width — no empty left/right cut */
+    transform: translate3d(-10%, 0, 0);
+  }
+}
+
+@keyframes weather-fog-pulse {
+  0%,
+  100% {
+    opacity: 0.7;
+  }
+  50% {
+    opacity: 1;
+  }
+}
+
+@keyframes weather-rain-sheet {
+  from {
+    transform: translate3d(0, -50%, 0);
+  }
+  to {
+    transform: translate3d(0, 0, 0);
+  }
+}
+
+@keyframes weather-snow-fall {
+  from {
+    background-position: 0 0;
+  }
+  to {
+    background-position: 24px 160%;
+  }
+}
+
+@keyframes weather-lightning {
+  0%,
+  88%,
+  100% {
+    opacity: 0;
+  }
+  90% {
+    opacity: 0.9;
+  }
+  91% {
+    opacity: 0.1;
+  }
+  93% {
+    opacity: 0.75;
+  }
+  95% {
+    opacity: 0;
+  }
+}
+
+@keyframes weather-stars-twinkle {
+  0%,
+  100% {
+    opacity: 0.85;
+  }
+  50% {
+    opacity: 1;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .weather-bg-clouds,
+  .weather-bg-fog,
+  .weather-bg-rain-sheet,
+  .weather-bg-snow,
+  .weather-bg-lightning,
+  .weather-bg-stars {
+    animation: none !important;
+  }
+}

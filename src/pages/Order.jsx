@@ -1,7 +1,15 @@
 import React, { useState, useMemo } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
-import { ChevronLeft, ChevronRight, Search, X, Minus, Plus } from 'lucide-react';
+import { ChevronLeft, ChevronRight, Search, X, Minus, Plus, MapPin } from 'lucide-react';
 import { getImageForCategory, getCategoryDisplayName, getEffectivePrice, PriceTags } from '../utils/menuData';
+import { FEATURE_FLAGS } from '../utils/featureFlags';
+import {
+    haversineKm,
+    resolveDeliveryCharge,
+    requestUserLocation,
+    emptyDeliveryState,
+} from '../utils/delivery';
+import { fetchRestoWeather, resolveWeatherSurcharge } from '../utils/weather';
 import '../styles/order.css';
 import '../styles/order_items.css';
 import '../styles/styles.css';
@@ -80,7 +88,12 @@ const Order = ({ restaurantData, orderDetails, setOrderDetails }) => {
         return () => clearTimeout(handler);
     }, [searchTerm]);
     if (!restaurantData) return null;
-    const { categories } = restaurantData;
+    const { categories, restoDetails } = restaurantData;
+    const deliveryConfig =
+        FEATURE_FLAGS.deliveryCharges && restoDetails?.delivery
+            ? restoDetails.delivery
+            : null;
+    const deliveryState = orderDetails.delivery || emptyDeliveryState();
     const uniqueCategories = [...new Set((categories || []).map(cat => cat.categoryType))];
     const allItems = useMemo(() => {
         const items = [];
@@ -178,6 +191,88 @@ const Order = ({ restaurantData, orderDetails, setOrderDetails }) => {
         }, 5000);
     };
 
+    const handleUseLocation = async () => {
+        if (!deliveryConfig) return;
+        setOrderDetails((prev) => ({
+            ...prev,
+            delivery: { ...emptyDeliveryState(), status: 'locating' },
+        }));
+        try {
+            const user = await requestUserLocation({
+                enableHighAccuracy: true,
+                timeout: 20000,
+                maximumAge: 0,
+            });
+            // Ignore very poor accuracy (~3km+)
+            if (user.accuracy != null && user.accuracy > 3000) {
+                setOrderDetails((prev) => ({
+                    ...prev,
+                    delivery: { ...emptyDeliveryState(), status: 'error' },
+                }));
+                showStatusSnackbar(
+                    'Location accuracy is too low. Enter your address instead.'
+                );
+                return;
+            }
+            const distanceKm = haversineKm(
+                deliveryConfig.coords.lat,
+                deliveryConfig.coords.lng,
+                user.lat,
+                user.lng
+            );
+            const { charge, outOfRange } = resolveDeliveryCharge(
+                deliveryConfig.slabs,
+                distanceKm
+            );
+            const weather = await fetchRestoWeather(
+                deliveryConfig.coords.lat,
+                deliveryConfig.coords.lng
+            );
+            const liveSurcharge = outOfRange
+                ? { amount: 0, reason: '', label: '', lines: [] }
+                : resolveWeatherSurcharge(deliveryConfig, weather);
+            setOrderDetails((prev) => ({
+                ...prev,
+                customerAddress: `https://maps.google.com/?q=${user.lat},${user.lng}`,
+                delivery: {
+                    status: outOfRange ? 'out_of_range' : 'ready',
+                    distanceKm: Math.round(distanceKm * 10) / 10,
+                    baseCharge: outOfRange ? null : charge,
+                    surcharge: liveSurcharge.amount,
+                    surchargeReason: liveSurcharge.reason,
+                    surchargeLabel: liveSurcharge.label || '',
+                    surchargeLines: liveSurcharge.lines || [],
+                    outOfRange,
+                    coords: { lat: user.lat, lng: user.lng },
+                    accuracy: user.accuracy,
+                },
+            }));
+            if (outOfRange) {
+                showStatusSnackbar('Sorry, you are outside our delivery range.');
+            }
+        } catch (err) {
+            const denied = err.code === 'GEO_DENIED';
+            setOrderDetails((prev) => ({
+                ...prev,
+                delivery: {
+                    ...emptyDeliveryState(),
+                    status: denied ? 'denied' : 'error',
+                },
+            }));
+            if (denied) {
+                showStatusSnackbar('Location denied. Enter your address — delivery charge will be confirmed by the restaurant.');
+            } else if (err.code === 'GEO_INSECURE') {
+                showStatusSnackbar('Location needs HTTPS or localhost. Enter your address instead.');
+            } else if (err.code === 'GEO_TIMEOUT') {
+                showStatusSnackbar(
+                    'Location timed out. Try again or enter your address.'
+                );
+            } else {
+                showStatusSnackbar('Could not get your location. Enter your address instead.');
+            }
+        }
+    };
+
     const handleReviewClick = () => {
         if (!orderDetails.customerName || orderDetails.customerName.trim().length === 0) {
             showStatusSnackbar('Please enter your Name');
@@ -194,6 +289,14 @@ const Order = ({ restaurantData, orderDetails, setOrderDetails }) => {
         }
         if (orderDetails.type === 'dinein' && (!orderDetails.tableNumber || orderDetails.tableNumber.trim().length === 0)) {
             showStatusSnackbar('Please enter table number');
+            return;
+        }
+        if (
+            orderDetails.type === 'online' &&
+            deliveryConfig &&
+            deliveryState.outOfRange
+        ) {
+            showStatusSnackbar('Sorry, you are outside our delivery range.');
             return;
         }
         const itemsCount = Object.values(orderDetails.items).reduce((acc, sizes) => {
@@ -332,7 +435,54 @@ const Order = ({ restaurantData, orderDetails, setOrderDetails }) => {
 
                             {orderDetails.type === 'online' ? (
                                 <div className="order-input-group">
-                                    <label className="order-input-label">Customer Address</label>
+                                    <div
+                                        style={{
+                                            display: 'flex',
+                                            alignItems: 'center',
+                                            justifyContent: 'space-between',
+                                            gap: '8px',
+                                            marginBottom: '1px',
+                                        }}
+                                    >
+                                        <label className="order-input-label" style={{ marginBottom: 0 }}>
+                                            Customer Address
+                                        </label>
+                                        {deliveryConfig && (
+                                            <button
+                                                type="button"
+                                                onClick={handleUseLocation}
+                                                disabled={deliveryState.status === 'locating'}
+                                                style={{
+                                                    display: 'inline-flex',
+                                                    alignItems: 'center',
+                                                    gap: '3px',
+                                                    border: 'none',
+                                                    background: 'none',
+                                                    padding: 0,
+                                                    margin: 0,
+                                                    color: '#00C851',
+                                                    fontSize: '13px',
+                                                    fontWeight: 600,
+                                                    fontFamily: 'Afacad, sans-serif',
+                                                    cursor:
+                                                        deliveryState.status === 'locating'
+                                                            ? 'wait'
+                                                            : 'pointer',
+                                                    opacity:
+                                                        deliveryState.status === 'locating'
+                                                            ? 0.7
+                                                            : 1,
+                                                    textDecoration: 'underline',
+                                                    whiteSpace: 'nowrap',
+                                                }}
+                                            >
+                                                <MapPin size={14} strokeWidth={2.2} />
+                                                {deliveryState.status === 'locating'
+                                                    ? 'Getting location…'
+                                                    : 'Use my Current Location'}
+                                            </button>
+                                        )}
+                                    </div>
                                     <textarea
                                         name="customerAddress"
                                         value={orderDetails.customerAddress}
@@ -348,6 +498,48 @@ const Order = ({ restaurantData, orderDetails, setOrderDetails }) => {
                                         autoCapitalize="sentences"
                                         enterKeyHint="done"
                                     />
+                                    {deliveryConfig && (
+                                        <button
+                                            type="button"
+                                            onClick={() =>
+                                                navigate(`/delivery-charges?r=${restaurantId}`)
+                                            }
+                                            style={{
+                                                display: 'inline-flex',
+                                                alignItems: 'center',
+                                                alignSelf: 'flex-start',
+                                                gap: '4px',
+                                                border: 'none',
+                                                background: 'none',
+                                                padding: 0,
+                                                marginTop: 0,
+                                                transform: 'translateY(-5px)',
+                                                color: 'var(--primary-color)',
+                                                fontSize: '13px',
+                                                fontWeight: 600,
+                                                fontFamily: 'Afacad, sans-serif',
+                                                cursor: 'pointer',
+                                                textDecoration: 'underline',
+                                            }}
+                                        >
+                                            View Delivery Charges
+                                        </button>
+                                    )}
+                                    {deliveryConfig && deliveryState.status === 'out_of_range' && (
+                                        <div style={{
+                                            marginTop: '10px',
+                                            padding: '10px 12px',
+                                            borderRadius: '10px',
+                                            background: '#fff3e0',
+                                            fontSize: '13px',
+                                            color: '#e65100',
+                                        }}>
+                                            Outside delivery range
+                                            {deliveryState.distanceKm != null
+                                                ? ` (≈ ${deliveryState.distanceKm} km)`
+                                                : ''}
+                                        </div>
+                                    )}
                                 </div>
                             ) : (
                                 <div className="order-input-group">

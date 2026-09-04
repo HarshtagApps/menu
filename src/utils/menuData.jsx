@@ -59,6 +59,7 @@ export const ProjectImages = {
     mainCourse: 'assets/images/mainCourse.png',
     frenchFries: 'assets/images/frenchFries.png',
     garlicBread: 'assets/images/garlicBread.png',
+    deliveryCharges: 'assets/images/deliveryCharges.png',
 };
 
 export const MenuData = {

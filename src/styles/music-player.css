@@ -91,6 +91,14 @@ body.has-music-player .more-container {
   padding-bottom: var(--music-player-height);
 }
 
+body.has-music-player .delivery-charges-page {
+  padding-bottom: 0;
+}
+
+body.has-music-player .delivery-charges-container {
+  padding-bottom: calc(12px + var(--music-player-height));
+}
+
 body.has-music-player .reserve-container {
   padding-bottom: calc(24px + var(--music-player-height));
 }

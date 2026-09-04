@@ -23,6 +23,7 @@ const Review = React.lazy(() => import('./pages/Review'));
 const More = React.lazy(() => import('./pages/More'));
 const Gallery = React.lazy(() => import('./pages/Gallery'));
 const Terms = React.lazy(() => import('./pages/Terms'));
+const DeliveryCharges = React.lazy(() => import('./pages/DeliveryCharges'));
 const Reserve = React.lazy(() => import('./pages/Reserve'));
 const TableSlots = React.lazy(() => import('./pages/TableSlots'));
 const ReserveReview = React.lazy(() => import('./pages/ReserveReview'));
@@ -55,7 +56,17 @@ const AppContent = () => {
     customerAddress: '',
     tableNumber: '',
     type: 'online',
-    items: {}
+    items: {},
+    delivery: {
+      status: 'idle',
+      distanceKm: null,
+      baseCharge: null,
+      surcharge: 0,
+      surchargeReason: '',
+      outOfRange: false,
+      coords: null,
+      accuracy: null,
+    },
   });
 
   const restaurantId = searchParams.get('r');
@@ -162,6 +173,7 @@ const AppContent = () => {
           <Route path="/more" element={<More restaurantData={restaurantData} />} />
           <Route path="/gallery" element={<Gallery restaurantData={restaurantData} />} />
           <Route path="/terms" element={<Terms restaurantData={restaurantData} />} />
+          <Route path="/delivery-charges" element={<DeliveryCharges restaurantData={restaurantData} />} />
           <Route path="/reserve" element={<Reserve restaurantData={restaurantData} />} />
           <Route path="/reserve/table" element={<TableSlots restaurantData={restaurantData} />} />
           <Route path="/reserve/review" element={<ReserveReview restaurantData={restaurantData} />} />

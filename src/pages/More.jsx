@@ -5,6 +5,7 @@ import '../styles/styles.css';
 import '../styles/More.css';
 import { ProjectImages, hexToCssFilter } from '../utils/menuData';
 import Ads from '../components/Ads';
+import { FEATURE_FLAGS } from '../utils/featureFlags';
 
 const SettingTileItem = ({ icon, label, onTap, onDisabledTap, trailing, isEnabled = true, comingSoon = false }) => {
     const handleClick = () => {
@@ -288,24 +289,32 @@ const More = ({ restaurantData }) => {
             onTap: () => navigate(`/gallery?r=${restaurantId}`),
             ...galleryProps
         },
+        ...(FEATURE_FLAGS.deliveryCharges && restoDetails.delivery
+            ? [{
+                icon: ProjectImages.deliveryCharges,
+                label: 'Delivery Charges',
+                onTap: () => navigate(`/delivery-charges?r=${restaurantId}`),
+                isEnabled: true
+            }]
+            : []),
         {
             icon: ProjectImages.broadcast,
             label: 'Terms & Conditions',
             onTap: () => navigate(`/terms?r=${restaurantId}`),
             isEnabled: true
         },
-        {
-            icon: ProjectImages.table,
-            label: 'Reserve a Table',
-            onTap: () => navigate(`/reserve?r=${restaurantId}`),
-            ...tableReserveProps
-        },
-        {
-            icon: ProjectImages.threeD,
-            label: 'Floor Plan Map',
-            onTap: () => navigate(`/floor-plan?r=${restaurantId}`),
-            ...tableReserveProps
-        },
+        // {
+        //     icon: ProjectImages.table,
+        //     label: 'Reserve a Table',
+        //     onTap: () => navigate(`/reserve?r=${restaurantId}`),
+        //     ...tableReserveProps
+        // },
+        // {
+        //     icon: ProjectImages.threeD,
+        //     label: 'Floor Plan Map',
+        //     onTap: () => navigate(`/floor-plan?r=${restaurantId}`),
+        //     ...tableReserveProps
+        // },
     ];
 
     return (

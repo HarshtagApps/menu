@@ -5,4 +5,6 @@
 export const FEATURE_FLAGS = {
   /** FoodItems double-tap coachmark + aurora; OrderItems focus aurora/focus-dim */
   menuItemHighlightUx: false,
+  /** Distance-based delivery fee via browser geolocation + sheet Delivery column */
+  deliveryCharges: true,
 };

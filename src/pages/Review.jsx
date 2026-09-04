@@ -4,7 +4,7 @@ import '../styles/order_review.css';
 import '../styles/styles.css';
 import {
     ChevronLeft,
-    User,
+    UserRound,
     FileText,
     Pencil,
     CheckCircle,
@@ -12,6 +12,21 @@ import {
     X,
     Truck
 } from 'lucide-react';
+import { FEATURE_FLAGS } from '../utils/featureFlags';
+import { emptyDeliveryState } from '../utils/delivery';
+import { formatSurchargeLabel } from '../utils/weather';
+
+function countOrderItems(items) {
+    return Object.values(items || {}).reduce((acc, sizes) => {
+        return (
+            acc +
+            Object.values(sizes || {}).reduce(
+                (sum, entry) => sum + (Number(entry?.quantity) || 0),
+                0
+            )
+        );
+    }, 0);
+}
 
 const Review = ({ restaurantData, orderDetails, setOrderDetails }) => {
     const navigate = useNavigate();
@@ -31,19 +46,21 @@ const Review = ({ restaurantData, orderDetails, setOrderDetails }) => {
         if (savedOrder) {
             try {
                 const parsedOrder = JSON.parse(savedOrder);
-                setOrderDetails(parsedOrder);
                 sessionStorage.removeItem('pendingOrder');
+                setOrderDetails(parsedOrder);
+                return;
             } catch (error) {
                 console.error('Error restoring order:', error);
                 sessionStorage.removeItem('pendingOrder');
             }
         }
-    }, [restaurantData, setOrderDetails]);
-    if (!restaurantData) return null;
-    const { restoDetails } = restaurantData;
-    const phoneNumber = restoDetails?.contact || '';
-    const upiId = restoDetails?.upiId;
+        if (countOrderItems(orderDetails.items) === 0) {
+            navigate(`/order?r=${restaurantId || ''}`, { replace: true });
+        }
+    }, [restaurantData, setOrderDetails, orderDetails.items, navigate, restaurantId]);
+
     const flatItems = useMemo(() => {
+        if (!restaurantData) return [];
         const findMenuItem = (itemId) => {
             for (const cat of restaurantData.categories || []) {
                 const found = cat.items?.find(i => i.id === itemId || i.name === itemId);
@@ -53,7 +70,7 @@ const Review = ({ restaurantData, orderDetails, setOrderDetails }) => {
         };
 
         const items = [];
-        Object.entries(orderDetails.items).forEach(([itemId, sizes]) => {
+        Object.entries(orderDetails.items || {}).forEach(([itemId, sizes]) => {
             const menuItem = findMenuItem(itemId);
             const displayName = menuItem?.name
                 || itemId.replace(/__(veg|egg|nonveg)$/, '');
@@ -75,8 +92,38 @@ const Review = ({ restaurantData, orderDetails, setOrderDetails }) => {
             });
         });
         return items;
-    }, [orderDetails.items, restaurantData.categories]);
-    const totalAmount = flatItems.reduce((acc, item) => acc + item.total, 0);
+    }, [orderDetails.items, restaurantData]);
+
+    if (!restaurantData) return null;
+    if (flatItems.length === 0) return null;
+
+    const { restoDetails } = restaurantData;
+    const phoneNumber = restoDetails?.contact || '';
+    const upiId = restoDetails?.upiId;
+    const subtotalAmount = flatItems.reduce((acc, item) => acc + item.total, 0);
+    const deliveryState = orderDetails.delivery || emptyDeliveryState();
+    const deliveryEnabled =
+        FEATURE_FLAGS.deliveryCharges &&
+        orderDetails.type === 'online' &&
+        restaurantData.restoDetails?.delivery;
+    const deliveryBase =
+        deliveryEnabled && deliveryState.status === 'ready'
+            ? Number(deliveryState.baseCharge) || 0
+            : null;
+    const deliverySurcharge =
+        deliveryEnabled && deliveryState.status === 'ready'
+            ? Number(deliveryState.surcharge) || 0
+            : 0;
+    const deliveryFeeTotal =
+        deliveryBase != null ? deliveryBase + deliverySurcharge : null;
+    const surchargeLabel =
+        deliveryState.surchargeLabel ||
+        formatSurchargeLabel(
+            deliveryState.surchargeLines,
+            deliveryState.surchargeReason
+        );
+    const totalAmount =
+        subtotalAmount + (deliveryFeeTotal != null ? deliveryFeeTotal : 0);
     const formatSize = (size) => {
         switch (size.toLowerCase()) {
             case 'small': return 'Small';
@@ -100,7 +147,11 @@ const Review = ({ restaurantData, orderDetails, setOrderDetails }) => {
             message += `*Table Number:* ${orderDetails.tableNumber.trim()}\n\n`;
         } else {
             message += `*Type:* Online (Delivery)\n`;
-            message += `*Address:* ${orderDetails.customerAddress.trim()}\n\n`;
+            message += `*Address:* ${orderDetails.customerAddress.trim()}\n`;
+            if (deliveryState.status === 'ready' && deliveryState.distanceKm != null) {
+                message += `*Distance:* ≈ ${deliveryState.distanceKm} km\n`;
+            }
+            message += `\n`;
         }
         message += `🍴 *Ordered Items:*\n`;
         flatItems.forEach((item, index) => {
@@ -113,13 +164,30 @@ const Review = ({ restaurantData, orderDetails, setOrderDetails }) => {
             }
             message += `\n`;
         });
-        message += `💸 *Total Amount:* ₹${totalAmount.toFixed(2)}\n\n`;
+        message += `*Subtotal:* ₹${subtotalAmount.toFixed(2)}\n`;
+        if (deliveryFeeTotal != null) {
+            if (deliveryBase === 0) {
+                message += `*Delivery Charges:* Free\n`;
+            } else {
+                message += `*Delivery Charges:* ₹${deliveryBase.toFixed(2)}\n`;
+            }
+            if (deliverySurcharge > 0) {
+                message += `*Delivery Surcharge${surchargeLabel ? ` (${surchargeLabel})` : ''}:* ₹${deliverySurcharge.toFixed(2)}\n`;
+            }
+        } else if (deliveryEnabled) {
+            message += `*Delivery Charges:* Delivery charge will be confirmed by ${restoDetails?.restoName || 'Restaurant'} on WhatsApp\n`;
+        }
+        message += `\n💸 *Total Amount:* ₹${totalAmount.toFixed(2)}\n\n`;
         message += `Please confirm. Thanks!\n`;
         message += `Powered by *HARSHTAG APPS*`;
         return message;
     };
 
     const handleSendOrder = () => {
+        if (flatItems.length === 0) {
+            navigate(`/order?r=${restaurantId || ''}`, { replace: true });
+            return;
+        }
         const message = encodeURIComponent(generateWhatsAppMessage());
         const whatsappURL = `https://api.whatsapp.com/send?phone=91${phoneNumber}&text=${message}`;
         window.open(whatsappURL, '_blank');
@@ -129,7 +197,8 @@ const Review = ({ restaurantData, orderDetails, setOrderDetails }) => {
             customerAddress: '',
             tableNumber: '',
             type: 'online',
-            items: {}
+            items: {},
+            delivery: emptyDeliveryState(),
         });
         setTimeout(() => {
             navigate(`/?r=${restaurantId}`);
@@ -171,33 +240,43 @@ const Review = ({ restaurantData, orderDetails, setOrderDetails }) => {
             </div>
 
             <div className="review-page-container">
-                <div className="review-customer-card">
-                    <div className="review-card-title">
-                        <User size={18} strokeWidth={2} />
+                <div className="review-customer-section">
+                    <div className="review-section-header">
+                        <UserRound size={18} strokeWidth={2} />
                         <span>Customer Details</span>
                     </div>
-                    <div className="review-detail-row">
-                        <span className="review-detail-label">Customer Name</span>
-                        <span className="review-detail-value">{orderDetails.customerName || '-'}</span>
-                    </div>
-                    <div className="review-detail-row">
-                        <span className="review-detail-label">Customer Number</span>
-                        <span className="review-detail-value">{orderDetails.customerPhone || '-'}</span>
-                    </div>
-                    {orderDetails.type === 'dinein' ? (
+                    <div className="review-customer-card">
                         <div className="review-detail-row">
-                            <span className="review-detail-label">Table Number</span>
-                            <span className="review-detail-value">{orderDetails.tableNumber || '-'}</span>
+                            <span className="review-detail-label">Customer Name</span>
+                            <span className="review-detail-value">{orderDetails.customerName || '-'}</span>
                         </div>
-                    ) : (
                         <div className="review-detail-row">
-                            <span className="review-detail-label">Customer Address</span>
-                            <span className="review-detail-value">{orderDetails.customerAddress || '-'}</span>
+                            <span className="review-detail-label">Customer Number</span>
+                            <span className="review-detail-value">{orderDetails.customerPhone || '-'}</span>
                         </div>
-                    )}
-                    <div className="review-detail-row">
-                        <span className="review-detail-label">Type</span>
-                        <span className="review-detail-value">{orderDetails.type === 'dinein' ? 'Dine-in' : 'Delivery'}</span>
+                        {orderDetails.type === 'dinein' ? (
+                            <div className="review-detail-row">
+                                <span className="review-detail-label">Table Number</span>
+                                <span className="review-detail-value">{orderDetails.tableNumber || '-'}</span>
+                            </div>
+                        ) : (
+                            <>
+                                <div className="review-detail-row">
+                                    <span className="review-detail-label">Customer Address</span>
+                                    <span className="review-detail-value">{orderDetails.customerAddress || '-'}</span>
+                                </div>
+                                {deliveryEnabled && deliveryState.status === 'ready' && (
+                                    <div className="review-detail-row">
+                                        <span className="review-detail-label">Distance</span>
+                                        <span className="review-detail-value">≈ {deliveryState.distanceKm} km</span>
+                                    </div>
+                                )}
+                            </>
+                        )}
+                        <div className="review-detail-row">
+                            <span className="review-detail-label">Type</span>
+                            <span className="review-detail-value">{orderDetails.type === 'dinein' ? 'Dine-in' : 'Delivery'}</span>
+                        </div>
                     </div>
                 </div>
 
@@ -266,11 +345,76 @@ const Review = ({ restaurantData, orderDetails, setOrderDetails }) => {
                 <div className="review-total-section" style={{
                     marginBottom: '0',
                     display: 'flex',
-                    justifyContent: 'space-between',
+                    flexDirection: 'column',
+                    gap: '6px',
                     width: '100%'
                 }}>
-                    <div className="review-total-label">Total Amount</div>
-                    <div className="review-total-amount">₹{totalAmount.toFixed(2)}</div>
+                    {deliveryEnabled && (
+                        <>
+                            <div style={{ display: 'flex', justifyContent: 'space-between', width: '100%' }}>
+                                <div className="review-total-label" style={{ fontWeight: 500, fontSize: '14px' }}>Subtotal</div>
+                                <div style={{ fontSize: '14px' }}>₹{subtotalAmount.toFixed(2)}</div>
+                            </div>
+                            <div style={{ display: 'flex', justifyContent: 'space-between', width: '100%', gap: '12px' }}>
+                                <div className="review-total-label" style={{ fontWeight: 500, fontSize: '14px', display: 'flex', alignItems: 'center', gap: '6px', flexShrink: 0 }}>
+                                    <Truck size={14} />
+                                    Delivery Charges
+                                </div>
+                                <div style={{ fontSize: '14px', textAlign: 'right', whiteSpace: 'nowrap' }}>
+                                    {deliveryFeeTotal == null
+                                        ? '—'
+                                        : deliveryBase === 0
+                                          ? 'Free'
+                                          : `₹${deliveryBase.toFixed(2)}`}
+                                </div>
+                            </div>
+                            {deliveryFeeTotal == null && (
+                                <div
+                                    style={{
+                                        width: '100%',
+                                        fontSize: '12px',
+                                        fontWeight: 500,
+                                        color: '#888',
+                                        lineHeight: 1.0,
+                                        marginTop: '-5px',
+                                    }}
+                                >
+                                    {`Delivery charge will be confirmed by ${restoDetails?.restoName || 'Restaurant'} on WhatsApp`}
+                                </div>
+                            )}
+                            {deliverySurcharge > 0 && (
+                                <>
+                                    <div style={{ display: 'flex', justifyContent: 'space-between', width: '100%' }}>
+                                        <div className="review-total-label" style={{ fontWeight: 500, fontSize: '14px' }}>
+                                            Delivery Surcharge
+                                            {surchargeLabel ? ` (${surchargeLabel})` : ''}
+                                        </div>
+                                        <div style={{ fontSize: '14px' }}>
+                                            ₹{deliverySurcharge.toFixed(2)}
+                                        </div>
+                                    </div>
+                                    {deliveryState.surchargeReason ? (
+                                        <div
+                                            style={{
+                                                width: '100%',
+                                                fontSize: '12px',
+                                                fontWeight: 500,
+                                                color: '#888',
+                                                lineHeight: 1.4,
+                                                marginTop: '-2px',
+                                            }}
+                                        >
+                                            {deliveryState.surchargeReason}
+                                        </div>
+                                    ) : null}
+                                </>
+                            )}
+                        </>
+                    )}
+                    <div style={{ display: 'flex', justifyContent: 'space-between', width: '100%' }}>
+                        <div className="review-total-label">Total Amount</div>
+                        <div className="review-total-amount">₹{totalAmount.toFixed(2)}</div>
+                    </div>
                 </div>
 
                 <button
