@@ -535,11 +535,11 @@ const Review = ({ restaurantData, orderDetails, setOrderDetails }) => {
                                             <div
                                                 style={{
                                                     width: '100%',
-                                                    fontSize: '12px',
+                                                    fontSize: '11px',
                                                     fontWeight: 500,
                                                     color: '#888',
-                                                    lineHeight: 1.4,
-                                                    marginTop: '-2px',
+                                                    lineHeight: 1.3,
+                                                    marginTop: '-8px',
                                                 }}
                                             >
                                                 {deliveryState.surchargeReason}

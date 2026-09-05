@@ -132,6 +132,12 @@
     color: #00c851;
 }
 
+.order-address-selected.is-fetching .order-address-selected-title,
+.order-address-selected-title.is-fetching {
+    color: #FF8800;
+    animation: order-address-fetch-fade 1.2s ease-in-out infinite;
+}
+
 .order-address-selected-title {
     font-weight: 600;
     font-size: 14px;
@@ -143,6 +149,16 @@
     font-size: 13px;
     color: grey;
     line-height: 1.15;
+}
+
+@keyframes order-address-fetch-fade {
+    0%,
+    100% {
+        opacity: 0.35;
+    }
+    50% {
+        opacity: 1;
+    }
 }
 
 .order-address-options {

@@ -1,4 +1,5 @@
 .delivery-map-wrap {
+  position: relative;
   width: 100%;
   height: 260px;
   border-radius: 12px;
@@ -88,4 +89,61 @@
 .delivery-map-user-marker .leaflet-div-icon {
   background: transparent;
   border: none;
+}
+
+.delivery-map-wrap .leaflet-control-layers {
+  border: none;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(51, 51, 51, 0.2);
+  font-family: 'Afacad', sans-serif;
+  font-size: 13px;
+}
+
+.delivery-map-wrap .leaflet-control-layers-toggle {
+  width: 34px;
+  height: 34px;
+}
+
+.delivery-map-wrap .leaflet-control-layers-expanded {
+  padding: 8px 10px;
+  background: #fff;
+}
+
+.delivery-map-gps-btn {
+  position: absolute;
+  right: 10px;
+  bottom: 20px;
+  z-index: 1000;
+  width: 42px;
+  height: 42px;
+  padding: 0;
+  border: none;
+  border-radius: 10px;
+  background: var(--primary-color, #fa057b);
+  color: #fff;
+  box-shadow: 0 2px 8px rgba(51, 51, 51, 0.22);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.delivery-map-gps-btn:active:not(:disabled) {
+  transform: scale(0.96);
+}
+
+.delivery-map-gps-btn:disabled {
+  cursor: wait;
+  opacity: 0.7;
+}
+
+.delivery-map-gps-btn .is-spinning {
+  animation: delivery-map-gps-spin 0.9s linear infinite;
+}
+
+@keyframes delivery-map-gps-spin {
+  to {
+    transform: rotate(360deg);
+  }
 }

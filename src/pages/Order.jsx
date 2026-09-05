@@ -581,15 +581,29 @@ const Order = ({ restaurantData, orderDetails, setOrderDetails }) => {
                                             <p
                                                 className={[
                                                     'order-address-selected',
-                                                    orderDetails.customerAddress
-                                                        ? 'is-set'
-                                                        : 'is-empty',
+                                                    deliveryState.status === 'locating'
+                                                        ? 'is-fetching'
+                                                        : orderDetails.customerAddress
+                                                            ? 'is-set'
+                                                            : 'is-empty',
                                                 ].join(' ')}
                                             >
-                                                {orderDetails.customerAddress ? (
+                                                {deliveryState.status === 'locating' ||
+                                                orderDetails.customerAddress ? (
                                                     <>
-                                                        <span className="order-address-selected-title">
-                                                            Delivery Location Confirmed 📌
+                                                        <span
+                                                            className={[
+                                                                'order-address-selected-title',
+                                                                deliveryState.status === 'locating'
+                                                                    ? 'is-fetching'
+                                                                    : '',
+                                                            ]
+                                                                .filter(Boolean)
+                                                                .join(' ')}
+                                                        >
+                                                            {deliveryState.status === 'locating'
+                                                                ? 'Fetching your location'
+                                                                : 'Delivery Location Confirmed 📌'}
                                                         </span>
                                                         <span className="order-address-selected-sub">
                                                             We’ll use this location for your Home Delivery 🏠
@@ -745,6 +759,7 @@ const Order = ({ restaurantData, orderDetails, setOrderDetails }) => {
                                 restoLogoUrl={ProjectImages.restoMarker}
                                 customerCoords={draftMapCoords}
                                 onChange={handleMapPinChange}
+                                onLocateError={showStatusSnackbar}
                                 focusKey={pinFocusKey}
                             />
                         </div>
