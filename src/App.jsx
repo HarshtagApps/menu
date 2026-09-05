@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { BrowserRouter as Router, Routes, Route, useSearchParams } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, useSearchParams, useLocation } from 'react-router-dom';
 import { loadRestaurantData, trackMenuView } from './api';
 import Splash from './components/Splash';
 import Loading from './components/Loading';
@@ -45,6 +45,8 @@ function shouldShowSplashOnLoad() {
 
 const AppContent = () => {
   const [searchParams] = useSearchParams();
+  const location = useLocation();
+  const hideMusicBar = location.pathname === '/review';
   const [restaurantData, setRestaurantData] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -189,7 +191,7 @@ const AppContent = () => {
         <React.Suspense fallback={null}>
           <BackgroundMusic
             urls={backgroundMusicUrls}
-            visible={!showSplash && !loading && !error}
+            visible={!showSplash && !loading && !error && !hideMusicBar}
             restoName={restaurantData?.restoDetails?.restoName || ""}
           />
         </React.Suspense>

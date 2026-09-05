@@ -1,18 +1,23 @@
 import React, { useState, useMemo } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { ChevronLeft, ChevronRight, Search, X, Minus, Plus, MapPin } from 'lucide-react';
-import { getImageForCategory, getCategoryDisplayName, getEffectivePrice, PriceTags } from '../utils/menuData';
+import { getImageForCategory, getCategoryDisplayName, getEffectivePrice, PriceTags, ProjectImages } from '../utils/menuData';
 import { FEATURE_FLAGS } from '../utils/featureFlags';
 import {
-    haversineKm,
+    roadDistanceKm,
     resolveDeliveryCharge,
     requestUserLocation,
     emptyDeliveryState,
+    cartTotalFromItems,
+    canReuseDeliveryDistance,
 } from '../utils/delivery';
 import { fetchRestoWeather, resolveWeatherSurcharge } from '../utils/weather';
+import DeliveryMap from '../components/DeliveryMap';
 import '../styles/order.css';
 import '../styles/order_items.css';
 import '../styles/styles.css';
+import '../styles/delivery-map.css';
+import '../styles/gallery.css';
 
 const SearchItem = React.memo(({ item, orderDetails, updateQuantity, updateNotes, getQuantity, getSizeLabel }) => {
     const itemId = item.id || item.name;
@@ -81,6 +86,9 @@ const Order = ({ restaurantData, orderDetails, setOrderDetails }) => {
     const [isSearchActive, setIsSearchActive] = useState(false);
     const [searchTerm, setSearchTerm] = useState('');
     const [searchQuery, setSearchQuery] = useState('');
+    const [pinFocusKey, setPinFocusKey] = useState(0);
+    const [showAddressMapDialog, setShowAddressMapDialog] = useState(false);
+    const [draftMapCoords, setDraftMapCoords] = useState(null);
     React.useEffect(() => {
         const handler = setTimeout(() => {
             setSearchQuery(searchTerm);
@@ -191,8 +199,115 @@ const Order = ({ restaurantData, orderDetails, setOrderDetails }) => {
         }, 5000);
     };
 
+    const applyDeliveryCoords = async (lat, lng, accuracy = null) => {
+        if (!deliveryConfig) return;
+        const prevDelivery = orderDetails.delivery || emptyDeliveryState();
+        const reuseKm = canReuseDeliveryDistance(
+            prevDelivery.coords,
+            prevDelivery.distanceKm,
+            lat,
+            lng
+        )
+            ? prevDelivery.distanceKm
+            : null;
+
+        setOrderDetails((prev) => ({
+            ...prev,
+            customerAddress: `https://maps.google.com/?q=${lat},${lng}`,
+            delivery: { ...emptyDeliveryState(), status: 'locating' },
+        }));
+        try {
+            const distanceKm =
+                reuseKm != null
+                    ? reuseKm
+                    : await roadDistanceKm(
+                        deliveryConfig.coords.lat,
+                        deliveryConfig.coords.lng,
+                        lat,
+                        lng
+                    );
+            const cartTotal = cartTotalFromItems(orderDetails.items);
+            const { charge, outOfRange, belowMinOrder, minOrder } =
+                resolveDeliveryCharge(deliveryConfig, distanceKm, cartTotal);
+            const weather = await fetchRestoWeather(
+                deliveryConfig.coords.lat,
+                deliveryConfig.coords.lng
+            );
+            const liveSurcharge = outOfRange
+                ? { amount: 0, reason: '', label: '', lines: [] }
+                : resolveWeatherSurcharge(deliveryConfig, weather);
+            setOrderDetails((prev) => ({
+                ...prev,
+                customerAddress: `https://maps.google.com/?q=${lat},${lng}`,
+                delivery: {
+                    status: outOfRange ? 'out_of_range' : 'ready',
+                    distanceKm: Math.round(distanceKm * 10) / 10,
+                    baseCharge: outOfRange || belowMinOrder ? null : charge,
+                    surcharge: liveSurcharge.amount,
+                    surchargeReason: liveSurcharge.reason,
+                    surchargeLabel: liveSurcharge.label || '',
+                    surchargeLines: liveSurcharge.lines || [],
+                    outOfRange,
+                    belowMinOrder,
+                    coords: { lat, lng },
+                    accuracy,
+                },
+            }));
+            if (outOfRange) {
+                showStatusSnackbar('Sorry, you are outside our delivery range.');
+            } else if (belowMinOrder && minOrder != null) {
+                showStatusSnackbar(
+                    `Please order more than ₹${minOrder}`
+                );
+            }
+        } catch (err) {
+            // Keep pin/GPS location; charges TBD by restaurant
+            setOrderDetails((prev) => ({
+                ...prev,
+                customerAddress: `https://maps.google.com/?q=${lat},${lng}`,
+                delivery: {
+                    ...emptyDeliveryState(),
+                    status: 'pending',
+                    distanceKm: null,
+                    baseCharge: null,
+                    surcharge: 0,
+                    outOfRange: false,
+                    coords: { lat, lng },
+                    accuracy,
+                },
+            }));
+        }
+    };
+
+    const handleMapPinChange = (coords) => {
+        if (!coords) return;
+        setDraftMapCoords({ lat: coords.lat, lng: coords.lng });
+        setPinFocusKey((k) => k + 1);
+    };
+
+    const handleMapDialogCancel = () => {
+        setShowAddressMapDialog(false);
+        setDraftMapCoords(null);
+    };
+
+    const handleMapDialogDone = async () => {
+        if (!draftMapCoords) {
+            showStatusSnackbar('Please drop a pin on the map');
+            return;
+        }
+        setShowAddressMapDialog(false);
+        await applyDeliveryCoords(draftMapCoords.lat, draftMapCoords.lng);
+        setDraftMapCoords(null);
+    };
+
+    const openAddressMapDialog = () => {
+        setDraftMapCoords(deliveryState.coords || null);
+        setShowAddressMapDialog(true);
+    };
+
     const handleUseLocation = async () => {
         if (!deliveryConfig) return;
+        setShowAddressMapDialog(false);
         setOrderDetails((prev) => ({
             ...prev,
             delivery: { ...emptyDeliveryState(), status: 'locating' },
@@ -203,53 +318,18 @@ const Order = ({ restaurantData, orderDetails, setOrderDetails }) => {
                 timeout: 20000,
                 maximumAge: 0,
             });
-            // Ignore very poor accuracy (~3km+)
             if (user.accuracy != null && user.accuracy > 3000) {
                 setOrderDetails((prev) => ({
                     ...prev,
                     delivery: { ...emptyDeliveryState(), status: 'error' },
                 }));
                 showStatusSnackbar(
-                    'Location accuracy is too low. Enter your address instead.'
+                    'Location accuracy is too low. Drop a pin on the map instead.'
                 );
                 return;
             }
-            const distanceKm = haversineKm(
-                deliveryConfig.coords.lat,
-                deliveryConfig.coords.lng,
-                user.lat,
-                user.lng
-            );
-            const { charge, outOfRange } = resolveDeliveryCharge(
-                deliveryConfig.slabs,
-                distanceKm
-            );
-            const weather = await fetchRestoWeather(
-                deliveryConfig.coords.lat,
-                deliveryConfig.coords.lng
-            );
-            const liveSurcharge = outOfRange
-                ? { amount: 0, reason: '', label: '', lines: [] }
-                : resolveWeatherSurcharge(deliveryConfig, weather);
-            setOrderDetails((prev) => ({
-                ...prev,
-                customerAddress: `https://maps.google.com/?q=${user.lat},${user.lng}`,
-                delivery: {
-                    status: outOfRange ? 'out_of_range' : 'ready',
-                    distanceKm: Math.round(distanceKm * 10) / 10,
-                    baseCharge: outOfRange ? null : charge,
-                    surcharge: liveSurcharge.amount,
-                    surchargeReason: liveSurcharge.reason,
-                    surchargeLabel: liveSurcharge.label || '',
-                    surchargeLines: liveSurcharge.lines || [],
-                    outOfRange,
-                    coords: { lat: user.lat, lng: user.lng },
-                    accuracy: user.accuracy,
-                },
-            }));
-            if (outOfRange) {
-                showStatusSnackbar('Sorry, you are outside our delivery range.');
-            }
+            await applyDeliveryCoords(user.lat, user.lng, user.accuracy);
+            setPinFocusKey((k) => k + 1);
         } catch (err) {
             const denied = err.code === 'GEO_DENIED';
             setOrderDetails((prev) => ({
@@ -260,15 +340,13 @@ const Order = ({ restaurantData, orderDetails, setOrderDetails }) => {
                 },
             }));
             if (denied) {
-                showStatusSnackbar('Location denied. Enter your address — delivery charge will be confirmed by the restaurant.');
+                showStatusSnackbar('Location denied. Drop a pin on the map instead.');
             } else if (err.code === 'GEO_INSECURE') {
-                showStatusSnackbar('Location needs HTTPS or localhost. Enter your address instead.');
+                showStatusSnackbar('Location needs HTTPS or localhost. Drop a pin on the map instead.');
             } else if (err.code === 'GEO_TIMEOUT') {
-                showStatusSnackbar(
-                    'Location timed out. Try again or enter your address.'
-                );
+                showStatusSnackbar('Location timed out. Try again or drop a pin on the map.');
             } else {
-                showStatusSnackbar('Could not get your location. Enter your address instead.');
+                showStatusSnackbar('Could not get your location. Drop a pin on the map instead.');
             }
         }
     };
@@ -284,7 +362,11 @@ const Order = ({ restaurantData, orderDetails, setOrderDetails }) => {
             return;
         }
         if (orderDetails.type === 'online' && (!orderDetails.customerAddress || orderDetails.customerAddress.trim().length === 0)) {
-            showStatusSnackbar('Please enter your Delivery Address');
+            showStatusSnackbar(
+                deliveryConfig
+                    ? 'Please select your Delivery Address'
+                    : 'Please enter your Delivery Address'
+            );
             return;
         }
         if (orderDetails.type === 'dinein' && (!orderDetails.tableNumber || orderDetails.tableNumber.trim().length === 0)) {
@@ -305,6 +387,17 @@ const Order = ({ restaurantData, orderDetails, setOrderDetails }) => {
         if (itemsCount === 0) {
             showStatusSnackbar('Please add items to the order');
             return;
+        }
+        const cartTotal = cartTotalFromItems(orderDetails.items);
+        if (orderDetails.type === 'online' && deliveryConfig) {
+            const km = Number.isFinite(deliveryState.distanceKm)
+                ? deliveryState.distanceKm
+                : 0;
+            const check = resolveDeliveryCharge(deliveryConfig, km, cartTotal);
+            if (check.belowMinOrder && check.minOrder != null) {
+                showStatusSnackbar(`Please order more than ₹${check.minOrder}`);
+                return;
+            }
         }
         navigate(`/review?r=${restaurantId}`);
     };
@@ -435,95 +528,94 @@ const Order = ({ restaurantData, orderDetails, setOrderDetails }) => {
 
                             {orderDetails.type === 'online' ? (
                                 <div className="order-input-group">
-                                    <div
-                                        style={{
-                                            display: 'flex',
-                                            alignItems: 'center',
-                                            justifyContent: 'space-between',
-                                            gap: '8px',
-                                            marginBottom: '1px',
-                                        }}
-                                    >
+                                    <div className="order-address-label-row">
                                         <label className="order-input-label" style={{ marginBottom: 0 }}>
                                             Customer Address
                                         </label>
                                         {deliveryConfig && (
                                             <button
                                                 type="button"
-                                                onClick={handleUseLocation}
-                                                disabled={deliveryState.status === 'locating'}
-                                                style={{
-                                                    display: 'inline-flex',
-                                                    alignItems: 'center',
-                                                    gap: '3px',
-                                                    border: 'none',
-                                                    background: 'none',
-                                                    padding: 0,
-                                                    margin: 0,
-                                                    color: '#00C851',
-                                                    fontSize: '13px',
-                                                    fontWeight: 600,
-                                                    fontFamily: 'Afacad, sans-serif',
-                                                    cursor:
-                                                        deliveryState.status === 'locating'
-                                                            ? 'wait'
-                                                            : 'pointer',
-                                                    opacity:
-                                                        deliveryState.status === 'locating'
-                                                            ? 0.7
-                                                            : 1,
-                                                    textDecoration: 'underline',
-                                                    whiteSpace: 'nowrap',
-                                                }}
+                                                className="order-view-delivery-charges"
+                                                onClick={() =>
+                                                    navigate(`/delivery-charges?r=${restaurantId}`)
+                                                }
                                             >
-                                                <MapPin size={14} strokeWidth={2.2} />
-                                                {deliveryState.status === 'locating'
-                                                    ? 'Getting location…'
-                                                    : 'Use my Current Location'}
+                                                View Delivery Charges
                                             </button>
                                         )}
                                     </div>
-                                    <textarea
-                                        name="customerAddress"
-                                        value={orderDetails.customerAddress}
-                                        onChange={handleInputChange}
-                                        onKeyDown={(e) => {
-                                            if (e.key === "Enter" && !e.shiftKey) {
-                                                e.preventDefault();
-                                                e.target.blur();
-                                            }
-                                        }}
-                                        className="order-input-field order-textarea-field"
-                                        placeholder="Enter delivery address"
-                                        autoCapitalize="sentences"
-                                        enterKeyHint="done"
-                                    />
-                                    {deliveryConfig && (
-                                        <button
-                                            type="button"
-                                            onClick={() =>
-                                                navigate(`/delivery-charges?r=${restaurantId}`)
-                                            }
-                                            style={{
-                                                display: 'inline-flex',
-                                                alignItems: 'center',
-                                                alignSelf: 'flex-start',
-                                                gap: '4px',
-                                                border: 'none',
-                                                background: 'none',
-                                                padding: 0,
-                                                marginTop: 0,
-                                                transform: 'translateY(-5px)',
-                                                color: 'var(--primary-color)',
-                                                fontSize: '13px',
-                                                fontWeight: 600,
-                                                fontFamily: 'Afacad, sans-serif',
-                                                cursor: 'pointer',
-                                                textDecoration: 'underline',
+                                    {deliveryConfig ? (
+                                        <>
+                                            <div className="order-address-options">
+                                                <button
+                                                    type="button"
+                                                    className={[
+                                                        'order-address-option',
+                                                        'order-address-option--pin',
+                                                        showAddressMapDialog
+                                                            ? 'is-active'
+                                                            : '',
+                                                    ]
+                                                        .filter(Boolean)
+                                                        .join(' ')}
+                                                    onClick={openAddressMapDialog}
+                                                    disabled={deliveryState.status === 'locating'}
+                                                >
+                                                    <MapPin size={18} strokeWidth={2.2} />
+                                                    <span className="order-address-option-title">
+                                                        Drop pin on map
+                                                    </span>
+                                                </button>
+                                                <button
+                                                    type="button"
+                                                    className="order-address-option order-address-option--gps"
+                                                    onClick={handleUseLocation}
+                                                    disabled={deliveryState.status === 'locating'}
+                                                >
+                                                    <MapPin size={18} strokeWidth={2.2} />
+                                                    <span className="order-address-option-title">
+                                                        Use my Current Location
+                                                    </span>
+                                                </button>
+                                            </div>
+                                            <p
+                                                className={[
+                                                    'order-address-selected',
+                                                    orderDetails.customerAddress
+                                                        ? 'is-set'
+                                                        : 'is-empty',
+                                                ].join(' ')}
+                                            >
+                                                {orderDetails.customerAddress ? (
+                                                    <>
+                                                        <span className="order-address-selected-title">
+                                                            Delivery Location Confirmed 📌
+                                                        </span>
+                                                        <span className="order-address-selected-sub">
+                                                            We’ll use this location for your Home Delivery 🏠
+                                                        </span>
+                                                    </>
+                                                ) : (
+                                                    ''
+                                                )}
+                                            </p>
+                                        </>
+                                    ) : (
+                                        <textarea
+                                            name="customerAddress"
+                                            value={orderDetails.customerAddress}
+                                            onChange={handleInputChange}
+                                            onKeyDown={(e) => {
+                                                if (e.key === "Enter" && !e.shiftKey) {
+                                                    e.preventDefault();
+                                                    e.target.blur();
+                                                }
                                             }}
-                                        >
-                                            View Delivery Charges
-                                        </button>
+                                            className="order-input-field order-textarea-field"
+                                            placeholder="Enter delivery address"
+                                            autoCapitalize="sentences"
+                                            enterKeyHint="done"
+                                        />
                                     )}
                                     {deliveryConfig && deliveryState.status === 'out_of_range' && (
                                         <div style={{
@@ -626,6 +718,54 @@ const Order = ({ restaurantData, orderDetails, setOrderDetails }) => {
                         <span>Review Order</span>
                         <ChevronRight size={16} strokeWidth={2} />
                     </button>
+                </div>
+            )}
+
+            {deliveryConfig && showAddressMapDialog && (
+                <div
+                    className="gallery-lightbox order-map-dialog"
+                    role="dialog"
+                    aria-modal="true"
+                >
+                    <div
+                        className="gallery-preview-card order-map-dialog-card"
+                        onClick={(e) => e.stopPropagation()}
+                    >
+                        <div className="order-map-dialog-header">
+                            <span className="gallery-preview-name">
+                                Drop pin on map
+                            </span>
+                        </div>
+                        <div className="order-map-dialog-body">
+                            <DeliveryMap
+                                className="delivery-map-wrap--dialog"
+                                restoLat={deliveryConfig.coords.lat}
+                                restoLng={deliveryConfig.coords.lng}
+                                restoName={restoDetails?.restoName}
+                                restoLogoUrl={ProjectImages.restoMarker}
+                                customerCoords={draftMapCoords}
+                                onChange={handleMapPinChange}
+                                focusKey={pinFocusKey}
+                            />
+                        </div>
+                    </div>
+                    <div className="order-map-dialog-actions">
+                        <button
+                            type="button"
+                            className="order-map-dialog-btn order-map-dialog-btn--cancel"
+                            onClick={handleMapDialogCancel}
+                        >
+                            Cancel
+                        </button>
+                        <button
+                            type="button"
+                            className="order-map-dialog-btn order-map-dialog-btn--done"
+                            onClick={handleMapDialogDone}
+                            disabled={!draftMapCoords}
+                        >
+                            Done
+                        </button>
+                    </div>
                 </div>
             )}
 

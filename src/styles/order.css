@@ -79,6 +79,189 @@
     box-shadow: 0 0 0 3px rgba(var(--primary-rgb), 0.1);
 }
 
+.order-delivery-map-block {
+    margin-top: 8px;
+    margin-bottom: 8px;
+}
+
+.order-address-label-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+    margin-bottom: 1px;
+}
+
+.order-view-delivery-charges {
+    border: none;
+    background: none;
+    padding: 0;
+    margin: 0;
+    color: var(--primary-color);
+    font-size: 13px;
+    font-weight: 600;
+    font-family: Afacad, sans-serif;
+    cursor: pointer;
+    text-decoration: underline;
+    white-space: nowrap;
+}
+
+.order-delivery-map-hint {
+    margin: 8px 0 0;
+    font-size: 13px;
+    color: var(--text-secondary, #666);
+    font-family: Afacad, sans-serif;
+}
+
+.order-address-selected {
+    margin: 5px 0px 15px 0;
+    font-size: 13px;
+    font-family: Afacad, sans-serif;
+    line-height: 1.2;
+    word-break: break-word;
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+}
+
+.order-address-selected.is-empty {
+    color: #999;
+}
+
+.order-address-selected.is-set {
+    color: #00c851;
+}
+
+.order-address-selected-title {
+    font-weight: 600;
+    font-size: 14px;
+    line-height: 1.15;
+}
+
+.order-address-selected-sub {
+    font-weight: 400;
+    font-size: 13px;
+    color: grey;
+    line-height: 1.15;
+}
+
+.order-address-options {
+    display: flex;
+    flex-direction: row;
+    gap: 10px;
+}
+
+.order-address-option {
+    flex: 1;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    min-width: 0;
+    text-align: center;
+    border: 1px dashed #cfcfcf;
+    background: #ffffff;
+    border-radius: 8px;
+    padding: 8px 10px;
+    cursor: pointer;
+    font-family: Afacad, sans-serif;
+    -webkit-tap-highlight-color: transparent;
+    transition: border-color 0.2s, box-shadow 0.2s, background 0.2s;
+}
+
+.order-address-option>svg {
+    color: var(--primary-color, #fa057b);
+    flex-shrink: 0;
+}
+
+.order-address-option--gps>svg {
+    color: #00c851;
+}
+
+.order-address-option .order-address-option-title {
+    font-size: 13px;
+    font-weight: 600;
+    color: #262626;
+    line-height: 1.25;
+}
+
+.order-address-option.is-active {
+    border-color: var(--primary-color, #fa057b);
+    box-shadow: 0 0 0 2px rgba(var(--primary-rgb), 0.12);
+}
+
+.order-map-dialog {
+    padding: 20px 16px 96px;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.order-map-dialog-card {
+    width: min(360px, 92vw);
+    max-height: 78vh;
+    display: flex;
+    flex-direction: column;
+    padding: 0;
+}
+
+.order-map-dialog-header {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 14px 16px;
+    text-align: center;
+}
+
+.order-map-dialog-header .gallery-preview-name {
+    text-align: center;
+    width: 100%;
+}
+
+.order-map-dialog-body {
+    height: 440px;
+    overflow: hidden;
+    border-top: 1px solid #e0e0e0;
+    flex: 1 1 auto;
+}
+
+.order-map-dialog-actions {
+    position: absolute;
+    left: 50%;
+    bottom: 25px;
+    transform: translateX(-50%);
+    display: flex;
+    gap: 15px;
+    width: min(360px, 92vw);
+}
+
+.order-map-dialog-btn {
+    flex: 1;
+    border: none;
+    border-radius: 10px;
+    padding: 10px 16px;
+    font-family: Afacad, sans-serif;
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+    -webkit-tap-highlight-color: transparent;
+}
+
+.order-map-dialog-btn--cancel {
+    background: #ffffff;
+    color: #333333;
+}
+
+.order-map-dialog-btn--done {
+    background: var(--primary-color, #fa057b);
+    color: #ffffff;
+}
+
+.order-map-dialog-btn--done:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
 .order-input-field::placeholder {
     color: #999999;
 }

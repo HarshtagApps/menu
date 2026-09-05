@@ -35,8 +35,17 @@
 }
 
 @keyframes music-wave-pulse {
-  0%, 100% { opacity: 0.75; transform: scaleY(0.92); }
-  50% { opacity: 1; transform: scaleY(1.08); }
+
+  0%,
+  100% {
+    opacity: 0.75;
+    transform: scaleY(0.92);
+  }
+
+  50% {
+    opacity: 1;
+    transform: scaleY(1.08);
+  }
 }
 
 .music-player-text {
@@ -116,7 +125,7 @@ body.has-music-player .order-items-container {
 }
 
 body.has-music-player .review-page-container {
-  padding-bottom: calc(185px + var(--music-player-height));
+  padding-bottom: calc(12px + var(--music-player-height));
 }
 
 body.has-music-player .category-summary-bar {
@@ -128,5 +137,6 @@ body.has-music-player .order-page-summary-bar {
 }
 
 body.has-music-player .review-page-summary-bar {
-  bottom: var(--music-player-height);
+  /* Review footer is in-flow (not fixed); music is hidden on /review anyway */
+  margin-bottom: 0;
 }

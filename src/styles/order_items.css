@@ -182,7 +182,7 @@
 }
 
 .order-items-variant-price {
-    font-size: 13px;
+    font-size: 12px;
     font-weight: 400;
     color: var(--primary-color);
     font-family: 'Afacad', sans-serif;
@@ -358,6 +358,12 @@
 
     .order-items-variant-price {
         font-size: 12px;
+    }
+
+    /* Match FoodItems price tags on small screens */
+    .order-items-variant-price .price-tag {
+        font-size: 14px;
+        padding: 0 4px;
     }
 
     .order-items-qty-btn {

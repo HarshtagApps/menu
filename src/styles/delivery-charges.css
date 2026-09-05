@@ -8,14 +8,14 @@
   box-sizing: border-box;
 }
 
-.delivery-charges-page > .secondary-appbar {
+.delivery-charges-page>.secondary-appbar {
   position: relative;
   z-index: 2;
   flex-shrink: 0;
 }
 
-.delivery-charges-page > .delivery-charges-container,
-.delivery-charges-page > .delivery-charges-empty {
+.delivery-charges-page>.delivery-charges-container,
+.delivery-charges-page>.delivery-charges-empty {
   position: relative;
   z-index: 1;
 }
@@ -49,7 +49,7 @@
   height: 0;
 }
 
-.delivery-charges-container > * {
+.delivery-charges-container>* {
   width: 100%;
   max-width: 520px;
 }
@@ -58,7 +58,7 @@
   margin: 0 0 -12px;
   font-size: 14px;
   font-weight: 500;
-  color: var(--primary-color, #fa057b);
+  color: black;
   font-family: Afacad, sans-serif;
 }
 
@@ -74,7 +74,7 @@
   pointer-events: none;
 }
 
-.delivery-lottie-hero > div {
+.delivery-lottie-hero>div {
   width: 200px !important;
   height: 140px !important;
 }
@@ -133,11 +133,9 @@
   width: 3px;
   transform: translateX(-50%);
   border-radius: 1px;
-  background-image: repeating-linear-gradient(
-    180deg,
-    #fff 0 0.75rem,
-    transparent 0.75rem 1.5rem
-  );
+  background-image: repeating-linear-gradient(180deg,
+      #fff 0 0.75rem,
+      transparent 0.75rem 1.5rem);
 }
 
 .delivery-road-stops {
@@ -233,11 +231,11 @@
 }
 
 .delivery-road-card-price.is-free {
-  color: #059669;
+  color: #00C851;
 }
 
 .delivery-charges-page.is-night-theme .delivery-road-card-price.is-free {
-  color: #4ade80;
+  color: #00C851;
 }
 
 .delivery-surcharge-row {

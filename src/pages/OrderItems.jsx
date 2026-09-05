@@ -113,7 +113,7 @@ const OrderItems = ({ restaurantData, orderDetails, setOrderDetails }) => {
                 newItems[itemId] = { ...newItems[itemId] };
                 newItems[itemId][size] = {
                     ...newItems[itemId][size],
-                    notes: notes.trim()
+                    notes: notes
                 };
             }
             return { ...prev, items: newItems };
@@ -298,9 +298,8 @@ const OrderItems = ({ restaurantData, orderDetails, setOrderDetails }) => {
                                 borderWidth={1.25}
                                 speed={FOCUS_DIM_SPEED}
                                 loop={false}
-                                className={`order-items-aurora${
-                                    isFocused && showFocusHint ? ' focus-dim-target' : ''
-                                }`}
+                                className={`order-items-aurora${isFocused && showFocusHint ? ' focus-dim-target' : ''
+                                    }`}
                             >
                                 {card}
                             </AuroraBorder>

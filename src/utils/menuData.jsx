@@ -57,6 +57,8 @@ export const ProjectImages = {
     broadcast: 'assets/images/broadcast.png',
     colddrinks: 'assets/images/colddrink.png',
     mainCourse: 'assets/images/mainCourse.png',
+    homeMarker: 'assets/images/homeMarker.png',
+    restoMarker: 'assets/images/restoMarker.png',
     frenchFries: 'assets/images/frenchFries.png',
     garlicBread: 'assets/images/garlicBread.png',
     deliveryCharges: 'assets/images/deliveryCharges.png',

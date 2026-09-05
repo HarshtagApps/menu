@@ -1,0 +1,91 @@
+.delivery-map-wrap {
+  width: 100%;
+  height: 260px;
+  border-radius: 12px;
+  overflow: hidden;
+  border: 1px solid var(--border-color, #e0e0e0);
+  box-shadow: 0 3px 6px rgba(51, 51, 51, 0.15);
+  background: #e8eef5;
+  flex-shrink: 0;
+}
+
+.delivery-map-wrap--dialog {
+  height: 100%;
+  border: none;
+  box-shadow: none;
+  border-radius: 0;
+  background: transparent;
+}
+
+.delivery-map {
+  width: 100%;
+  height: 100%;
+  min-height: 260px;
+  z-index: 1;
+}
+
+.delivery-map-resto-marker {
+  background: transparent !important;
+  border: none !important;
+}
+
+.delivery-map-resto-pin {
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  background: transparent;
+  border: none;
+  box-shadow: none;
+  border-radius: 0;
+  overflow: visible;
+}
+
+.delivery-map-resto-pin-img {
+  width: 32px;
+  height: 32px;
+  object-fit: contain;
+  display: block;
+  border-radius: 0;
+  background: transparent;
+}
+
+.delivery-map-resto-pin-dot {
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background: #fa057b;
+}
+
+.delivery-map-user-marker {
+  background: transparent !important;
+  border: none !important;
+}
+
+.delivery-map-user-pin {
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  background: transparent;
+  border: none;
+  box-shadow: none;
+  border-radius: 0;
+  overflow: visible;
+}
+
+.delivery-map-user-pin-img {
+  width: 32px;
+  height: 32px;
+  object-fit: contain;
+  display: block;
+  border-radius: 0;
+  background: transparent;
+}
+
+.delivery-map-user-marker .leaflet-div-icon {
+  background: transparent;
+  border: none;
+}

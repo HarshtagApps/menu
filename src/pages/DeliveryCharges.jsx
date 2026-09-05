@@ -69,7 +69,29 @@ const DeliveryCharges = ({ restaurantData }) => {
   const wxTestIsNight =
     wxTestNightParam === '1' || wxTestNightParam === 'true';
   const delivery = restaurantData?.restoDetails?.delivery;
+  const mode = delivery?.mode || 'distance';
   const slabs = delivery?.slabs || [];
+  const orderRates = delivery?.orderRates || [];
+  const pricingRows =
+    mode === 'order'
+      ? orderRates.map((r) => ({
+        key: `${r.minAmount}-${r.maxAmount}-${r.notAllowed ? 'NA' : r.ratePerKm}`,
+        title:
+          r.maxAmount === Infinity
+            ? `Order of ₹${r.minAmount}+`
+            : `Order of ₹${r.minAmount}–${r.maxAmount}`,
+        price: r.notAllowed ? 'Not Available' : `₹${r.ratePerKm}/km`,
+        isFree: false,
+      }))
+      : slabs.map((slab) => ({
+        key: `${slab.minKm}-${slab.maxKm}-${slab.charge}`,
+        title:
+          slab.minKm === 0
+            ? `Up to ${slab.maxKm} km`
+            : `${slab.minKm}–${slab.maxKm} km`,
+        price: slab.charge === 0 ? 'Free' : `₹${slab.charge}`,
+        isFree: slab.charge === 0,
+      }));
   const reduced = useReducedMotion();
 
   const wrapRef = useRef(null);
@@ -91,7 +113,7 @@ const DeliveryCharges = ({ restaurantData }) => {
     isNight: false,
   });
 
-  const stepCount = slabs.length;
+  const stepCount = pricingRows.length;
   const segments = Math.max(stepCount - 1, 1);
 
   const updateSpine = useCallback(() => {
@@ -217,7 +239,7 @@ const DeliveryCharges = ({ restaurantData }) => {
     return () => ac.abort();
   }, [reduced, stepCount, segments]);
 
-  if (!delivery || slabs.length === 0) {
+  if (!delivery || pricingRows.length === 0) {
     return (
       <div className="delivery-charges-page">
         <div className="secondary-appbar">
@@ -276,7 +298,15 @@ const DeliveryCharges = ({ restaurantData }) => {
         </div>
 
         <p className="delivery-charges-intro">
-          Charges by distance from the {restaurantData?.restoDetails?.restoName || 'Restaurant'}
+          {mode === 'order'
+            ? `Charges by order value × distance from ${restaurantData?.restoDetails?.restoName || 'Restaurant'}`
+            : `Charges by distance from the ${restaurantData?.restoDetails?.restoName || 'Restaurant'}`}
+          {delivery.minOrder != null
+            ? ` · Order more than ₹${delivery.minOrder}`
+            : ''}
+          {mode === 'order' && delivery.maxKm != null
+            ? ` · Up to ${delivery.maxKm} km`
+            : ''}
         </p>
 
         <div className="delivery-road-wrap" ref={wrapRef}>
@@ -296,20 +326,14 @@ const DeliveryCharges = ({ restaurantData }) => {
           )}
 
           <ul className="delivery-road-stops">
-            {slabs.map((slab, index) => {
+            {pricingRows.map((row, index) => {
               const isRevealed = index < revealedCount;
               const isFirst = index === 0;
               const isLast = index === stepCount - 1;
-              const label =
-                slab.minKm === 0
-                  ? `Up to ${slab.maxKm} km`
-                  : `${slab.minKm}–${slab.maxKm} km`;
-              const chargeLabel =
-                slab.charge === 0 ? 'Free' : `₹${slab.charge}`;
 
               return (
                 <li
-                  key={`${slab.minKm}-${slab.maxKm}-${slab.charge}`}
+                  key={row.key}
                   className="delivery-road-stop"
                   aria-hidden={!isRevealed}
                 >
@@ -349,13 +373,12 @@ const DeliveryCharges = ({ restaurantData }) => {
                       ease: stepEase,
                     }}
                   >
-                    <div className="delivery-road-card-title">{label}</div>
+                    <div className="delivery-road-card-title">{row.title}</div>
                     <div
-                      className={`delivery-road-card-price ${
-                        slab.charge === 0 ? 'is-free' : ''
-                      }`}
+                      className={`delivery-road-card-price ${row.isFree ? 'is-free' : ''
+                        }`}
                     >
-                      {chargeLabel}
+                      {row.price}
                     </div>
                   </motion.div>
                 </li>
@@ -378,7 +401,7 @@ const DeliveryCharges = ({ restaurantData }) => {
                 ? 'Checking weather…'
                 : liveSurcharge.amount > 0
                   ? liveSurcharge.reason
-                  : `No extra surcharge right now — only distance charges apply`}
+                  : `No extra surcharge right now — only ${mode === 'order' ? 'order' : 'distance'} charges apply`}
             </div>
             {weatherReady &&
               liveSurcharge.amount > 0 &&

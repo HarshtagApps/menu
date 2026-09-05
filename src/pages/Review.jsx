@@ -1,9 +1,10 @@
-import React, { useMemo, useEffect } from 'react';
+import React, { useMemo, useEffect, useState } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import '../styles/order_review.css';
 import '../styles/styles.css';
 import {
     ChevronLeft,
+    ChevronDown,
     UserRound,
     FileText,
     Pencil,
@@ -13,7 +14,11 @@ import {
     Truck
 } from 'lucide-react';
 import { FEATURE_FLAGS } from '../utils/featureFlags';
-import { emptyDeliveryState } from '../utils/delivery';
+import {
+    emptyDeliveryState,
+    resolveDeliveryCharge,
+    resolveRoundOffDiscount,
+} from '../utils/delivery';
 import { formatSurchargeLabel } from '../utils/weather';
 
 function countOrderItems(items) {
@@ -31,7 +36,8 @@ function countOrderItems(items) {
 const Review = ({ restaurantData, orderDetails, setOrderDetails }) => {
     const navigate = useNavigate();
     const [searchParams] = useSearchParams();
-    const [showPaymentModal, setShowPaymentModal] = React.useState(false);
+    const [showPaymentModal, setShowPaymentModal] = useState(false);
+    const [summaryExpanded, setSummaryExpanded] = useState(true);
     const restaurantId = searchParams.get('r');
     const isIOS = /iPhone|iPad|iPod/.test(navigator.userAgent);
     useEffect(() => {
@@ -102,16 +108,47 @@ const Review = ({ restaurantData, orderDetails, setOrderDetails }) => {
     const upiId = restoDetails?.upiId;
     const subtotalAmount = flatItems.reduce((acc, item) => acc + item.total, 0);
     const deliveryState = orderDetails.delivery || emptyDeliveryState();
+    const deliveryConfig = restaurantData.restoDetails?.delivery;
     const deliveryEnabled =
         FEATURE_FLAGS.deliveryCharges &&
         orderDetails.type === 'online' &&
-        restaurantData.restoDetails?.delivery;
-    const deliveryBase =
-        deliveryEnabled && deliveryState.status === 'ready'
-            ? Number(deliveryState.baseCharge) || 0
-            : null;
+        deliveryConfig;
+    // Re-resolve on Review so order-based ₹/km tracks cart total
+    let deliveryBase = null;
+    let deliveryGross = null;
+    let deliveryDiscount = 0;
+    let deliveryRatePerKm = null;
+    let belowMinOrder = false;
+    let minOrderHint = deliveryConfig?.minOrder ?? null;
+    if (deliveryEnabled && deliveryState.status === 'ready') {
+        if (
+            deliveryConfig.mode === 'order' &&
+            Number.isFinite(deliveryState.distanceKm)
+        ) {
+            const resolved = resolveDeliveryCharge(
+                deliveryConfig,
+                deliveryState.distanceKm,
+                subtotalAmount
+            );
+            belowMinOrder = resolved.belowMinOrder;
+            minOrderHint = resolved.minOrder ?? minOrderHint;
+            deliveryBase =
+                resolved.outOfRange || resolved.belowMinOrder
+                    ? null
+                    : Number(resolved.charge) || 0;
+            if (deliveryBase != null) {
+                deliveryGross = Number(resolved.grossCharge);
+                deliveryDiscount = Number(resolved.discount) || 0;
+                deliveryRatePerKm = Number(resolved.ratePerKm);
+            }
+        } else if (!deliveryState.belowMinOrder) {
+            deliveryBase = Number(deliveryState.baseCharge) || 0;
+        } else {
+            belowMinOrder = true;
+        }
+    }
     const deliverySurcharge =
-        deliveryEnabled && deliveryState.status === 'ready'
+        deliveryEnabled && deliveryState.status === 'ready' && deliveryBase != null
             ? Number(deliveryState.surcharge) || 0
             : 0;
     const deliveryFeeTotal =
@@ -122,8 +159,35 @@ const Review = ({ restaurantData, orderDetails, setOrderDetails }) => {
             deliveryState.surchargeLines,
             deliveryState.surchargeReason
         );
-    const totalAmount =
+    const deliveryShown =
+        deliveryFeeTotal == null
+            ? null
+            : deliveryBase === 0
+                ? 0
+                : deliveryDiscount > 0 && Number.isFinite(deliveryGross)
+                    ? deliveryGross
+                    : deliveryBase;
+    // Payable after delivery km-discount (or subtotal only if no delivery fee)
+    const payableAfterKm =
         subtotalAmount + (deliveryFeeTotal != null ? deliveryFeeTotal : 0);
+    const roundOff = resolveRoundOffDiscount(
+        payableAfterKm,
+        deliveryConfig?.discountBands
+    );
+    const totalDiscount =
+        deliveryDiscount + (Number(roundOff.discount) || 0);
+    const totalAmount = roundOff.rounded;
+    const preDiscountTotal =
+        totalDiscount > 0 ? payableAfterKm + deliveryDiscount : null;
+    const deliveryHowMessage =
+        deliveryFeeTotal != null &&
+            Number.isFinite(deliveryState.distanceKm) &&
+            deliveryBase !== 0
+            ? deliveryConfig?.mode === 'order' &&
+                Number.isFinite(deliveryRatePerKm)
+                ? `${deliveryState.distanceKm} km × ₹${deliveryRatePerKm}/km`
+                : `Based on ≈ ${deliveryState.distanceKm} km distance`
+            : null;
     const formatSize = (size) => {
         switch (size.toLowerCase()) {
             case 'small': return 'Small';
@@ -147,10 +211,12 @@ const Review = ({ restaurantData, orderDetails, setOrderDetails }) => {
             message += `*Table Number:* ${orderDetails.tableNumber.trim()}\n\n`;
         } else {
             message += `*Type:* Online (Delivery)\n`;
-            message += `*Address:* ${orderDetails.customerAddress.trim()}\n`;
             if (deliveryState.status === 'ready' && deliveryState.distanceKm != null) {
                 message += `*Distance:* ≈ ${deliveryState.distanceKm} km\n`;
+            } else if (deliveryEnabled) {
+                message += `*Distance:* NA\n`;
             }
+            message += `*Address:* ${orderDetails.customerAddress.trim()}\n`;
             message += `\n`;
         }
         message += `🍴 *Ordered Items:*\n`;
@@ -169,15 +235,26 @@ const Review = ({ restaurantData, orderDetails, setOrderDetails }) => {
             if (deliveryBase === 0) {
                 message += `*Delivery Charges:* Free\n`;
             } else {
-                message += `*Delivery Charges:* ₹${deliveryBase.toFixed(2)}\n`;
+                const chargeAmt =
+                    deliveryDiscount > 0 && Number.isFinite(deliveryGross)
+                        ? deliveryGross
+                        : deliveryBase;
+                const howSuffix =
+                    deliveryHowMessage != null ? ` (${deliveryHowMessage})` : '';
+                message += `*Delivery Charges:* ₹${chargeAmt.toFixed(2)}${howSuffix}\n`;
             }
             if (deliverySurcharge > 0) {
                 message += `*Delivery Surcharge${surchargeLabel ? ` (${surchargeLabel})` : ''}:* ₹${deliverySurcharge.toFixed(2)}\n`;
             }
         } else if (deliveryEnabled) {
-            message += `*Delivery Charges:* Delivery charge will be confirmed by ${restoDetails?.restoName || 'Restaurant'} on WhatsApp\n`;
+            message += `*Delivery Charges:* NA\n`;
+            message += `Delivery charges will be shared by ${restoDetails?.restoName || 'Restaurant'}\n`;
         }
-        message += `\n💸 *Total Amount:* ₹${totalAmount.toFixed(2)}\n\n`;
+        if (preDiscountTotal != null) {
+            message += `*Total:* ₹${preDiscountTotal.toFixed(2)}\n`;
+            message += `*Discount:* −₹${totalDiscount.toFixed(2)}\n`;
+        }
+        message += `\n💸 *Total Amount:* *₹${totalAmount.toFixed(2)}*\n\n`;
         message += `Please confirm. Thanks!\n`;
         message += `Powered by *HARSHTAG APPS*`;
         return message;
@@ -261,16 +338,28 @@ const Review = ({ restaurantData, orderDetails, setOrderDetails }) => {
                             </div>
                         ) : (
                             <>
-                                <div className="review-detail-row">
-                                    <span className="review-detail-label">Customer Address</span>
-                                    <span className="review-detail-value">{orderDetails.customerAddress || '-'}</span>
-                                </div>
                                 {deliveryEnabled && deliveryState.status === 'ready' && (
                                     <div className="review-detail-row">
                                         <span className="review-detail-label">Distance</span>
-                                        <span className="review-detail-value">≈ {deliveryState.distanceKm} km</span>
+                                        <span className="review-detail-value">{deliveryState.distanceKm} km</span>
                                     </div>
                                 )}
+                                {deliveryEnabled &&
+                                    deliveryState.status === 'pending' &&
+                                    deliveryState.coords && (
+                                        <div className="review-detail-row">
+                                            <span className="review-detail-label">Distance</span>
+                                            <span className="review-detail-value">NA</span>
+                                        </div>
+                                    )}
+                                <div className="review-detail-row">
+                                    <span className="review-detail-label">Customer Address</span>
+                                    <span className="review-detail-value">
+                                        {orderDetails.customerAddress?.trim()
+                                            ? 'Address Received'
+                                            : '-'}
+                                    </span>
+                                </div>
                             </>
                         )}
                         <div className="review-detail-row">
@@ -335,85 +424,160 @@ const Review = ({ restaurantData, orderDetails, setOrderDetails }) => {
                 </div>
             </div>
 
-            <div className="review-page-summary-bar" style={{
-                display: 'flex',
-                flexDirection: 'column',
-                gap: '12px',
-                alignItems: 'stretch',
-                paddingTop: '16px'
-            }}>
-                <div className="review-total-section" style={{
-                    marginBottom: '0',
+            <div
+                className="review-page-summary-bar"
+                style={{
                     display: 'flex',
                     flexDirection: 'column',
-                    gap: '6px',
-                    width: '100%'
+                    gap: '12px',
+                    alignItems: 'stretch',
+                    paddingTop: '2px'
                 }}>
-                    {deliveryEnabled && (
-                        <>
-                            <div style={{ display: 'flex', justifyContent: 'space-between', width: '100%' }}>
-                                <div className="review-total-label" style={{ fontWeight: 500, fontSize: '14px' }}>Subtotal</div>
-                                <div style={{ fontSize: '14px' }}>₹{subtotalAmount.toFixed(2)}</div>
-                            </div>
-                            <div style={{ display: 'flex', justifyContent: 'space-between', width: '100%', gap: '12px' }}>
-                                <div className="review-total-label" style={{ fontWeight: 500, fontSize: '14px', display: 'flex', alignItems: 'center', gap: '6px', flexShrink: 0 }}>
-                                    <Truck size={14} />
-                                    Delivery Charges
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '4px', width: '100%' }}>
+                    <div className="review-summary-toolbar">
+                        {deliveryEnabled ? (
+                            <button
+                                type="button"
+                                className="review-view-delivery-charges"
+                                onClick={() =>
+                                    navigate(`/delivery-charges?r=${restaurantId}`)
+                                }
+                            >
+                                View Delivery Charges
+                            </button>
+                        ) : (
+                            <span />
+                        )}
+                        <button
+                            type="button"
+                            className="review-summary-toggle"
+                            aria-expanded={summaryExpanded}
+                            aria-label={summaryExpanded ? 'Collapse total' : 'Expand total'}
+                            onClick={() => setSummaryExpanded((v) => !v)}
+                        >
+                            <ChevronDown
+                                size={22}
+                                strokeWidth={2}
+                                style={{
+                                    transform: summaryExpanded ? 'none' : 'rotate(180deg)',
+                                    transition: 'transform 0.2s ease',
+                                }}
+                            />
+                        </button>
+                    </div>
+                    <div className="review-total-section" style={{
+                        marginBottom: '0',
+                        display: 'flex',
+                        flexDirection: 'column',
+                        gap: '6px',
+                        width: '100%'
+                    }}>
+                        {summaryExpanded && deliveryEnabled && (
+                            <>
+                                <div style={{ display: 'flex', justifyContent: 'space-between', width: '100%' }}>
+                                    <div className="review-total-label" style={{ fontWeight: 500, fontSize: '14px' }}>Subtotal</div>
+                                    <div style={{ fontSize: '14px' }}>₹{subtotalAmount.toFixed(2)}</div>
                                 </div>
-                                <div style={{ fontSize: '14px', textAlign: 'right', whiteSpace: 'nowrap' }}>
-                                    {deliveryFeeTotal == null
-                                        ? '—'
-                                        : deliveryBase === 0
-                                          ? 'Free'
-                                          : `₹${deliveryBase.toFixed(2)}`}
+                                <div style={{ display: 'flex', justifyContent: 'space-between', width: '100%', gap: '12px' }}>
+                                    <div className="review-total-label" style={{ fontWeight: 500, fontSize: '14px', display: 'flex', alignItems: 'center', gap: '6px', flexShrink: 0 }}>
+                                        Delivery Charges
+                                    </div>
+                                    <div style={{ fontSize: '14px', textAlign: 'right', whiteSpace: 'nowrap' }}>
+                                        {deliveryFeeTotal == null
+                                            ? 'NA'
+                                            : deliveryBase === 0
+                                                ? 'Free'
+                                                : `₹${(deliveryShown ?? 0).toFixed(2)}`}
+                                    </div>
                                 </div>
-                            </div>
-                            {deliveryFeeTotal == null && (
+                                {deliveryHowMessage && (
+                                    <div
+                                        style={{
+                                            width: '100%',
+                                            fontSize: '11px',
+                                            fontWeight: 500,
+                                            color: '#888',
+                                            lineHeight: 1.3,
+                                            marginTop: '-8px',
+                                        }}
+                                    >
+                                        {deliveryHowMessage}
+                                    </div>
+                                )}
+                                {deliveryFeeTotal == null && (
+                                    <div
+                                        style={{
+                                            width: '100%',
+                                            fontSize: '12px',
+                                            fontWeight: 500,
+                                            color: '#888',
+                                            lineHeight: 1.0,
+                                            marginTop: '-5px',
+                                        }}
+                                    >
+                                        {belowMinOrder && minOrderHint != null
+                                            ? `Please order more than ₹${minOrderHint}.`
+                                            : `Delivery charges will be shared by ${restoDetails?.restoName || 'Restaurant'}.`}
+                                    </div>
+                                )}
+                                {deliverySurcharge > 0 && (
+                                    <>
+                                        <div style={{ display: 'flex', justifyContent: 'space-between', width: '100%' }}>
+                                            <div className="review-total-label" style={{ fontWeight: 500, fontSize: '14px' }}>
+                                                Delivery Surcharge
+                                                {surchargeLabel ? ` (${surchargeLabel})` : ''}
+                                            </div>
+                                            <div style={{ fontSize: '14px' }}>
+                                                ₹{deliverySurcharge.toFixed(2)}
+                                            </div>
+                                        </div>
+                                        {deliveryState.surchargeReason ? (
+                                            <div
+                                                style={{
+                                                    width: '100%',
+                                                    fontSize: '12px',
+                                                    fontWeight: 500,
+                                                    color: '#888',
+                                                    lineHeight: 1.4,
+                                                    marginTop: '-2px',
+                                                }}
+                                            >
+                                                {deliveryState.surchargeReason}
+                                            </div>
+                                        ) : null}
+                                    </>
+                                )}
+                            </>
+                        )}
+                        {summaryExpanded && preDiscountTotal != null && (
+                            <>
+                                <div style={{ display: 'flex', justifyContent: 'space-between', width: '100%' }}>
+                                    <div className="review-total-label" style={{ fontWeight: 500, fontSize: '14px' }}>Total</div>
+                                    <div style={{ fontSize: '14px' }}>₹{preDiscountTotal.toFixed(2)}</div>
+                                </div>
                                 <div
                                     style={{
                                         width: '100%',
-                                        fontSize: '12px',
-                                        fontWeight: 500,
-                                        color: '#888',
-                                        lineHeight: 1.0,
-                                        marginTop: '-5px',
+                                        height: '1px',
+                                        backgroundColor: 'rgba(0, 0, 0, 0.12)',
+                                        margin: '2px 0',
                                     }}
-                                >
-                                    {`Delivery charge will be confirmed by ${restoDetails?.restoName || 'Restaurant'} on WhatsApp`}
-                                </div>
-                            )}
-                            {deliverySurcharge > 0 && (
-                                <>
-                                    <div style={{ display: 'flex', justifyContent: 'space-between', width: '100%' }}>
-                                        <div className="review-total-label" style={{ fontWeight: 500, fontSize: '14px' }}>
-                                            Delivery Surcharge
-                                            {surchargeLabel ? ` (${surchargeLabel})` : ''}
-                                        </div>
-                                        <div style={{ fontSize: '14px' }}>
-                                            ₹{deliverySurcharge.toFixed(2)}
-                                        </div>
+                                    aria-hidden="true"
+                                />
+                                <div style={{ display: 'flex', justifyContent: 'space-between', width: '100%' }}>
+                                    <div className="review-total-label" style={{ fontWeight: 500, fontSize: '14px', color: '#00C851' }}>
+                                        Discount
                                     </div>
-                                    {deliveryState.surchargeReason ? (
-                                        <div
-                                            style={{
-                                                width: '100%',
-                                                fontSize: '12px',
-                                                fontWeight: 500,
-                                                color: '#888',
-                                                lineHeight: 1.4,
-                                                marginTop: '-2px',
-                                            }}
-                                        >
-                                            {deliveryState.surchargeReason}
-                                        </div>
-                                    ) : null}
-                                </>
-                            )}
-                        </>
-                    )}
-                    <div style={{ display: 'flex', justifyContent: 'space-between', width: '100%' }}>
-                        <div className="review-total-label">Total Amount</div>
-                        <div className="review-total-amount">₹{totalAmount.toFixed(2)}</div>
+                                    <div style={{ fontSize: '14px', color: '#00C851' }}>
+                                        −₹{totalDiscount.toFixed(2)}
+                                    </div>
+                                </div>
+                            </>
+                        )}
+                        <div style={{ display: 'flex', justifyContent: 'space-between', width: '100%' }}>
+                            <div className="review-total-label">Total Amount</div>
+                            <div className="review-total-amount">₹{totalAmount.toFixed(2)}</div>
+                        </div>
                     </div>
                 </div>
 
