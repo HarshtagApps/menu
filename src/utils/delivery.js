@@ -227,11 +227,6 @@ export function haversineKm(lat1, lng1, lat2, lng2) {
   return R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
 }
 
-/**
- * Road distance in km via Next.js proxy → OpenRouteService (driving-car).
- * Set VITE_DELIVERY_DISTANCE_URL (e.g. http://localhost:3000/api/delivery-distance).
- */
-
 /** Reuse cached road km if pin moved less than this (meters). */
 export const DELIVERY_REUSE_RADIUS_M = 200;
 
@@ -269,7 +264,7 @@ export async function roadDistanceKm(fromLat, fromLng, toLat, toLng) {
 
   const endpoint =
     import.meta.env.VITE_DELIVERY_DISTANCE_URL ||
-    'http://localhost:3000/api/delivery-distance';
+    'https://harshtag-resto.vercel.app/api/delivery-distance';
   const controller = new AbortController();
   const timer = setTimeout(() => controller.abort(), 15000);
   try {
